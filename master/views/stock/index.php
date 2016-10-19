@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php //$this->render('_search', ['model' => $searchModel]); ?>
-    
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'header' => 'Tipe Stok',
-                'attribute' => 'stocktype',
-                'value' => 'stocktype'
+                'attribute' => 'tipeid',
+                'value' => 'tipeid'
             ],
             [
                 'header' => 'Jumlah Stok',

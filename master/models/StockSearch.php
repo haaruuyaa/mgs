@@ -18,7 +18,7 @@ class StockSearch extends Stock
     public function rules()
     {
         return [
-            [['stockid', 'stocktype', 'stockqty'], 'integer'],
+            [['stockid', 'tipeid', 'stockqty'], 'integer'],
             [['stockname', 'stockdateadd', 'datecrt'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class StockSearch extends Stock
         // grid filtering conditions
         $query->andFilterWhere([
             'stockid' => $this->stockid,
-            'stocktype' => $this->stocktype,
+            'tipeid' => $this->tipeid,
             'stockqty' => $this->stockqty,
             'stockdateadd' => $this->stockdateadd,
             'datecrt' => $this->datecrt,

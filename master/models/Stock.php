@@ -30,7 +30,7 @@ class Stock extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['stocktype', 'stockqty'], 'integer'],
+            [['tipeid', 'stockqty'], 'integer'],
             [['stockdateadd', 'datecrt'], 'safe'],
             [['stockname'], 'string', 'max' => 50],
         ];
@@ -44,7 +44,7 @@ class Stock extends \yii\db\ActiveRecord
         return [
             'stockid' => 'Stockid',
             'stockname' => 'Stockname',
-            'stocktype' => 'Stocktype',
+            'tipeid' => 'Tipe Stock',
             'stockqty' => 'Stockqty',
             'stockdateadd' => 'Stockdateadd',
             'datecrt' => 'Datecrt',
