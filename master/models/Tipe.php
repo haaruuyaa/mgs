@@ -7,7 +7,8 @@ use Yii;
 /**
  * This is the model class for table "tipe".
  *
- * @property integer $tipeid
+ * @property string $tipeid
+ * @property string $status
  * @property string $tipename
  * @property boolean $isactive
  */
@@ -27,7 +28,9 @@ class Tipe extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['tipeid', 'status'], 'required'],
             [['isactive'], 'boolean'],
+            [['tipeid', 'status'], 'string', 'max' => 10],
             [['tipename'], 'string', 'max' => 50],
         ];
     }
@@ -39,6 +42,7 @@ class Tipe extends \yii\db\ActiveRecord
     {
         return [
             'tipeid' => 'Tipeid',
+            'status' => 'Status',
             'tipename' => 'Tipename',
             'isactive' => 'Isactive',
         ];

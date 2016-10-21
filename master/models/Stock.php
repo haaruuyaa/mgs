@@ -7,9 +7,9 @@ use Yii;
 /**
  * This is the model class for table "stock".
  *
- * @property integer $stockid
+ * @property string $stockid
  * @property string $stockname
- * @property integer $stocktype
+ * @property string $tipeid
  * @property integer $stockqty
  * @property string $stockdateadd
  * @property string $datecrt
@@ -19,9 +19,7 @@ class Stock extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-
     public $type;
-
     public static function tableName()
     {
         return 'stock';
@@ -33,8 +31,10 @@ class Stock extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tipeid', 'stockqty'], 'integer'],
+            [['stockid'], 'required'],
+            [['stockqty'], 'integer'],
             [['stockdateadd', 'datecrt'], 'safe'],
+            [['stockid', 'tipeid'], 'string', 'max' => 10],
             [['stockname'], 'string', 'max' => 50],
         ];
     }
@@ -47,7 +47,7 @@ class Stock extends \yii\db\ActiveRecord
         return [
             'stockid' => 'Stockid',
             'stockname' => 'Stockname',
-            'tipeid' => 'Tipe Stock',
+            'tipeid' => 'Tipeid',
             'stockqty' => 'Stockqty',
             'stockdateadd' => 'Stockdateadd',
             'datecrt' => 'Datecrt',
