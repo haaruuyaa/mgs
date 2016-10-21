@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "so".
  *
- * @property integer $soid
+ * @property string $soid
  * @property string $sodate
  * @property integer $tipeid
  * @property integer $qty
@@ -31,8 +31,10 @@ class So extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['soid'], 'required'],
             [['sodate', 'datecrt'], 'safe'],
             [['tipeid', 'qty'], 'integer'],
+            [['soid'], 'string', 'max' => 10],
             [['user', 'usercrt'], 'string', 'max' => 50],
         ];
     }
