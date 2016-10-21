@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
+use kartik\widgets\DatePicker;
 use app\master\models\Customer;
 use app\master\models\Tipe;
 use yii\helpers\ArrayHelper;
-use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\transaction\models\Orderan */

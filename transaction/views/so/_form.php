@@ -2,10 +2,17 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\master\models\Tipe;
+use kartik\widgets\DatePicker;
+use kartik\widgets\Select2;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\transaction\models\So */
 /* @var $form yii\widgets\ActiveForm */
+
+$dataTipe = Tipe::find()->where('isactive = 1')->all();
+$dataTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
 ?>
 
 <div class="so-form">
@@ -19,19 +26,33 @@ use yii\widgets\ActiveForm;
         <div class="box-body">
           <label for="sodate" class="col-sm-2">Tanggal SO</label>
           <div class="col-sm-10">
-            <?= $form->field($model, 'sodate')->textInput(['id' => 'sodate'])->label(false) ?>
+            <?= $form->field($model, 'sodate')->widget(DatePicker::classname(), [
+                    'options' => ['placeholder' => 'Masukan tanggal SO ...'],
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'todayHighlight' => true,
+                        'todayBtn' => true,
+                    ]
+                ])->label(false) ?>
           </div>
           <label for="tipeid" class="col-sm-2">Tipe Barang</label>
           <div class="col-sm-10">
-            <?= $form->field($model, 'tipeid')->textInput()->label(false) ?>
+            <?= $form->field($model, 'tipeid')->widget(Select2::classname(), [
+                    'data' => $dataTipeList,
+                    'options' => ['placeholder' => '-- Pilih Tipe Barang --'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '45%'
+                    ],
+                ])->label(false) ?>
           </div>
           <label for="qty" class="col-sm-2">Jumlah</label>
           <div class="col-sm-10">
-            <?= $form->field($model, 'qty')->textInput()->label(false) ?>
+            <?= $form->field($model, 'qty')->textInput(['style' => 'width:20%'])->label(false) ?>
           </div>
           <label for="user" class="col-sm-2">Helper</label>
           <div class="col-sm-10">
-            <?= $form->field($model, 'user')->textInput(['maxlength' => true])->label(false) ?>
+            <?= $form->field($model, 'user')->textInput(['maxlength' => true,'style' => 'width:20%'])->label(false) ?>
           </div>
         </div>
       </div>
