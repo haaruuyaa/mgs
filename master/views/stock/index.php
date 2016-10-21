@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'header' => 'Tipe Stok',
-                'attribute' => 'tipeid',
-                'value' => 'tipeid'
+                'attribute' => 'type',
+                'value' => 'type'
             ],
             [
                 'header' => 'Jumlah Stok',
@@ -55,6 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <p>
-        <?= Html::a('Create Stock', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php //Html::a('Create Stock', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 </div>

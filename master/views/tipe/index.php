@@ -36,6 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
     <p>
-        <?= Html::a('Create Tipe', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php //Html::a('Create Tipe', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 </div>

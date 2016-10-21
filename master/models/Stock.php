@@ -19,6 +19,9 @@ class Stock extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $type;
+
     public static function tableName()
     {
         return 'stock';

@@ -4,23 +4,19 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\master\models\Stock */
+/* @var $model app\master\models\Customer */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="stock-form">
+<div class="customer-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'stockname')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'customerid')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tipeid')->textInput() ?>
+    <?= $form->field($model, 'customername')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'stockqty')->textInput() ?>
-
-    <?= $form->field($model, 'stockdateadd')->textInput() ?>
-
-    <?= $form->field($model, 'datecrt')->textInput() ?>
+    <?= $form->field($model, 'customerphone')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

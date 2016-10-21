@@ -66,6 +66,9 @@ $config = [
         'master' => [
             'class' => 'app\master\master',
         ],
+        'transaction' => [
+            'class' => 'app\transaction\transaction',
+        ],
     ],
 ];
 

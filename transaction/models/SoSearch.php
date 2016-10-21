@@ -1,16 +1,16 @@
 <?php
 
-namespace app\master\models;
+namespace app\transaction\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\master\models\Stock;
+use app\transaction\models\So;
 
 /**
- * StockSearch represents the model behind the search form about `app\master\models\Stock`.
+ * SoSearch represents the model behind the search form about `app\transaction\models\So`.
  */
-class StockSearch extends Stock
+class SoSearch extends So
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class StockSearch extends Stock
     public function rules()
     {
         return [
-            [['stockid', 'tipeid', 'stockqty'], 'integer'],
-            [['stockname', 'stockdateadd', 'datecrt'], 'safe'],
+            [['soid', 'tipeid', 'qty'], 'integer'],
+            [['sodate', 'user', 'usercrt', 'datecrt'], 'safe'],
         ];
     }
 
@@ -41,10 +41,7 @@ class StockSearch extends Stock
      */
     public function search($params)
     {
-        $query = Stock::find()
-                  ->select('Stock.*,Tipe.tipename as type')
-                  ->leftJoin('Tipe','Tipe.tipeid = Stock.tipeid')
-        ;
+        $query = So::find();
 
         // add conditions that should always apply here
 
@@ -62,14 +59,15 @@ class StockSearch extends Stock
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'stockid' => $this->stockid,
+            'soid' => $this->soid,
+            'sodate' => $this->sodate,
             'tipeid' => $this->tipeid,
-            'stockqty' => $this->stockqty,
-            'stockdateadd' => $this->stockdateadd,
+            'qty' => $this->qty,
             'datecrt' => $this->datecrt,
         ]);
 
-        $query->andFilterWhere(['like', 'stockname', $this->stockname]);
+        $query->andFilterWhere(['like', 'user', $this->user])
+            ->andFilterWhere(['like', 'usercrt', $this->usercrt]);
 
         return $dataProvider;
     }

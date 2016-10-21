@@ -1,16 +1,16 @@
 <?php
 
-namespace app\master\models;
+namespace app\transaction\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\master\models\Stock;
+use app\transaction\models\Orderan;
 
 /**
- * StockSearch represents the model behind the search form about `app\master\models\Stock`.
+ * OrderanSearch represents the model behind the search form about `app\transaction\models\Orderan`.
  */
-class StockSearch extends Stock
+class OrderanSearch extends Orderan
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class StockSearch extends Stock
     public function rules()
     {
         return [
-            [['stockid', 'tipeid', 'stockqty'], 'integer'],
-            [['stockname', 'stockdateadd', 'datecrt'], 'safe'],
+            [['orderid', 'tipeid', 'customerid', 'orderdate', 'dateadd', 'dateupdate'], 'safe'],
+            [['qty'], 'integer'],
         ];
     }
 
@@ -41,10 +41,7 @@ class StockSearch extends Stock
      */
     public function search($params)
     {
-        $query = Stock::find()
-                  ->select('Stock.*,Tipe.tipename as type')
-                  ->leftJoin('Tipe','Tipe.tipeid = Stock.tipeid')
-        ;
+        $query = Orderan::find();
 
         // add conditions that should always apply here
 
@@ -62,14 +59,15 @@ class StockSearch extends Stock
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'stockid' => $this->stockid,
-            'tipeid' => $this->tipeid,
-            'stockqty' => $this->stockqty,
-            'stockdateadd' => $this->stockdateadd,
-            'datecrt' => $this->datecrt,
+            'qty' => $this->qty,
+            'orderdate' => $this->orderdate,
+            'dateadd' => $this->dateadd,
+            'dateupdate' => $this->dateupdate,
         ]);
 
-        $query->andFilterWhere(['like', 'stockname', $this->stockname]);
+        $query->andFilterWhere(['like', 'orderid', $this->orderid])
+            ->andFilterWhere(['like', 'tipeid', $this->tipeid])
+            ->andFilterWhere(['like', 'customerid', $this->customerid]);
 
         return $dataProvider;
     }

@@ -5,12 +5,12 @@ namespace app\master\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\master\models\Stock;
+use app\master\models\Customer;
 
 /**
- * StockSearch represents the model behind the search form about `app\master\models\Stock`.
+ * CustomerSearch represents the model behind the search form about `app\master\models\Customer`.
  */
-class StockSearch extends Stock
+class CustomerSearch extends Customer
 {
     /**
      * @inheritdoc
@@ -18,8 +18,7 @@ class StockSearch extends Stock
     public function rules()
     {
         return [
-            [['stockid', 'tipeid', 'stockqty'], 'integer'],
-            [['stockname', 'stockdateadd', 'datecrt'], 'safe'],
+            [['customerid', 'customername', 'customerphone'], 'safe'],
         ];
     }
 
@@ -41,10 +40,7 @@ class StockSearch extends Stock
      */
     public function search($params)
     {
-        $query = Stock::find()
-                  ->select('Stock.*,Tipe.tipename as type')
-                  ->leftJoin('Tipe','Tipe.tipeid = Stock.tipeid')
-        ;
+        $query = Customer::find();
 
         // add conditions that should always apply here
 
@@ -61,15 +57,9 @@ class StockSearch extends Stock
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'stockid' => $this->stockid,
-            'tipeid' => $this->tipeid,
-            'stockqty' => $this->stockqty,
-            'stockdateadd' => $this->stockdateadd,
-            'datecrt' => $this->datecrt,
-        ]);
-
-        $query->andFilterWhere(['like', 'stockname', $this->stockname]);
+        $query->andFilterWhere(['like', 'customerid', $this->customerid])
+            ->andFilterWhere(['like', 'customername', $this->customername])
+            ->andFilterWhere(['like', 'customerphone', $this->customerphone]);
 
         return $dataProvider;
     }
