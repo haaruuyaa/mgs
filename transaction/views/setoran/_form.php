@@ -2,10 +2,24 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use kartik\widgets\DatePicker;
+use kartik\widgets\Select2;
+use app\master\models\Helper;
+use app\master\models\Tipe;
+use app\master\models\Jenis;
 /* @var $this yii\web\View */
 /* @var $model app\transaction\models\Setoran */
 /* @var $form yii\widgets\ActiveForm */
+
+$modelHelper = Helper::find()->all();
+$modelTipe = Tipe::find()->where(['status' => 'ISI'])->all();
+$modelJenis = Jenis::find()->all();
+
+$dataHelperList = ArrayHelper::map($modelHelper,'helperid','helpername');
+$dataTipeList = ArrayHelper::map($modelTipe,'tipeid','tipename');
+$dataJenisList = ArrayHelper::map($modelJenis,'jenisid','jenisname');
 ?>
 
 <div class="setoran-form">
@@ -19,15 +33,31 @@ use yii\widgets\ActiveForm;
                 <div class="box-body">
                     <label class="col-xs-2">Helper</label>
                     <div class="col-xs-10">
-                        <?= $form->field($model, 'helperid')->textInput(['maxlength' => true])->label(false) ?>
+                        <?= $form->field($model, 'helperid')->widget(Select2::classname(), [
+                            'data' => $dataHelperList,
+                            'options' => ['placeholder' => '-- Pilih Helper --'],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'width' => '45%'
+                            ],
+                        ])->label(false) ?>
                     </div>
                     <label class="col-xs-2">Tipe</label>
                     <div class="col-xs-10">
-                        <?= $form->field($model, 'tipeid')->textInput(['maxlength' => true])->label(false) ?>
+                        <?= $form->field($model, 'tipeid')->dropDownList($dataTipeList, 
+                        ['prompt'=>'-- Pilih Tipe --',
+                         'onchange'=>'
+                           $.post( "index.php?r=transaction/setoran/listjenis&id="+$(this).val(), function( data ) {
+                             $( "select#jenisid" ).html( data );
+                           });
+                       '])->label(false) ?>
                     </div>
                     <label class="col-xs-2">Jenis</label>
                     <div class="col-xs-10">
-                        <?= $form->field($model, 'jenisid')->textInput(['maxlength' => true])->label(false) ?>
+                        <?= $form->field($model, 'jenisid')->dropDownList(
+                            $dataJenisList,           
+                            ['prompt'=>'-- Pilih Jenis --','id'=>'jenisid']
+                        )->label(false) ?>
                     </div>
                     <label class="col-xs-2">Jumlah</label>
                     <div class="col-xs-10">

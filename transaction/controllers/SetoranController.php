@@ -121,4 +121,27 @@ class SetoranController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    public function actionListjenis($id)
+    {
+        $countPosts = \app\master\models\Jenis::find()
+                ->where(['tipeid' => $id])
+                ->count();
+ 
+        $posts = \app\master\models\Jenis::find()
+                ->where(['tipeid' => $id])
+                ->orderBy('jenisid DESC')
+                ->all();
+                
+        if($countPosts>0){
+                echo "<option>-- Pilih Jenis --</option>";
+            foreach($posts as $post){
+                echo "<option value='".$post->jenisid."'>".$post->jenisname."</option>";
+            }
+        }
+        else{
+            echo "<option>-- Pilih Jenis --</option>";
+        }
+ 
+    }
 }

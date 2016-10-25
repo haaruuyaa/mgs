@@ -9,6 +9,7 @@ use Yii;
  *
  * @property string $jenisid
  * @property string $jenisname
+ * @property string $tipeid
  */
 class Jenis extends \yii\db\ActiveRecord
 {
@@ -27,7 +28,7 @@ class Jenis extends \yii\db\ActiveRecord
     {
         return [
             [['jenisid'], 'required'],
-            [['jenisid', 'jenisname'], 'string', 'max' => 10],
+            [['jenisid', 'jenisname', 'tipeid'], 'string', 'max' => 10],
         ];
     }
 
@@ -39,6 +40,7 @@ class Jenis extends \yii\db\ActiveRecord
         return [
             'jenisid' => 'Jenisid',
             'jenisname' => 'Jenisname',
+            'tipeid' => 'Tipeid',
         ];
     }
 }
