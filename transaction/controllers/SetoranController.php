@@ -65,8 +65,11 @@ class SetoranController extends Controller
     {
         $model = new Setoran();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->setoranid]);
+        if ($model->load(Yii::$app->request->post())) {
+            echo var_dump($model);
+            die();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

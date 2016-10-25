@@ -65,7 +65,14 @@ $dataJenisList = ArrayHelper::map($modelJenis,'jenisid','jenisname');
                     </div>
                     <label class="col-xs-2">Tanggal</label>
                     <div class="col-xs-10">
-                        <?= $form->field($model, 'date')->textInput()->label(false) ?>
+                        <?= $form->field($model, 'date')->widget(DatePicker::classname(), [
+                            'options' => ['placeholder' => 'Masukan tanggal setor ...'],
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'todayHighlight' => true,
+                                'todayBtn' => true,
+                            ]
+                        ])->label(false) ?>
                     </div>  
                 </div>
             </div>
