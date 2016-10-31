@@ -63,10 +63,26 @@ class OrderanController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Orderan();
+         $model = new Orderan();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->orderid]);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $orderid = Yii::$app->db->createCommand("SELECT
+                        CONCAT(
+                                'O',
+                                RIGHT(YEAR(NOW()),2),
+                                RIGHT(MONTH(NOW()),2),
+                                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(orderid,3)),0)+1,CHAR)),3)
+                        ) AS orderid 
+                        FROM orderan 
+                        WHERE SUBSTRING(orderid,2,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2));
+            ")->queryScalar();
+            $model->orderid = $orderid;
+            $formatDate = date('Y-m-d',strtotime($model->orderdate));
+            
+            $model->orderdate = $formatDate;
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

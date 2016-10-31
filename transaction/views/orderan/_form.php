@@ -6,6 +6,7 @@ use kartik\widgets\Select2;
 use kartik\widgets\DatePicker;
 use app\master\models\Customer;
 use app\master\models\Tipe;
+use app\master\models\Jenis;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
@@ -14,7 +15,8 @@ use yii\helpers\ArrayHelper;
 
 $dataCustomer = Customer::find()->select("customerid,customername")->all();
 $dataCustomerList = ArrayHelper::map($dataCustomer,'customerid','customername');
-
+$modelJenis = Jenis::find()->all();
+$dataJenisList = ArrayHelper::map($modelJenis,'jenisid','jenisname');
 $dataTipe = Tipe::find()->select('tipeid,tipename')->where(['isactive' => '1'])->all();
 $dateTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
 ?>
@@ -29,8 +31,8 @@ $dateTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
         </div>
         <div class="box-body">
           <div class="form-group">
-            <label for="inputCustomerID" class="col-sm-2 control-label">Customer ID</label>
-            <div class="col-sm-10">
+            <label for="inputCustomerID" class="col-sm-3 control-label">Customer ID</label>
+            <div class="col-sm-9">
               <?php echo $form->field($model, 'customerid')->widget(Select2::classname(), [
                     'data' => $dataCustomerList,
                     'options' => ['placeholder' => '-- Pilih Customer --'],
@@ -40,23 +42,29 @@ $dateTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
                     ],
                 ])->label(false); ?>
             </div>
-            <label for="inputTipeID" class="col-sm-2 control-label">Tipe</label>
-            <div class="col-sm-10">
-              <?php echo $form->field($model, 'tipeid')->widget(Select2::classname(), [
-                    'data' => $dateTipeList,
-                    'options' => ['placeholder' => '-- Pilih Tipe --'],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'width' => '45%'
-                    ],
-                ])->label(false); ?>
+            <label class="col-xs-3">Tipe</label>
+            <div class="col-xs-9">
+                <?= $form->field($model, 'tipeid')->dropDownList($dateTipeList, 
+                ['prompt'=>'-- Pilih Tipe --',
+                 'onchange'=>'
+                   $.post( "index.php?r=transaction/setoran/listjenis&id="+$(this).val(), function( data ) {
+                     $( "select#jenisid" ).html( data );
+                   });
+                '])->label(false) ?>
             </div>
-            <label for="inputQty" class="col-sm-2 control-label">Quantity</label>
-            <div class="col-sm-10">
+            <label class="col-xs-3">Jenis</label>
+            <div class="col-xs-9">
+                <?= $form->field($model, 'jenisid')->dropDownList(
+                    $dataJenisList,           
+                    ['prompt'=>'-- Pilih Jenis --','id'=>'jenisid']
+                )->label(false) ?>
+            </div>
+            <label for="inputQty" class="col-sm-3 control-label">Quantity</label>
+            <div class="col-sm-9">
                 <?= $form->field($model, 'qty')->textInput(['id' =>'inputQty','style' => 'width:100px'])->label(false) ?>
             </div>
-            <label for="inputOrderDate" class="col-sm-2 control-label">Order Date</label>
-            <div class="col-sm-10">
+            <label for="inputOrderDate" class="col-sm-3 control-label">Order Date</label>
+            <div class="col-sm-9">
                 <?php //$form->field($model, 'orderdate')->textInput(['id' =>'inputOrderDate'])->label(false) ?>
                 <?= $form->field($model, 'orderdate')->widget(DatePicker::classname(), [
                     'options' => ['placeholder' => 'Input order date ...'],

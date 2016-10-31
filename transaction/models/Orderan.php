@@ -14,6 +14,7 @@ use Yii;
  * @property string $orderdate
  * @property string $dateadd
  * @property string $dateupdate
+ * @property string $jenisid
  */
 class Orderan extends \yii\db\ActiveRecord
 {
@@ -34,7 +35,7 @@ class Orderan extends \yii\db\ActiveRecord
             [['orderid'], 'required'],
             [['qty'], 'integer'],
             [['orderdate', 'dateadd', 'dateupdate'], 'safe'],
-            [['orderid', 'customerid'], 'string', 'max' => 10],
+            [['orderid', 'customerid', 'jenisid'], 'string', 'max' => 10],
             [['tipeid'], 'string', 'max' => 5],
         ];
     }
@@ -52,6 +53,7 @@ class Orderan extends \yii\db\ActiveRecord
             'orderdate' => 'Orderdate',
             'dateadd' => 'Dateadd',
             'dateupdate' => 'Dateupdate',
+            'jenisid' => 'Jenisid',
         ];
     }
 }
