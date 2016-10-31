@@ -66,8 +66,21 @@ class SetoranController extends Controller
         $model = new Setoran();
 
         if ($model->load(Yii::$app->request->post())) {
-            echo var_dump($model);
-            die();
+            
+            $setoranid = Yii::$app->db->createCommand("SELECT
+                        CONCAT(
+                                'S',
+                                RIGHT(YEAR(NOW()),2),
+                                RIGHT(MONTH(NOW()),2),
+                                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(setoranid,3)),0)+1,CHAR)),3)
+                        ) AS setoranid 
+                        FROM setoran 
+                        WHERE SUBSTRING(setoranid,2,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2));
+            ")->queryScalar();
+            $model->setoranid = $setoranid;
+            $formatDate = date('Y-m-d',strtotime($model->date));
+            
+            $model->date = $formatDate;
             $model->save();
             return $this->redirect(['index']);
         } else {
