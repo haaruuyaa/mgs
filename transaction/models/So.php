@@ -9,11 +9,12 @@ use Yii;
  *
  * @property string $soid
  * @property string $sodate
- * @property integer $tipeid
+ * @property string $tipeid
  * @property integer $qty
  * @property string $user
  * @property string $usercrt
  * @property string $datecrt
+ * @property string $jenisid
  */
 class So extends \yii\db\ActiveRecord
 {
@@ -33,8 +34,8 @@ class So extends \yii\db\ActiveRecord
         return [
             [['soid'], 'required'],
             [['sodate', 'datecrt'], 'safe'],
-            [['tipeid', 'qty'], 'integer'],
-            [['soid'], 'string', 'max' => 10],
+            [['qty'], 'integer'],
+            [['soid', 'tipeid', 'jenisid'], 'string', 'max' => 10],
             [['user', 'usercrt'], 'string', 'max' => 50],
         ];
     }
@@ -52,6 +53,7 @@ class So extends \yii\db\ActiveRecord
             'user' => 'User',
             'usercrt' => 'Usercrt',
             'datecrt' => 'Datecrt',
+            'jenisid' => 'Jenisid',
         ];
     }
 }

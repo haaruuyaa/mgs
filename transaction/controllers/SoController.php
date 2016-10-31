@@ -65,8 +65,24 @@ class SoController extends Controller
     {
         $model = new So();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->soid]);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $soid = Yii::$app->db->createCommand("SELECT
+                        CONCAT(
+                                'SO',
+                                RIGHT(YEAR(NOW()),2),
+                                RIGHT(MONTH(NOW()),2),
+                                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(soid,3)),0)+1,CHAR)),3)
+                        ) AS soid 
+                        FROM so 
+                        WHERE SUBSTRING(soid,3,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2));
+            ")->queryScalar();
+            $model->soid = $soid;
+            $formatDate = date('Y-m-d',strtotime($model->sodate));
+            
+            $model->sodate = $formatDate;
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

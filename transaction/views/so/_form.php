@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\master\models\Tipe;
+use app\master\models\Jenis;
+use app\master\models\Helper;
 use kartik\widgets\DatePicker;
 use kartik\widgets\Select2;
 use yii\helpers\ArrayHelper;
@@ -13,6 +15,10 @@ use yii\helpers\ArrayHelper;
 
 $dataTipe = Tipe::find()->where('isactive = 1')->all();
 $dataTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
+$modelJenis = Jenis::find()->all();
+$dataJenisList = ArrayHelper::map($modelJenis,'jenisid','jenisname');
+$modelHelper = Helper::find()->all();
+$dataHelperList = ArrayHelper::map($modelHelper,'helperid','helpername');
 ?>
 
 <div class="so-form">
@@ -24,8 +30,19 @@ $dataTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
           <h1 class="box-title with-header"><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="box-body">
-          <label for="sodate" class="col-sm-2">Tanggal SO</label>
-          <div class="col-sm-10">
+          <label for="user" class="col-xs-3">Helper</label>
+          <div class="col-xs-9">
+            <?= $form->field($model, 'user')->widget(Select2::classname(), [
+                    'data' => $dataHelperList,
+                    'options' => ['placeholder' => '-- Pilih Helper --'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '45%'
+                    ],
+                ])->label(false) ?>
+          </div>
+          <label for="sodate" class="col-xs-3">Tanggal SO</label>
+          <div class="col-xs-9">
             <?= $form->field($model, 'sodate')->widget(DatePicker::classname(), [
                     'options' => ['placeholder' => 'Masukan tanggal SO ...'],
                     'pluginOptions' => [
@@ -35,25 +52,28 @@ $dataTipeList = ArrayHelper::map($dataTipe,'tipeid','tipename');
                     ]
                 ])->label(false) ?>
           </div>
-          <label for="tipeid" class="col-sm-2">Tipe Barang</label>
-          <div class="col-sm-10">
-            <?= $form->field($model, 'tipeid')->widget(Select2::classname(), [
-                    'data' => $dataTipeList,
-                    'options' => ['placeholder' => '-- Pilih Tipe Barang --'],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'width' => '45%'
-                    ],
-                ])->label(false) ?>
-          </div>
-          <label for="qty" class="col-sm-2">Jumlah</label>
-          <div class="col-sm-10">
+          <label class="col-xs-3">Tipe</label>
+            <div class="col-xs-9">
+                <?= $form->field($model, 'tipeid')->dropDownList($dataTipeList, 
+                ['prompt'=>'-- Pilih Tipe --',
+                 'onchange'=>'
+                   $.post( "index.php?r=transaction/setoran/listjenis&id="+$(this).val(), function( data ) {
+                     $( "select#jenisid" ).html( data );
+                   });
+                '])->label(false) ?>
+            </div>
+            <label class="col-xs-3">Jenis</label>
+            <div class="col-xs-9">
+                <?= $form->field($model, 'jenisid')->dropDownList(
+                    $dataJenisList,           
+                    ['prompt'=>'-- Pilih Jenis --','id'=>'jenisid']
+                )->label(false) ?>
+            </div>
+          <label for="qty" class="col-xs-3">Jumlah</label>
+          <div class="col-xs-9">
             <?= $form->field($model, 'qty')->textInput(['style' => 'width:20%'])->label(false) ?>
           </div>
-          <label for="user" class="col-sm-2">Helper</label>
-          <div class="col-sm-10">
-            <?= $form->field($model, 'user')->textInput(['maxlength' => true,'style' => 'width:20%'])->label(false) ?>
-          </div>
+          
         </div>
       </div>
     </div>
