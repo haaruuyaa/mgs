@@ -12,10 +12,11 @@
                     ['label' => 'Tipe', 'icon' => 'fa fa-folder-o', 'url' => ['/master/tipe']],
                     ['label' => 'Jenis', 'icon' => 'fa fa-file-o', 'url' => ['/master/jenis']],
                     ['label' => 'Customer', 'icon' => 'fa fa-users', 'url' => ['/master/customer']],
+                    ['label' => 'Harga', 'icon' => 'fa fa-usd', 'url' => ['/master/harga']],
                     ['label' => 'Helper', 'icon' => 'fa fa-user', 'url' => ['/master/helper']],
                     ['label' => 'SO', 'icon' => 'fa fa-mail-reply', 'url' => ['/transaction/so']],
                     ['label' => 'Orderan', 'icon' => 'fa fa-pencil-square-o', 'url' => ['/transaction/orderan']],
-                    ['label' => 'Setoran', 'icon' => 'fa fa-money', 'url' => ['/transaction/setoran']],
+                    ['label' => 'Setoran', 'icon' => 'fa fa-money', 'url' => ['/transaction/setoran-h']],
                     
                 ],
             ]
