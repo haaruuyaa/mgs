@@ -65,8 +65,10 @@ class HargaCustomerController extends Controller
     {
         $model = new HargaCustomer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->HCID]);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

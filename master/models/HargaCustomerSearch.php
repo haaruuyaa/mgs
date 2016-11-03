@@ -41,7 +41,10 @@ class HargaCustomerSearch extends HargaCustomer
      */
     public function search($params)
     {
-        $query = HargaCustomer::find();
+        $query = HargaCustomer::find()->select("mc.CustomerName as CustomerName,hc.Price as Price,hc.CustomerId as CustomerId")
+                ->from("HargaCustomer hc")
+                ->leftJoin('MasterCustomer mc','mc.CustomerId = hc.CustomerId')
+                ;
 
         // add conditions that should always apply here
 
@@ -63,7 +66,7 @@ class HargaCustomerSearch extends HargaCustomer
         ]);
 
         $query->andFilterWhere(['like', 'HCID', $this->HCID])
-            ->andFilterWhere(['like', 'CustomerId', $this->CustomerId]);
+            ->andFilterWhere(['like', 'CustomerName', $this->CustomerId]);
 
         return $dataProvider;
     }
