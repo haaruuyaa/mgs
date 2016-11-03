@@ -18,6 +18,8 @@ class MasterStock extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $JenisName;
+    
     public static function tableName()
     {
         return 'masterstock';

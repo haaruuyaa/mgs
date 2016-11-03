@@ -18,8 +18,8 @@ class MasterStockSearch extends MasterStock
     public function rules()
     {
         return [
-            [['StockId', 'JenisId', 'StockDateAdd', 'DateCrt'], 'safe'],
-            [['StockQty'], 'integer'],
+            [['StockId', 'StockQty'], 'integer'],
+            [['JenisId', 'StockDateAdd', 'DateCrt'], 'safe'],
         ];
     }
 
@@ -41,7 +41,11 @@ class MasterStockSearch extends MasterStock
      */
     public function search($params)
     {
-        $query = MasterStock::find();
+        $query = MasterStock::find()
+                ->select("*")
+                ->from("MasterStock ms")
+                ->leftJoin("MasterJenis mj","mj.JenisId = ms.JenisId")
+                ;
 
         // add conditions that should always apply here
 
@@ -59,13 +63,13 @@ class MasterStockSearch extends MasterStock
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'StockId' => $this->StockId,
             'StockQty' => $this->StockQty,
             'StockDateAdd' => $this->StockDateAdd,
             'DateCrt' => $this->DateCrt,
         ]);
 
-        $query->andFilterWhere(['like', 'StockId', $this->StockId])
-            ->andFilterWhere(['like', 'JenisId', $this->JenisId]);
+        $query->andFilterWhere(['like', 'JenisName', $this->JenisId]);
 
         return $dataProvider;
     }

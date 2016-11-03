@@ -26,14 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['class' => 'yii\grid\SerialColumn'],
 
                             [
-                                'header' => 'Stock ID',
-                                'attribute' => 'StockId',
-                                'value' => 'StockId'
-                            ],
-                            [
                                 'header' => 'Jenis',
                                 'attribute' => 'JenisId',
-                                'value' => 'JenisId'
+                                'value' => 'JenisName'
                             ],
                             [
                                 'header' => 'Jumlah',
@@ -43,7 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'header' => 'Tanggal Tambah Stock',
                                 'attribute' => 'StockDateAdd',
-                                'value' => 'StockDateAdd'
+                                'value' => function($data)
+                                {
+                                    $strtotime = strtotime($data['StockDateAdd']);
+                                    $newDate = date("d F Y",$strtotime);
+                                    
+                                    return $newDate;
+                                }      
                             ],
 
                             ['class' => 'yii\grid\ActionColumn'],
