@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "masterstock".
  *
- * @property string $StockId
+ * @property integer $StockId
  * @property string $JenisId
  * @property integer $StockQty
  * @property string $StockDateAdd
@@ -29,10 +29,8 @@ class MasterStock extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['StockId'], 'required'],
             [['StockQty'], 'integer'],
             [['StockDateAdd', 'DateCrt'], 'safe'],
-            [['StockId'], 'string', 'max' => 10],
             [['JenisId'], 'string', 'max' => 50],
         ];
     }

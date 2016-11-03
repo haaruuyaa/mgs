@@ -5,6 +5,7 @@ namespace app\master\controllers;
 use Yii;
 use app\master\models\MasterStock;
 use app\master\models\MasterStockSearch;
+use app\controllers\GlobalFunctionController;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,8 +66,11 @@ class MasterStockController extends Controller
     {
         $model = new MasterStock();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->StockId]);
+        if ($model->load(Yii::$app->request->post())) {
+                       
+            $model->StockDateAdd = $this->formatDate($model->StockDateAdd);
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -120,5 +124,13 @@ class MasterStockController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    protected function formatDate($date)
+    {
+        $toTime = strtotime($date);
+        $newDate = date('Y-m-d',$toTime);
+        
+        return $newDate;
     }
 }
