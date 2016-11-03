@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\master\models\MasterCustomer;
+use app\master\models\MasterJenis;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 /* @var $this yii\web\View */
@@ -13,6 +14,10 @@ use kartik\select2\Select2;
 $modelCustomer = new MasterCustomer();
 $dataListCustomer = MasterCustomer::find()->all();
 $arrayMapCustomer = ArrayHelper::map($dataListCustomer,'CustomerId','CustomerName');
+
+$modelJenis = new MasterJenis();
+$dataListJenis = MasterJenis::find()->all();
+$arrayMapJenis = ArrayHelper::map($dataListJenis,'JenisId','JenisName');
 ?>
 
 <div class="harga-customer-form">
@@ -28,7 +33,17 @@ $arrayMapCustomer = ArrayHelper::map($dataListCustomer,'CustomerId','CustomerNam
                     <div class="col-md-8">
                         <?= $form->field($model, 'CustomerId')->widget(Select2::classname(),[
                             'data' => $arrayMapCustomer,
-                            'options' => ['placeholder' => 'Pilih Tipe ...'],
+                            'options' => ['placeholder' => 'Pilih Customer ...'],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ])->label(false) ?>
+                    </div>
+                    <label class="col-md-4">Jenis</label>
+                    <div class="col-md-8">
+                        <?= $form->field($model, 'JenisId')->widget(Select2::classname(),[
+                            'data' => $arrayMapJenis,
+                            'options' => ['placeholder' => 'Pilih Jenis ...'],
                             'pluginOptions' => [
                                 'allowClear' => true
                             ],

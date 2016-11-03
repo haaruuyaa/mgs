@@ -7,8 +7,9 @@ use Yii;
 /**
  * This is the model class for table "hargahelper".
  *
- * @property string $HHID
+ * @property integer $HHID
  * @property string $HelperId
+ * @property string $JenisId
  * @property string $Price
  */
 class HargaHelper extends \yii\db\ActiveRecord
@@ -16,6 +17,9 @@ class HargaHelper extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $HelperName;
+    public $JenisName;
+    
     public static function tableName()
     {
         return 'hargahelper';
@@ -27,9 +31,8 @@ class HargaHelper extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['HHID'], 'required'],
             [['Price'], 'number'],
-            [['HHID', 'HelperId'], 'string', 'max' => 10],
+            [['HelperId', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 
@@ -41,6 +44,7 @@ class HargaHelper extends \yii\db\ActiveRecord
         return [
             'HHID' => 'Hhid',
             'HelperId' => 'Helper ID',
+            'JenisId' => 'Jenis ID',
             'Price' => 'Price',
         ];
     }

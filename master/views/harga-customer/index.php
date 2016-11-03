@@ -32,6 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'CustomerName'
                             ],
                             [
+                                'header' => 'Jenis',
+                                'attribute' => 'JenisId',
+                                'value' => 'JenisName'
+                            ],
+                            [
                                 'header' => 'Harga Satuan',
                                 'attribute' => 'Price',
                                 'value' => 'Price'

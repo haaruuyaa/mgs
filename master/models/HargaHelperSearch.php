@@ -18,7 +18,7 @@ class HargaHelperSearch extends HargaHelper
     public function rules()
     {
         return [
-            [['HHID', 'HelperId'], 'safe'],
+            [['HHID', 'HelperId','JenisId'], 'safe'],
             [['Price'], 'number'],
         ];
     }
@@ -41,7 +41,12 @@ class HargaHelperSearch extends HargaHelper
      */
     public function search($params)
     {
-        $query = HargaHelper::find();
+        $query = HargaHelper::find()
+                ->select("*")
+                ->from("HargaHelper hh")
+                ->leftJoin("MasterHelper mh",'mh.HelperId = hh.HelperId')
+                ->leftJoin('MasterJenis mj','mj.JenisId = hh.JenisId')
+                ;
 
         // add conditions that should always apply here
 
@@ -63,7 +68,8 @@ class HargaHelperSearch extends HargaHelper
         ]);
 
         $query->andFilterWhere(['like', 'HHID', $this->HHID])
-            ->andFilterWhere(['like', 'HelperId', $this->HelperId]);
+            ->andFilterWhere(['like', 'HelperName', $this->HelperId])
+            ->andFilterWhere(['like', 'JenisName', $this->JenisId]);
 
         return $dataProvider;
     }

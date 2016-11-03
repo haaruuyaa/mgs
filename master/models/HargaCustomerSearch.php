@@ -18,7 +18,7 @@ class HargaCustomerSearch extends HargaCustomer
     public function rules()
     {
         return [
-            [['HCID', 'CustomerId'], 'safe'],
+            [['HCID', 'CustomerId','JenisId'], 'safe'],
             [['Price'], 'number'],
         ];
     }
@@ -41,9 +41,11 @@ class HargaCustomerSearch extends HargaCustomer
      */
     public function search($params)
     {
-        $query = HargaCustomer::find()->select("mc.CustomerName as CustomerName,hc.Price as Price,hc.CustomerId as CustomerId")
+        $query = HargaCustomer::find()
+                ->select("mc.CustomerName as CustomerName,hc.Price as Price,hc.CustomerId as CustomerId,mj.JenisName,mj.JenisId")
                 ->from("HargaCustomer hc")
                 ->leftJoin('MasterCustomer mc','mc.CustomerId = hc.CustomerId')
+                ->leftJoin('MasterJenis mj','mj.JenisId = hc.JenisId')
                 ;
 
         // add conditions that should always apply here
@@ -66,7 +68,8 @@ class HargaCustomerSearch extends HargaCustomer
         ]);
 
         $query->andFilterWhere(['like', 'HCID', $this->HCID])
-            ->andFilterWhere(['like', 'CustomerName', $this->CustomerId]);
+            ->andFilterWhere(['like', 'CustomerName', $this->CustomerId])
+            ->andFilterWhere(['like', 'JenisName', $this->JenisId]);
 
         return $dataProvider;
     }
