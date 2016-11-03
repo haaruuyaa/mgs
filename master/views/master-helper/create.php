@@ -11,8 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Master Helpers', 'url' => ['index'
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="master-helper-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+    
 
     <?= $this->render('_form', [
         'model' => $model,

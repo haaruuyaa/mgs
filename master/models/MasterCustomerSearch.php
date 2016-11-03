@@ -63,4 +63,18 @@ class MasterCustomerSearch extends MasterCustomer
 
         return $dataProvider;
     }
+    
+    public function GenerateId()
+    {
+        $query = Yii::$app->db->createCommand("
+            SELECT
+            CONCAT(
+                    'CUS',
+                    RIGHT(CONCAT('000',CONVERT(IFNULL(MAX(RIGHT(CustomerId,4)),0)+1,CHAR)),4)
+            ) AS CustomerId 
+            FROM MasterCustomer
+            ;")->queryScalar();
+        
+        return $query;
+    }
 }

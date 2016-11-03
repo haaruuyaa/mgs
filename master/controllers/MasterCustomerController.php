@@ -64,9 +64,13 @@ class MasterCustomerController extends Controller
     public function actionCreate()
     {
         $model = new MasterCustomer();
+        $searchModel = new MasterCustomerSearch();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->CustomerId]);
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->CustomerId = $searchModel->GenerateId();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

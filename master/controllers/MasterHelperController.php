@@ -64,9 +64,12 @@ class MasterHelperController extends Controller
     public function actionCreate()
     {
         $model = new MasterHelper();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->HelperId]);
+        $searchModel = new MasterHelperSearch();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->HelperId = $searchModel->GenerateId();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

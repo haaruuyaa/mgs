@@ -63,4 +63,18 @@ class MasterHelperSearch extends MasterHelper
 
         return $dataProvider;
     }
+    
+    public function GenerateId()
+    {
+        $query = Yii::$app->db->createCommand("
+            SELECT
+            CONCAT(
+                    'A',
+                    RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(HelperId,3)),0)+1,CHAR)),3)
+            ) AS HelperId 
+            FROM MasterHelper
+            ;")->queryScalar();
+        
+        return $query;
+    }
 }
