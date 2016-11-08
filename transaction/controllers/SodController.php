@@ -3,16 +3,16 @@
 namespace app\transaction\controllers;
 
 use Yii;
-use app\transaction\models\So;
-use app\transaction\models\SoSearch;
+use app\transaction\models\Sod;
+use app\transaction\models\SodSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SoController implements the CRUD actions for So model.
+ * SodController implements the CRUD actions for Sod model.
  */
-class SoController extends Controller
+class SodController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,22 +30,22 @@ class SoController extends Controller
     }
 
     /**
-     * Lists all So models.
+     * Lists all Sod models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SoSearch();
+        $searchModel = new SodSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+//            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single So model.
+     * Displays a single Sod model.
      * @param string $id
      * @return mixed
      */
@@ -57,16 +57,21 @@ class SoController extends Controller
     }
 
     /**
-     * Creates a new So model.
+     * Creates a new Sod model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new So();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->SOID]);
+        $model = new Sod();
+        $searchModel = new SodSearch();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->SOIDH = Yii::$app->request->post('soidh');
+            $model->SOIDD = $searchModel->GenerateId();
+            $model->save();
+            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -75,7 +80,7 @@ class SoController extends Controller
     }
 
     /**
-     * Updates an existing So model.
+     * Updates an existing Sod model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -85,7 +90,7 @@ class SoController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->SOID]);
+            return $this->redirect(['view', 'id' => $model->SOIDD]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -94,7 +99,7 @@ class SoController extends Controller
     }
 
     /**
-     * Deletes an existing So model.
+     * Deletes an existing Sod model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -107,15 +112,15 @@ class SoController extends Controller
     }
 
     /**
-     * Finds the So model based on its primary key value.
+     * Finds the Sod model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return So the loaded model
+     * @return Sod the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = So::findOne($id)) !== null) {
+        if (($model = Sod::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

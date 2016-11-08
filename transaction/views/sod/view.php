@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\transaction\models\So */
+/* @var $model app\transaction\models\Sod */
 
-$this->title = $model->SOID;
-$this->params['breadcrumbs'][] = ['label' => 'Sos', 'url' => ['index']];
+$this->title = $model->SOIDD;
+$this->params['breadcrumbs'][] = ['label' => 'Sods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="so-view">
+<div class="sod-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->SOID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->SOID], [
+        <?= Html::a('Update', ['update', 'id' => $model->SOIDD], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->SOIDD], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -28,12 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'SOID',
-            'SODate',
+            'SOIDD',
+            'SOIDH',
             'JenisId',
             'HelperId',
             'Qty',
-            'datecrt',
+            'DateCrt',
         ],
     ]) ?>
 

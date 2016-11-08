@@ -5,12 +5,12 @@ namespace app\transaction\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\transaction\models\So;
+use app\transaction\models\Sod;
 
 /**
- * SoSearch represents the model behind the search form about `app\transaction\models\So`.
+ * SodSearch represents the model behind the search form about `app\transaction\models\Sod`.
  */
-class SoSearch extends So
+class SodSearch extends Sod
 {
     /**
      * @inheritdoc
@@ -18,7 +18,7 @@ class SoSearch extends So
     public function rules()
     {
         return [
-            [['SOID', 'SODate', 'JenisId', 'HelperId', 'datecrt'], 'safe'],
+            [['SOIDD', 'SOIDH', 'JenisId', 'HelperId', 'DateCrt'], 'safe'],
             [['Qty'], 'integer'],
         ];
     }
@@ -41,7 +41,11 @@ class SoSearch extends So
      */
     public function search($params)
     {
-        $query = So::find();
+        $query = Sod::find()
+                ->select("mh.HelperName,mj.JenisName,Sod.Qty")
+                ->leftJoin('MasterJenis mj','mj.JenisId = Sod.JenisId')
+                ->leftJoin('MasterHelper mh','mh.HelperId = Sod.HelperId')
+                ;
 
         // add conditions that should always apply here
 
@@ -59,15 +63,30 @@ class SoSearch extends So
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'SODate' => $this->SODate,
             'Qty' => $this->Qty,
-            'datecrt' => $this->datecrt,
+            'DateCrt' => $this->DateCrt,
         ]);
 
-        $query->andFilterWhere(['like', 'SOID', $this->SOID])
+        $query->andFilterWhere(['like', 'SOIDD', $this->SOIDD])
+            ->andFilterWhere(['like', 'SOIDH', $this->SOIDH])
             ->andFilterWhere(['like', 'JenisId', $this->JenisId])
             ->andFilterWhere(['like', 'HelperId', $this->HelperId]);
 
         return $dataProvider;
+    }
+    
+    public function GenerateId()
+    {
+        $genId = Yii::$app->db->createCommand("SELECT
+        CONCAT(
+                'SOD',
+                RIGHT(YEAR(NOW()),2),
+                RIGHT(MONTH(NOW()),2),
+                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(soidd,3)),0)+1,CHAR)),3)
+        ) AS soidd 
+        FROM sod
+        WHERE SUBSTRING(soidd,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
+        
+        return $genId;
     }
 }
