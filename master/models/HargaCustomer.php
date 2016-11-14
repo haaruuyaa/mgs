@@ -17,6 +17,9 @@ class HargaCustomer extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $CustomerName;
+    public $JenisName;
+    
     public static function tableName()
     {
         return 'hargacustomer';
