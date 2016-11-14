@@ -73,4 +73,12 @@ class HargaCustomerSearch extends HargaCustomer
 
         return $dataProvider;
     }
+    
+    public function GetHarga($Cus,$Jen)
+    {
+        $query = HargaCustomer::find()->where(['CustomerId' => $Cus,'JenisId' => $Jen])->one();
+        
+        return $query;
+        
+    }
 }

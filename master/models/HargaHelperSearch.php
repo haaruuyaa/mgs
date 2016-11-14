@@ -76,4 +76,11 @@ class HargaHelperSearch extends HargaHelper
 
         return $dataProvider;
     }
+    
+    public function GetHarga($Help,$Jen)
+    {
+        $query = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen])->one();
+        return $query;
+        
+    }
 }
