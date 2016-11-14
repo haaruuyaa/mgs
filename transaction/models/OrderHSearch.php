@@ -66,4 +66,19 @@ class OrderHSearch extends OrderH
 
         return $dataProvider;
     }
+    
+    public function GenerateId()
+    {
+        $genId = Yii::$app->db->createCommand("SELECT
+          CONCAT(
+                  'ODH',
+                  RIGHT(YEAR(NOW()),2),
+                  RIGHT(MONTH(NOW()),2),
+                  RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(OrderIdH,3)),0)+1,CHAR)),3)
+          ) AS OrderIdH 
+          FROM orderh
+          WHERE SUBSTRING(OrderIdH,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
+        
+        return $genId;
+    }
 }

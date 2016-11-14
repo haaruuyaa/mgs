@@ -11,7 +11,7 @@ use Yii;
  * @property string $OrderIdH
  * @property string $CustomerId
  * @property string $JenisId
- * @property string $IDHC
+ * @property integer $IDHC
  * @property integer $Qty
  * @property string $DateCrt
  * @property string $DateUpdate
@@ -21,6 +21,10 @@ class OrderD extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $Price;
+    public $CustomerName;
+    public $JenisName;
+    
     public static function tableName()
     {
         return 'orderd';
@@ -33,9 +37,9 @@ class OrderD extends \yii\db\ActiveRecord
     {
         return [
             [['OrderIdD'], 'required'],
-            [['Qty'], 'integer'],
+            [['IDHC', 'Qty'], 'integer'],
             [['DateCrt', 'DateUpdate'], 'safe'],
-            [['OrderIdD', 'OrderIdH', 'CustomerId', 'JenisId', 'IDHC'], 'string', 'max' => 10],
+            [['OrderIdD', 'OrderIdH', 'CustomerId', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 

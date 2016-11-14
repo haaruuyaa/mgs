@@ -67,7 +67,7 @@ $dataListJenis = ArrayHelper::map($modelJenis,'JenisId','JenisName');
     <?php 
     $searchModel = new SodSearch();
     
-    $dataProvider1 = $searchModel->search(Yii::$app->request->queryParams);
+    $dataProvider1 = $searchModel->searchSod($SOIDH);
     
     echo $this->render('index',[
         'dataProvider' => $dataProvider1,

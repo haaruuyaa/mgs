@@ -5,6 +5,7 @@ namespace app\transaction\controllers;
 use Yii;
 use app\transaction\models\OrderD;
 use app\transaction\models\OrderDSearch;
+use app\master\models\HargaCustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -64,9 +65,23 @@ class OrderDController extends Controller
     public function actionCreate()
     {
         $model = new OrderD();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->OrderIdD]);
+        $searchModel = new OrderDSearch();
+        $searchModelHC = new HargaCustomerSearch();
+        
+        $Odh = Yii::$app->request->post('odh','xxx');
+                
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $Customer = $model->CustomerId;
+            $Jenis = $model->JenisId;
+            
+            $model->OrderIdD = $searchModel->GenerateId();
+            $model->OrderIdH = $Odh;
+            
+            $arrayHC = $searchModelHC->GetHarga($Customer, $Jenis);
+            $model->IDHC = $arrayHC['HCID'];
+            $model->save();
+            return $this->redirect(['order-d/create', 'id' => $model->OrderIdH]);
         } else {
             return $this->render('create', [
                 'model' => $model,

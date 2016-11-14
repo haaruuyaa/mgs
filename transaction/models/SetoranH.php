@@ -17,6 +17,8 @@ class SetoranH extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $HelperName;
+    
     public static function tableName()
     {
         return 'setoranh';

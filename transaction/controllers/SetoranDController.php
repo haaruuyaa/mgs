@@ -5,6 +5,8 @@ namespace app\transaction\controllers;
 use Yii;
 use app\transaction\models\SetoranD;
 use app\transaction\models\SetoranDSearch;
+use app\master\models\HargaHelperSearch;
+use app\master\models\HargaCustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -64,9 +66,27 @@ class SetoranDController extends Controller
     public function actionCreate()
     {
         $model = new SetoranD();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->SetoranIdD]);
+        $searchModel = new SetoranDSearch();
+        $hargasearch = new HargaHelperSearch();
+        $hargacus = new HargaCustomerSearch();
+        $Sth = Yii::$app->request->post('sdh');
+        $helpid = Yii::$app->request->post('helpid');
+        
+        
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $jenid = $model->JenisId;
+            $cus = $model->CustomerId;
+            $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
+            $arrayhc = $hargacus->GetHarga($cus, $jenid);
+            $idhh = $arrayhh['HHID'];
+            $idhc = $arrayhc['HCID'];
+            $model->HCID = $idhc;
+            $model->HHID = $idhh;
+            $model->SetoranIdH = $Sth;
+            $model->SetoranIdD = $searchModel->GenerateId();
+            $model->save();
+            return $this->redirect(['setoran-d/create', 'id' => $model->SetoranIdH]);
         } else {
             return $this->render('create', [
                 'model' => $model,

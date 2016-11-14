@@ -75,6 +75,43 @@ class SodSearch extends Sod
         return $dataProvider;
     }
     
+    public function searchSod($params)
+    {
+        $query = Sod::find()
+                ->select("mh.HelperName,mj.JenisName,Sod.Qty")
+                ->leftJoin('MasterJenis mj','mj.JenisId = Sod.JenisId')
+                ->leftJoin('MasterHelper mh','mh.HelperId = Sod.HelperId')
+                ->where(['Sod.SOIDH' => $params])
+                ;
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'Qty' => $this->Qty,
+            'DateCrt' => $this->DateCrt,
+        ]);
+
+        $query->andFilterWhere(['like', 'SOIDD', $this->SOIDD])
+            ->andFilterWhere(['like', 'SOIDH', $this->SOIDH])
+            ->andFilterWhere(['like', 'JenisId', $this->JenisId])
+            ->andFilterWhere(['like', 'HelperId', $this->HelperId]);
+
+        return $dataProvider;
+    }
+    
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT

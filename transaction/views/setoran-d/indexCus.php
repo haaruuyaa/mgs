@@ -26,6 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['class' => 'yii\grid\SerialColumn'],
                             
                             [
+                                'header' => 'Customer',
+                                'attribute' => 'CustomerId',
+                                'value' => 'CustomerName'
+                            ],
+                            [
                                 'header' => 'Jenis',
                                 'attribute' => 'JenisId',
                                 'value' => 'JenisName'
@@ -60,7 +65,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format'=>['decimal',2],
                                 'value' => function($data)
                                 {
-                                    $total = $data['Price'] * $data['Qty'];
+                                    if($data['HHID'] == NULL)
+                                    {
+                                        $id = $data['HCID'];
+                                        $search = HargaCustomer::find()->where(['HCID' => $id])->one();
+                                        $price = $search['Price'];
+                                    } else {
+                                        $id = $data['HHID'];
+                                        $search = HargaHelper::find()->where(['HHID' => $id])->one();
+                                        $price = $search['Price'];
+                                    }
+                                    
+                                    $total = $price * $data['Qty'];
                                     
                                     return $total;
                                 }

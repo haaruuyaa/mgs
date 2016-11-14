@@ -64,9 +64,15 @@ class OrderHController extends Controller
     public function actionCreate()
     {
         $model = new OrderH();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->OrderIdH]);
+        $searchModel = new OrderHSearch();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->OrderIdH = $searchModel->GenerateId();
+            $model->OrderDate = $this->formatDate($model->OrderDate);
+            
+            $model->save();
+            return $this->redirect(['order-d/create', 'id' => $model->OrderIdH]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -120,5 +126,13 @@ class OrderHController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function formatDate($date)
+    {
+        $totime = strtotime($date);
+        $newdate = date("Y-m-d",$totime);
+        
+        return $newdate;
     }
 }

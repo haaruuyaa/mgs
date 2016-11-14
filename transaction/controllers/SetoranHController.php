@@ -64,9 +64,14 @@ class SetoranHController extends Controller
     public function actionCreate()
     {
         $model = new SetoranH();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->SetoranIdH]);
+        $searchModel = new SetoranHSearch();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->SetoranIdH = $searchModel->GenerateId();
+            $model->Date = $this->formatDate($model->Date);
+            $model->save();
+            return $this->redirect(['setoran-d/create', 'id' => $model->SetoranIdH]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -120,5 +125,13 @@ class SetoranHController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function formatDate($date)
+    {
+        $totime = strtotime($date);
+        $formatdate = date('Y-m-d',$totime);
+        
+        return $formatdate;
     }
 }
