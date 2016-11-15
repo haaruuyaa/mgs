@@ -7,6 +7,8 @@ use app\transaction\models\SetoranD;
 use app\transaction\models\SetoranDSearch;
 use app\master\models\HargaHelperSearch;
 use app\master\models\HargaCustomerSearch;
+use app\master\models\MasterStock;
+use app\master\models\MasterStockHistory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -75,8 +77,10 @@ class SetoranDController extends Controller
         
         if ($model->load(Yii::$app->request->post())) {
             
+            $qty = $model->Qty;
             $jenid = $model->JenisId;
             $cus = $model->CustomerId;
+            $this->ReduceStock($jenid, $qty);
             $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
             $arrayhc = $hargacus->GetHarga($cus, $jenid);
             $idhh = $arrayhh['HHID'];
@@ -86,14 +90,22 @@ class SetoranDController extends Controller
             $model->SetoranIdH = $Sth;
             $model->SetoranIdD = $searchModel->GenerateId();
             $model->save();
-            return $this->redirect(['setoran-d/create', 'id' => $model->SetoranIdH]);
+            return $this->redirect(['setoran-d/create', 'id' => $Sth]);
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
     }
-
+    
+    /**
+     * Render page hitung setoran.
+     */
+    public function actionHitung()
+    {
+            return $this->render('indexHitung', [
+            ]);
+    }
     /**
      * Updates an existing SetoranD model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -140,5 +152,24 @@ class SetoranDController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function ReduceStock($id,$qty)
+    {
+        $modelHis = new MasterStockHistory();
+        
+        $model = MasterStock::find()->where(['JenisId' => $id])->one();
+        $qtystock = $model['StockQty'];
+        $datestock = $model['StockDateAdd'];
+        
+        
+        $modelHis->StockQty = $qtystock;
+        $modelHis->JenisId = $id;
+        $modelHis->StockDateAdd = $datestock;
+        $modelHis->DateCrt = date('Y-m-d h:i:s');
+        
+        $model->StockQty = ($qtystock - $qty);
+        $modelHis->save();
+        $model->save();
     }
 }

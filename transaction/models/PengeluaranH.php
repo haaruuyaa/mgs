@@ -5,24 +5,21 @@ namespace app\transaction\models;
 use Yii;
 
 /**
- * This is the model class for table "setoranh".
+ * This is the model class for table "pengeluaranh".
  *
+ * @property integer $PengeluaranIdH
  * @property string $SetoranIdH
- * @property string $HelperId
  * @property string $Date
  * @property string $DateCrt
  */
-class SetoranH extends \yii\db\ActiveRecord
+class PengeluaranH extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
-    public $HelperName;
-    public $PengeluaranIdH;
-    public $SOIDH;
     public static function tableName()
     {
-        return 'setoranh';
+        return 'pengeluaranh';
     }
 
     /**
@@ -31,9 +28,9 @@ class SetoranH extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['SetoranIdH'], 'required'],
+            [['PengeluaranIdH'], 'required'],
             [['Date', 'DateCrt'], 'safe'],
-            [['SetoranIdH', 'HelperId'], 'string', 'max' => 10],
+            [['PengeluaranIdH', 'SetoranIdH'], 'string', 'max' => 10],
         ];
     }
 
@@ -43,8 +40,8 @@ class SetoranH extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'PengeluaranIdH' => 'Pengeluaran Id H',
             'SetoranIdH' => 'Setoran Id H',
-            'HelperId' => 'Helper ID',
             'Date' => 'Date',
             'DateCrt' => 'Date Crt',
         ];

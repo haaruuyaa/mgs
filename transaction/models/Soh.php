@@ -29,7 +29,7 @@ class Soh extends \yii\db\ActiveRecord
         return [
             [['SOIDH'], 'required'],
             [['SODate', 'DateCrt'], 'safe'],
-            [['SOIDH'], 'string', 'max' => 10],
+            [['SOIDH', 'SetoranIdH'], 'string', 'max' => 10],
         ];
     }
 
@@ -40,6 +40,7 @@ class Soh extends \yii\db\ActiveRecord
     {
         return [
             'SOIDH' => 'Soidh',
+            'SetoranIdH' => 'Setoran Id H', 
             'SODate' => 'Sodate',
             'DateCrt' => 'Date Crt',
         ];

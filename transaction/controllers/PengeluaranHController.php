@@ -3,18 +3,16 @@
 namespace app\transaction\controllers;
 
 use Yii;
-use app\transaction\models\Sod;
-use app\transaction\models\SodSearch;
-use app\master\models\MasterStock;
-use app\master\models\MasterStockHistory;
+use app\transaction\models\PengeluaranH;
+use app\transaction\models\PengeluaranHSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SodController implements the CRUD actions for Sod model.
+ * PengeluaranHController implements the CRUD actions for PengeluaranH model.
  */
-class SodController extends Controller
+class PengeluaranHController extends Controller
 {
     /**
      * @inheritdoc
@@ -32,23 +30,23 @@ class SodController extends Controller
     }
 
     /**
-     * Lists all Sod models.
+     * Lists all PengeluaranH models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SodSearch();
+        $searchModel = new PengeluaranHSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-//            'searchModel' => $searchModel,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Sod model.
-     * @param string $id
+     * Displays a single PengeluaranH model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
@@ -59,27 +57,16 @@ class SodController extends Controller
     }
 
     /**
-     * Creates a new Sod model.
+     * Creates a new PengeluaranH model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Sod();
-        $searchModel = new SodSearch();
-        
-        if ($model->load(Yii::$app->request->post())) {
-            $sth = Yii::$app->request->post('sth','xxx');
-            $helperid = Yii::$app->request->post('helper','xxx');
-            $jenis = $model->JenisId;
-            $qty = $model->Qty;
-            $this->AddStock($jenis, $qty);
-            $model->HelperId = $helperid;
-            $model->SOIDH = Yii::$app->request->post('soidh');
-            $model->SOIDD = $searchModel->GenerateId();
-            $model->save();
-            return $this->redirect(['setoran-d/create', 'id' => $sth]);
-//            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);
+        $model = new PengeluaranH();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->PengeluaranIdH]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -88,9 +75,9 @@ class SodController extends Controller
     }
 
     /**
-     * Updates an existing Sod model.
+     * Updates an existing PengeluaranH model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -98,7 +85,7 @@ class SodController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->SOIDD]);
+            return $this->redirect(['view', 'id' => $model->PengeluaranIdH]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -107,9 +94,9 @@ class SodController extends Controller
     }
 
     /**
-     * Deletes an existing Sod model.
+     * Deletes an existing PengeluaranH model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -120,38 +107,18 @@ class SodController extends Controller
     }
 
     /**
-     * Finds the Sod model based on its primary key value.
+     * Finds the PengeluaranH model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Sod the loaded model
+     * @param integer $id
+     * @return PengeluaranH the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Sod::findOne($id)) !== null) {
+        if (($model = PengeluaranH::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    
-    public function AddStock($id,$qty)
-    {
-        $modelHis = new MasterStockHistory();
-        $model = MasterStock::find()->where(['JenisId' => $id])->one();
-        $qtystock = $model['StockQty'];
-        $datestock = $model['StockDateAdd'];
-        
-        $model->StockQty = $qty + $qtystock;
-        $model->StockDateAdd = date('Y-m-d');
-        
-        
-        $modelHis->JenisId = $id;
-        $modelHis->StockQty = $qtystock;
-        $modelHis->StockDateAdd = $datestock;
-        $modelHis->DateCrt = date('Y-m-d h:i:s');
-        
-        $modelHis->save();
-        $model->save();
     }
 }

@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+//                            ['class' => 'yii\grid\SerialColumn'],
                             
                             [
                                 'header' => 'Jenis',
@@ -60,7 +60,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format'=>['decimal',2],
                                 'value' => function($data)
                                 {
-                                    $total = $data['Price'] * $data['Qty'];
+                                    
+                                    if($data['HHID'] == NULL)
+                                    {
+                                        $id = $data['HCID'];
+                                        $search = HargaCustomer::find()->where(['HCID' => $id])->one();
+                                        $price = $search['Price'];
+                                    } else {
+                                        $id = $data['HHID'];
+                                        $search = HargaHelper::find()->where(['HHID' => $id])->one();
+                                        $price = $search['Price'];
+                                    }
+                                    
+                                    $total = $price * $data['Qty'];
                                     
                                     return $total;
                                 }

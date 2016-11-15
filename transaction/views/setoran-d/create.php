@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\transaction\models\SetoranD */
 
-$this->title = 'Buat Setoran Detail';
+$this->title = 'Detail Setoran';
 $this->params['breadcrumbs'][] = ['label' => 'Setoran Ds', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

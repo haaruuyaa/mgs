@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'header' => 'Helper',
                                 'attribute' => 'HelperId',
-                                'value' => 'HelperId'
+                                'value' => 'HelperName'
                             ],
                             [
                                 'header' => 'Tanggal',

@@ -3,20 +3,16 @@
 namespace app\transaction\controllers;
 
 use Yii;
-use app\transaction\models\SetoranH;
-use app\transaction\models\SetoranHSearch;
-use app\transaction\models\Soh;
-use app\transaction\models\SohSearch;
-use app\transaction\models\PengeluaranH;
-use app\transaction\models\PengeluaranHSearch;
+use app\transaction\models\PengeluaranD;
+use app\transaction\models\PengeluaranDSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SetoranHController implements the CRUD actions for SetoranH model.
+ * PengeluaranDController implements the CRUD actions for PengeluaranD model.
  */
-class SetoranHController extends Controller
+class PengeluaranDController extends Controller
 {
     /**
      * @inheritdoc
@@ -34,12 +30,12 @@ class SetoranHController extends Controller
     }
 
     /**
-     * Lists all SetoranH models.
+     * Lists all PengeluaranD models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SetoranHSearch();
+        $searchModel = new PengeluaranDSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -49,7 +45,7 @@ class SetoranHController extends Controller
     }
 
     /**
-     * Displays a single SetoranH model.
+     * Displays a single PengeluaranD model.
      * @param string $id
      * @return mixed
      */
@@ -61,26 +57,24 @@ class SetoranHController extends Controller
     }
 
     /**
-     * Creates a new SetoranH model.
+     * Creates a new PengeluaranD model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SetoranH();
-        $searchModel = new SetoranHSearch();
+        $model = new PengeluaranD();
+        $searchModel = new PengeluaranDSearch();
         
         if ($model->load(Yii::$app->request->post())) {
+            $sth = Yii::$app->request->post('sth','xxx');
+            $pengh = Yii::$app->request->post('pengh','xxx');
             
-            $setoranidh = $searchModel->GenerateId();
-            
-            $this->SaveSO($setoranidh);
-            $this->SavePeng($setoranidh);
-            $model->SetoranIdH = $setoranidh;
-            $model->Date = $this->formatDate($model->Date);
+            $model->PengeluaranIdH = $pengh;
+            $model->PengeluaranIdD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
             $model->save();
-            return $this->redirect(['setoran-d/create', 'id' => $model->SetoranIdH]);
+            return $this->redirect(['setoran-d/create', 'id' => $sth]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -89,7 +83,7 @@ class SetoranHController extends Controller
     }
 
     /**
-     * Updates an existing SetoranH model.
+     * Updates an existing PengeluaranD model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -99,7 +93,7 @@ class SetoranHController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->SetoranIdH]);
+            return $this->redirect(['view', 'id' => $model->PengeluaranIdD]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -108,7 +102,7 @@ class SetoranHController extends Controller
     }
 
     /**
-     * Deletes an existing SetoranH model.
+     * Deletes an existing PengeluaranD model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -121,54 +115,18 @@ class SetoranHController extends Controller
     }
 
     /**
-     * Finds the SetoranH model based on its primary key value.
+     * Finds the PengeluaranD model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return SetoranH the loaded model
+     * @return PengeluaranD the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SetoranH::findOne($id)) !== null) {
+        if (($model = PengeluaranD::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    
-    public function formatDate($date)
-    {
-        $totime = strtotime($date);
-        $formatdate = date('Y-m-d',$totime);
-        
-        return $formatdate;
-    }
-    
-    public function SaveSO($idsetoranh)
-    {
-        $modelSO = new Soh();
-        $searchModelSo = new SohSearch();
-        $soidh = $searchModelSo->GenerateId();
-        
-        $modelSO->SOIDH = $soidh;
-        $modelSO->SetoranIdH = $idsetoranh;
-        $modelSO->SODate = date('Y-m-d');
-        $modelSO->DateCrt = date('Y-m-d h:i;s');
-        
-        $modelSO->save();
-    }
-    
-    public function SavePeng($idsetoranh)
-    {
-        $modelPeng = new PengeluaranH();
-        $searchModelPeng = new PengeluaranHSearch();
-        $pengidh = $searchModelPeng->GenerateId();
-        
-        $modelPeng->PengeluaranIdH = $pengidh;
-        $modelPeng->SetoranIdH = $idsetoranh;
-        $modelPeng->Date = date('Y-m-d');
-        $modelPeng->DateCrt = date('Y-m-d h:i;s');
-        
-        $modelPeng->save();
     }
 }
