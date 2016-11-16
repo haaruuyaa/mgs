@@ -181,6 +181,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
         </div>
         <div class="col-xs-12">
             <?= Html::a('Hitung',['setoran-d/hitung','id'=>$setoranH], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Back', ['setoran-h/index'], ['class' => 'btn btn-success']) ?>
         </div>
     </div>
     

@@ -159,16 +159,23 @@ class SetoranDController extends Controller
         $modelHis = new MasterStockHistory();
         
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
-        $qtystock = $model['StockQty'];
+        $stockisi = $model['StockIsi'];
+        $stockkosong = $model['StockKosong'];
         $datestock = $model['StockDateAdd'];
+        $stocktotal = $model['StockTotal'];
+        $dateupdate = $model['DateUpdate'];
         
-        
-        $modelHis->StockQty = $qtystock;
+        $modelHis->StockIsi = $stockisi;
+        $modelHis->StockKosong = $stockkosong;
+        $modelHis->StockTotal = $stocktotal;
         $modelHis->JenisId = $id;
         $modelHis->StockDateAdd = $datestock;
         $modelHis->DateCrt = date('Y-m-d h:i:s');
+        $modelHis->DateUpdate = $dateupdate;
         
-        $model->StockQty = ($qtystock - $qty);
+        $model->StockIsi = ($stockisi - $qty);
+        $model->StockKosong = ($stockkosong + $qty);
+        $model->DateUpdate = date('Y-m-d h:i:s');
         $modelHis->save();
         $model->save();
     }

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $searchModel app\transaction\models\SetoranHSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
 
@@ -32,7 +33,24 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'header' => 'Tanggal',
                                 'attribute' => 'Date',
-                                'value' => 'Date'
+                                'format' => 'raw',
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel, 
+                                    'attribute' => 'Date',
+                                    'options' => ['placeholder' => 'Pilih Tanggal ...'],
+                                    'pluginOptions' => [
+                                        'todayHighlight' => true,
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy/mm/dd'
+                                    ]
+                                ]),
+                                'value' => function($data)
+                                {
+                                    $toTime = strtotime($data['Date']);
+                                    $dateFormat = date('d F Y',$toTime);
+                                    
+                                    return $dateFormat;
+                                }
                             ],
                             [
                                 'header' => 'Action',

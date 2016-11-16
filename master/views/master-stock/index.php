@@ -41,6 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'StockKosong'
                             ],
                             [
+                                'header' => 'Jumlah Stock',
+                                'attribute' => 'StockTotal',
+                                'value' => 'StockTotal'
+                            ],
+                            [
                                 'header' => 'Tanggal Tambah Stock',
                                 'attribute' => 'StockDateAdd',
                                 'value' => function($data)

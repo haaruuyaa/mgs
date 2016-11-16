@@ -186,7 +186,7 @@ $SubTotal = $TotalPendapatan - $TotalPengeluaran;
         </div><!-- /.col -->        
       </div><!-- /.row -->
         <div class="col-xs-12">
-            <?= Html::a('Back', ['setoran-d/create','id' => $Setoranidh], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Back', ['setoran-h/index'], ['class' => 'btn btn-success']) ?>
         </div>
       <!-- this row will not appear when printing 
       <div class="row no-print">
