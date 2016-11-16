@@ -9,11 +9,9 @@ use Yii;
  *
  * @property integer $StockId
  * @property string $JenisId
- * @property integer $StockIsi
- * @property integer $StockKosong
+ * @property integer $StockQty
  * @property string $StockDateAdd
  * @property string $DateCrt
- * @property string $DateUpdate
  */
 class MasterStockHistory extends \yii\db\ActiveRecord
 {
@@ -31,8 +29,8 @@ class MasterStockHistory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['StockIsi', 'StockKosong'], 'integer'],
-            [['StockDateAdd', 'DateCrt', 'DateUpdate'], 'safe'],
+            [['StockQty'], 'integer'],
+            [['StockDateAdd', 'DateCrt'], 'safe'],
             [['JenisId'], 'string', 'max' => 50],
         ];
     }
@@ -45,11 +43,9 @@ class MasterStockHistory extends \yii\db\ActiveRecord
         return [
             'StockId' => 'Stock ID',
             'JenisId' => 'Jenis ID',
-            'StockIsi' => 'Stock Isi',
-            'StockKosong' => 'Stock Kosong',
+            'StockQty' => 'Stock Qty',
             'StockDateAdd' => 'Stock Date Add',
             'DateCrt' => 'Date Crt',
-            'DateUpdate' => 'Date Update',
         ];
     }
 }

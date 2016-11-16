@@ -31,14 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'JenisName'
                             ],
                             [
-                                'header' => 'Jumlah Isi',
-                                'attribute' => 'StockIsi',
-                                'value' => 'StockIsi'
-                            ],
-                            [
-                                'header' => 'Jumlah Kosong',
-                                'attribute' => 'StockKosong',
-                                'value' => 'StockKosong'
+                                'header' => 'Jumlah',
+                                'attribute' => 'StockQty',
+                                'value' => 'StockQty'
                             ],
                             [
                                 'header' => 'Tanggal Tambah Stock',
