@@ -89,6 +89,7 @@ class SetoranDController extends Controller
             $model->HHID = $idhh;
             $model->SetoranIdH = $Sth;
             $model->SetoranIdD = $searchModel->GenerateId();
+            $model->DateCrt = date('Y-m-d h:i:s');
             $model->save();
             return $this->redirect(['setoran-d/create', 'id' => $Sth]);
         } else {
