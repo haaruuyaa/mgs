@@ -20,7 +20,6 @@ class Sod extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public $JenisName;
-    public $HelperName;
     
     public static function tableName()
     {
@@ -36,7 +35,7 @@ class Sod extends \yii\db\ActiveRecord
             [['SOIDD'], 'required'],
             [['Qty'], 'integer'],
             [['DateCrt'], 'safe'],
-            [['SOIDD', 'SOIDH', 'JenisId', 'HelperId'], 'string', 'max' => 10],
+            [['SOIDD', 'SOIDH', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 
@@ -49,7 +48,6 @@ class Sod extends \yii\db\ActiveRecord
             'SOIDD' => 'Soidd',
             'SOIDH' => 'Soidh',
             'JenisId' => 'Jenis ID',
-            'HelperId' => 'Helper ID',
             'Qty' => 'Qty',
             'DateCrt' => 'Date Crt',
         ];

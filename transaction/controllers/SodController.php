@@ -5,6 +5,8 @@ namespace app\transaction\controllers;
 use Yii;
 use app\transaction\models\Sod;
 use app\transaction\models\SodSearch;
+use app\transaction\models\Soh;
+use app\transaction\models\SohSearch;
 use app\master\models\MasterStock;
 use app\master\models\MasterStockHistory;
 use yii\web\Controller;
@@ -67,18 +69,52 @@ class SodController extends Controller
     {
         $model = new Sod();
         $searchModel = new SodSearch();
-        
+        $modelSoh = new Soh();
+        $searchModelSoh = new SohSearch();
         if ($model->load(Yii::$app->request->post())) {
             $sth = Yii::$app->request->post('sth','xxx');
-            $helperid = Yii::$app->request->post('helper','xxx');
+            $storandate = Yii::$app->request->post('date','xxx');
             $jenis = $model->JenisId;
             $qty = $model->Qty;
+            
+            $soidh = $searchModelSoh->GenerateId();
+            $modelSoh->SOIDH = $soidh;
+            $modelSoh->SODate = $storandate;
+            $modelSoh->SetoranIdH = $sth;
+            $modelSoh->DateCrt = date('Y-m-d h:i:s');
+            
             $this->AddStock($jenis, $qty);
-            $model->HelperId = $helperid;
-            $model->SOIDH = Yii::$app->request->post('soidh');
+            $model->SOIDH = $soidh;
             $model->SOIDD = $searchModel->GenerateId();
+            $model->DateCrt = date('Y-m-d h:i:s');
+            
+            $modelSoh->save();
             $model->save();
             return $this->redirect(['setoran-d/create', 'id' => $sth]);
+//            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+    
+    public function actionCreateSod()
+    {
+        $model = new Sod();
+        $searchModel = new SodSearch();
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $soidh = Yii::$app->request->post('soidh','xxx');
+            $jenis = $model->JenisId;
+            $qty = $model->Qty;
+            
+            $model->SOIDH = $soidh;
+            $model->SOIDD = $searchModel->GenerateId();
+            $model->DateCrt = date('Y-m-d h:i:s');
+            $this->AddStock($jenis, $qty);
+            $model->save();
+            return $this->redirect(['sod/create-sod', 'id' => $soidh]);
 //            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);
         } else {
             return $this->render('create', [
@@ -137,19 +173,24 @@ class SodController extends Controller
     
     public function AddStock($id,$qty)
     {
-        $modelHis = new MasterStockHistory();
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
-        $qtystock = $model['StockQty'];
+        $isistock = $model['StockIsi'];
+        $kosongstock = $model['StockKosong'];
         $datestock = $model['StockDateAdd'];
+        $stocktotal = $model['StockTotal'];
         
-        $model->StockQty = $qty + $qtystock;
-        $model->StockDateAdd = date('Y-m-d');
-        
+        $modelHis = new MasterStockHistory();
         
         $modelHis->JenisId = $id;
-        $modelHis->StockQty = $qtystock;
+        $modelHis->StockIsi = $isistock;
+        $modelHis->StockKosong = $kosongstock;
         $modelHis->StockDateAdd = $datestock;
+        $modelHis->StockTotal = $stocktotal;
         $modelHis->DateCrt = date('Y-m-d h:i:s');
+                
+        $model->StockIsi = $isistock + $qty;
+        $model->StockKosong = $kosongstock - $qty;
+        $model->StockDateAdd = date('Y-m-d');
         
         $modelHis->save();
         $model->save();

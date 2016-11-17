@@ -72,7 +72,12 @@ class PengeluaranDSearch extends PengeluaranD
     
     public function searchPengD($params)
     {
-        $query = PengeluaranD::find()->where(['PengeluaranIdH' => $params]);
+        $query = PengeluaranD::find()
+                ->select("*")
+                ->from("PengeluaranD pd")
+                ->leftJoin('PengeluaranH ph','ph.PengeluaranIdH = pd.PengeluaranIdH')
+                ->leftJoin('SetoranH sh','sh.SetoranIdH = ph.SetoranIdH')
+                ->where(['sh.SetoranIdH' => $params]);
 
         // add conditions that should always apply here
 

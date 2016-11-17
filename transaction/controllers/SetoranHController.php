@@ -74,8 +74,8 @@ class SetoranHController extends Controller
             
             $setoranidh = $searchModel->GenerateId();
             
-            $this->SaveSO($setoranidh);
-            $this->SavePeng($setoranidh);
+//            $this->SaveSO($setoranidh);
+//            $this->SavePeng($setoranidh);
             $model->SetoranIdH = $setoranidh;
             $model->Date = $this->formatDate($model->Date);
             $model->DateCrt = date('Y-m-d h:i:s');

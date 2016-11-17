@@ -5,6 +5,8 @@ namespace app\transaction\controllers;
 use Yii;
 use app\transaction\models\PengeluaranD;
 use app\transaction\models\PengeluaranDSearch;
+use app\transaction\models\PengeluaranH;
+use app\transaction\models\PengeluaranHSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,14 +67,21 @@ class PengeluaranDController extends Controller
     {
         $model = new PengeluaranD();
         $searchModel = new PengeluaranDSearch();
-        
+        $modelPeng = new PengeluaranH();
+        $searchModelPeng = new PengeluaranHSearch();        
         if ($model->load(Yii::$app->request->post())) {
             $sth = Yii::$app->request->post('sth','xxx');
-            $pengh = Yii::$app->request->post('pengh','xxx');
-            
-            $model->PengeluaranIdH = $pengh;
+            $pengidh = $searchModelPeng->GenerateId();
+        
+            $modelPeng->PengeluaranIdH = $pengidh;
+            $modelPeng->SetoranIdH = $sth;
+            $modelPeng->Date = date('Y-m-d');
+            $modelPeng->DateCrt = date('Y-m-d h:i;s');
+
+            $model->PengeluaranIdH = $pengidh;
             $model->PengeluaranIdD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
+            $modelPeng->save();
             $model->save();
             return $this->redirect(['setoran-d/create', 'id' => $sth]);
         } else {

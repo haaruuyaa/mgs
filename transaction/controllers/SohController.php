@@ -70,7 +70,7 @@ class SohController extends Controller
             $model->SOIDH = $searchModel->GenerateId();
             $model->SODate = $this->formatDate($model->SODate);
             $model->save();
-            return $this->redirect(['index']);
+            return $this->redirect(['sod/create-sod','id' => $model->SOIDH]);
         } else {
             return $this->render('create', [
                 'model' => $model,

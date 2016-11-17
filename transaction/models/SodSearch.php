@@ -18,7 +18,7 @@ class SodSearch extends Sod
     public function rules()
     {
         return [
-            [['SOIDD', 'SOIDH', 'JenisId', 'HelperId', 'DateCrt'], 'safe'],
+            [['SOIDD', 'SOIDH', 'JenisId', 'DateCrt'], 'safe'],
             [['Qty'], 'integer'],
         ];
     }
@@ -42,9 +42,11 @@ class SodSearch extends Sod
     public function search($params)
     {
         $query = Sod::find()
-                ->select("mh.HelperName,mj.JenisName,Sod.Qty")
-                ->leftJoin('MasterJenis mj','mj.JenisId = Sod.JenisId')
-                ->leftJoin('MasterHelper mh','mh.HelperId = Sod.HelperId')
+                ->select("mj.JenisName,sd.Qty")
+                ->from('Sod sd')
+                ->leftJoin('Soh sh','sh.SOIDH = sd.SOIDH')
+                ->leftJoin('MasterJenis mj','mj.JenisId = sd.JenisId')
+                ->where(['sh.SOIDH' => $params])
                 ;
 
         // add conditions that should always apply here
@@ -69,8 +71,7 @@ class SodSearch extends Sod
 
         $query->andFilterWhere(['like', 'SOIDD', $this->SOIDD])
             ->andFilterWhere(['like', 'SOIDH', $this->SOIDH])
-            ->andFilterWhere(['like', 'JenisId', $this->JenisId])
-            ->andFilterWhere(['like', 'HelperId', $this->HelperId]);
+            ->andFilterWhere(['like', 'JenisId', $this->JenisId]);
 
         return $dataProvider;
     }
@@ -78,10 +79,11 @@ class SodSearch extends Sod
     public function searchSod($params)
     {
         $query = Sod::find()
-                ->select("mh.HelperName,mj.JenisName,Sod.Qty")
-                ->leftJoin('MasterJenis mj','mj.JenisId = Sod.JenisId')
-                ->leftJoin('MasterHelper mh','mh.HelperId = Sod.HelperId')
-                ->where(['Sod.SOIDH' => $params])
+                ->select("mj.JenisName,sd.Qty")
+                ->from('Sod sd')
+                ->leftJoin('Soh sh','sh.SOIDH = sd.SOIDH')
+                ->leftJoin('MasterJenis mj','mj.JenisId = sd.JenisId')
+                ->where(['sh.SetoranIdH' => $params])
                 ;
 
         // add conditions that should always apply here
@@ -106,8 +108,7 @@ class SodSearch extends Sod
 
         $query->andFilterWhere(['like', 'SOIDD', $this->SOIDD])
             ->andFilterWhere(['like', 'SOIDH', $this->SOIDH])
-            ->andFilterWhere(['like', 'JenisId', $this->JenisId])
-            ->andFilterWhere(['like', 'HelperId', $this->HelperId]);
+            ->andFilterWhere(['like', 'JenisId', $this->JenisId]);
 
         return $dataProvider;
     }

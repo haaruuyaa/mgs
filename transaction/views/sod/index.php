@@ -36,11 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'JenisId',
                             'value' => 'JenisName'
                         ],
-                        [
-                            'header' => 'Helper',
-                            'attribute' => 'HelperId',
-                            'value' => 'HelperName'
-                        ],
+//                        [
+//                            'header' => 'Helper',
+//                            'attribute' => 'HelperId',
+//                            'value' => 'HelperName'
+//                        ],
                         [
                             'header' => 'Jumlah',
                             'attribute' => 'Qty',

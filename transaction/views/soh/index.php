@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function($data)
                                 {
-                                    $href = Html::a('<i class="glyphicon glyphicon-pencil"><i>', ['sod/create','id' => $data['SOIDH']]);
+                                    $href = Html::a('<i class="glyphicon glyphicon-pencil"><i>', ['sod/create-sod','id' => $data['SOIDH']]);
                                     return $href;
                                 }
                             ]

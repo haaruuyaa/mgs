@@ -25,14 +25,11 @@ $setoranH = Yii::$app->request->get('id','xxx');
 $dataH = SetoranH::find()
         ->select("*")
         ->from("SetoranH sth")
-        ->leftJoin('Soh sh','sh.SetoranIdH = sth.SetoranIdH')
-        ->leftJoin('PengeluaranH ph','ph.SetoranIdH = sth.SetoranIdH')
         ->where(['sth.SetoranIdH' => $setoranH])
         ->all();
 
-$soidh = $dataH[0]['SOIDH'];
-$pengh = $dataH[0]['PengeluaranIdH'];
 $helper = $dataH[0]['HelperId'];
+$storandate = $dataH[0]['Date'];
 
 $dataHelper = MasterHelper::find()->where(['HelperId' => $helper])->one();
 $namaHelper = $dataHelper['HelperName'];
@@ -91,7 +88,6 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 <?php $form1 = ActiveForm::begin(['action' => ['pengeluaran-d/create']]); ?>
                 <div class="box-body">
                     <?= html::hiddeninput('sth',$setoranH)?>
-                    <?= Html::hiddenInput('pengh',$pengh) ?>
                     <label class="col-xs-2">Desc</label>
                     <div class="col-xs-10">
                         <?= $form->field($modelP, 'Description')->textInput(['maxlength' => true])->label(false) ?>
@@ -114,8 +110,8 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 </div>
                 <?php $form2 = ActiveForm::begin(['action' => ['sod/create']]); ?>
                 <div class="box-body">
-                    <?= Html::hiddenInput('soidh',$soidh) ?>
                     <?= Html::hiddenInput('sth',$setoranH) ?>
+                    <?= Html::hiddenInput('date',$storandate) ?>
                     <?= Html::hiddenInput('helper',$helper) ?>
                     <label class="col-md-2">Jenis</label>
                     <div class="col-md-10">
@@ -162,7 +158,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
         <div class="col-md-6">
             <?php
                 $searchModelPengeluaran = new \app\transaction\models\PengeluaranDSearch();
-                $dataProviderPengeluaran = $searchModelPengeluaran->searchPengD($pengh);
+                $dataProviderPengeluaran = $searchModelPengeluaran->searchPengD($setoranH);
                 
                 echo $this->render('/pengeluaran-d/index',[
                     'dataProvider' => $dataProviderPengeluaran,
@@ -172,7 +168,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
         <div class="col-md-6">
             <?php
                 $searchModelSO = new \app\transaction\models\SodSearch();
-                $dataProviderSO = $searchModelSO->searchSod($soidh);
+                $dataProviderSO = $searchModelSO->searchSod($setoranH);
                 
                 echo $this->render('/sod/index',[
                     'dataProvider' => $dataProviderSO,

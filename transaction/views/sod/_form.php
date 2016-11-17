@@ -35,13 +35,13 @@ $dataListJenis = ArrayHelper::map($modelJenis,'JenisId','JenisName');
                     <h1 class="box-title with-border"><?= Html::encode($this->title." tanggal ".$SODate) ?></h1>
                 </div>
                 <div class="box-body">
-                    <label class="col-md-2">Helper</label>
+                <!--    <label class="col-md-2">Helper</label>
                     <div class="col-md-10">
-                        <?= $form->field($model, 'HelperId')->widget(Select2::classname(),[
-                            'options' => ['placeholder' => 'Pilih Helper ...'],
-                            'data' => $dataListHelper
-                        ])->label(false) ?>
-                    </div>
+                        <?php //$form->field($model, 'HelperId')->widget(Select2::classname(),[
+                            //'options' => ['placeholder' => 'Pilih Helper ...'],
+                            //'data' => $dataListHelper
+                        //])->label(false) ?>
+                    </div> -->
                     <label class="col-md-2">Jenis</label>
                     <div class="col-md-10">
                         <?= $form->field($model, 'JenisId')->widget(Select2::classname(),[
@@ -67,7 +67,7 @@ $dataListJenis = ArrayHelper::map($modelJenis,'JenisId','JenisName');
     <?php 
     $searchModel = new SodSearch();
     
-    $dataProvider1 = $searchModel->searchSod($SOIDH);
+    $dataProvider1 = $searchModel->search($SOIDH);
     
     echo $this->render('index',[
         'dataProvider' => $dataProvider1,
