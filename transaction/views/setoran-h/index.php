@@ -17,6 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box box-primary">
                 <div class="box-header">
                     <h1 class="box-title with-border"><?= Html::encode($this->title) ?></h1>
+                </div>                
+                <div class="col-xs-12">
+                    <?= Html::a('Buat Setoran', ['create'], ['class' => 'btn btn-success']) ?>
                 </div>
                 <div class="box-body">
                     <?= GridView::widget([
@@ -65,9 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
                 </div>
             </div>
-        </div>
-        <div class="col-xs-12">
-            <?= Html::a('Buat Setoran', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
     </div>
 </div>
