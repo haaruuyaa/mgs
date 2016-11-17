@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\transaction\models\Soh;
 use app\transaction\models\SodSearch;
-use app\master\models\MasterHelper;
 use app\master\models\MasterJenis;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
@@ -19,8 +18,6 @@ $queryDate = Soh::find()->where(['SOIDH' => $SOIDH])->all();
 
 $SODate = date('d F Y',strtotime($queryDate[0]['SODate']));
 
-$modelHelper = MasterHelper::find()->all();
-$dataListHelper = ArrayHelper::map($modelHelper,'HelperId','HelperName');
 $modelJenis = MasterJenis::find()->all();
 $dataListJenis = ArrayHelper::map($modelJenis,'JenisId','JenisName');
 ?>

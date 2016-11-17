@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
 use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranD;
 use app\transaction\models\PengeluaranD;
+use app\transaction\models\Sod;
 use app\master\models\MasterHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel app\transaction\models\SetoranDSearch */
@@ -32,17 +32,25 @@ $dataSetoranD = SetoranD::find()->select("sd.Qty,sd.JenisId,sd.HHID,sd.HCID,hc.P
                                 ->all();
 
 $dataPengeluaranD = PengeluaranD::find()
-        ->select('*')
+        ->select('pd.Description,pd.Amount')
         ->from('PengeluaranD pd')
         ->leftJoin('PengeluaranH ph','ph.PengeluaranIdH = pd.PengeluaranIdH')
         ->leftJoin('SetoranH sh','sh.SetoranIdH = ph.SetoranIdH')
         ->where(['sh.SetoranIdH' => $Setoranidh])
         ->all()
         ;
-//echo var_dump($dataSetoranD);
-//die();
+$dataSOHelper = Sod::find()
+        ->select('sd.Qty,sd.JenisId,mj.JenisName,mn.Price')
+        ->from('Sod sd')
+        ->innerJoin('Soh sh','sh.SOIDH = sd.SOIDH')
+        ->leftJoin('MasterJenis mj','mj.JenisId = sd.JenisId')
+        ->leftJoin('MasterNet mn','mn.JenisId = sd.JenisId')
+        ->where(['sh.SetoranIdH' => $Setoranidh])
+        ->all()
+        ;
 $ArrPendapatan = [];
 $ArrPengeluaran = [];
+$ArrSO = [];
 for($i = 0;$i < count($dataSetoranD);$i++)
 {
     if($dataSetoranD[$i]['HHID'] == NULL)
@@ -61,6 +69,14 @@ for($i = 0;$i < count($dataPengeluaranD);$i++)
     array_push($ArrPengeluaran, $price);
 }
 $TotalPengeluaran = array_sum($ArrPengeluaran);
+
+for($i = 0;$i < count($dataSOHelper);$i++)
+{
+    $price = $dataSOHelper[$i]['Qty'] * $dataSOHelper[$i]['Price'];
+    array_push($ArrSO, $price);
+}
+$TotalPengeluaranSo = array_sum($ArrSO);
+
 $SubTotal = $TotalPendapatan - $TotalPengeluaran;
 ?>
     <!-- Content Header (Page header) 
@@ -73,92 +89,131 @@ $SubTotal = $TotalPendapatan - $TotalPengeluaran;
     <!-- Main content -->
     <section class="invoice">
       <!-- title row -->
-      <div class="row">
-        <div class="col-xs-12">
-          <h2 class="page-header">
-            <i class="fa fa-globe"></i> <?= $namahelper ?> (Murni Gas).
-            <small class="pull-right"><label>Tanggal:</label> <?= $formatDate ?></small>
-          </h2>
-        </div><!-- /.col -->
-      </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <i class="fa fa-globe"></i> <?= $namahelper ?> (Murni Gas).
+                    <small class="pull-right"><label>Tanggal:</label> <?= $formatDate ?></small>
+                </h2>
+            </div><!-- /.col -->
+        </div>
       <!-- info row -->
-      <div class="row invoice-info">
-        <div class="col-sm-4 invoice-col">
-         
-        </div><!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-          
-        </div><!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-          
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+
+            </div><!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+
+            </div><!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+
+            </div><!-- /.col -->
+        </div><!-- /.row -->
 
       <!-- Table row -->
-      <div class="row">
-        <div class="col-xs-12 table-responsive">
-          <table class="table table-striped">
-              <h3>Pendapatan</h3>
-            <thead>
-                <tr>
-                    <th style="width:10%; text-align: center;">Qty</th>
-                    <th style="width:10%; text-align: center;">Product</th>
-                    <th style="width:65%;">Harga Satuan</th>
-                    <th style="width:15%; text-align: center;">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($dataSetoranD as $item){ ?>
-                <tr>
-                    <?php
-                    if($item['JenisId'] == 'G001')
-                    {
-                        $badge = 'label label-primary';
-                    } else if ($item['JenisId'] == 'AQ001')
-                    {
-                        $badge = 'label label-info';
-                    } else if ($item['JenisId'] == 'G002')
-                    {
-                        $badge = 'label label-success';
-                    } else if ($item['JenisId'] == 'G003')
-                    {
-                        $badge = 'label label-warning';
-                    } else if ($item['JenisId'] == 'G004')
-                    {
-                        $badge = 'label label-danger';
-                    }
-                    ?>
-                    <td style="text-align:center;"><?= $item['Qty']; ?></td>
-                    <td style="text-align:center;"><label class="<?= $badge; ?>" style="font-size: 14px;"><?= $item['JenisName']; ?></label></td>
-                    <td><?php $price = ($item['HHID'] == NULL) ? $price = $item['PriceHC'] : $price = $item['PriceHH']; echo 'Rp. '.number_format($price, 0, '.', ','); ?></td>
-                    <td style="text-align:center;"><?php $price = ($item['HHID'] == NULL) ? $price = $item['PriceHC'] : $price = $item['PriceHH']; $totalprice = $item['Qty'] * $price; echo 'Rp. '.number_format($totalprice, 0, '.', ','); ?></td>
-                </tr>
-                <?php }?>
-            </tbody>
-          </table>
-            <table class="table table-striped">
-                <h3>Pengeluaran</h3>
-            <thead>
-                <tr>
-                    <th style="width:10%; text-align: center;">Keterangan</th>
-                    <th style="width:10%; text-align: center;"></th>
-                    <th style="width:65%;"></th>
-                    <th style="width:15%; text-align: center;">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($dataPengeluaranD as $item){ ?>
-                <tr>
-                    <td style="text-align:center;"><?= $item['Description']; ?></td>
-                    <td></td>
-                    <td></td>
-                    <td style="text-align:center;"><?= 'Rp. '.number_format($item['Amount'], 0, '.', ',');?></td>
-                </tr>
-                <?php }?>
-            </tbody>
-          </table>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <h3>Pendapatan</h3>
+                    <thead>
+                        <tr>
+                            <th style="width:10%; text-align: center;">Qty</th>
+                            <th style="width:10%; text-align: center;">Product</th>
+                            <th style="width:65%;">Harga Satuan</th>
+                            <th style="width:15%; text-align: center;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($dataSetoranD as $item){ ?>
+                        <tr>
+                            <?php
+                            if($item['JenisId'] == 'G001')
+                            {
+                                $badge = 'label label-primary';
+                            } else if ($item['JenisId'] == 'AQ001')
+                            {
+                                $badge = 'label label-info';
+                            } else if ($item['JenisId'] == 'G002')
+                            {
+                                $badge = 'label label-success';
+                            } else if ($item['JenisId'] == 'G003')
+                            {
+                                $badge = 'label label-warning';
+                            } else if ($item['JenisId'] == 'G004')
+                            {
+                                $badge = 'label label-danger';
+                            }
+                            ?>
+                            <td style="text-align:center;"><?= $item['Qty']; ?></td>
+                            <td style="text-align:center;"><label class="<?= $badge; ?>" style="font-size: 14px;"><?= $item['JenisName']; ?></label></td>
+                            <td><?php $price = ($item['HHID'] == NULL) ? $price = $item['PriceHC'] : $price = $item['PriceHH']; echo 'Rp. '.number_format($price, 0, '.', ','); ?></td>
+                            <td style="text-align:center;"><?php $price = ($item['HHID'] == NULL) ? $price = $item['PriceHC'] : $price = $item['PriceHH']; $totalprice = $item['Qty'] * $price; echo 'Rp. '.number_format($totalprice, 0, '.', ','); ?></td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+                <table class="table table-striped">
+                    <h3>Pengeluaran</h3>
+                    <thead>
+                        <tr>
+                            <th style="width:10%; text-align: center;">Keterangan</th>
+                            <th style="width:10%; text-align: center;"></th>
+                            <th style="width:65%;"></th>
+                            <th style="width:15%; text-align: center;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($dataPengeluaranD as $item){ ?>
+                        <tr>
+                            <td style="text-align:center;"><?= $item['Description']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center;"><?= 'Rp. '.number_format($item['Amount'], 0, '.', ',');?></td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+                <table class="table table-striped">
+                    <h3>SO</h3>
+                    <thead>
+                        <tr>
+                            <th style="width:10%; text-align: center;">Qty</th>
+                            <th style="width:10%; text-align: center;">Product</th>
+                            <th style="width:65%;">Harga Satuan</th>
+                            <th style="width:15%; text-align: center;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($dataSOHelper as $item){ ?>
+                        <tr>
+                            <?php
+                            if($item['JenisId'] == 'G001')
+                            {
+                                $badge = 'label label-primary';
+                            } else if ($item['JenisId'] == 'AQ001')
+                            {
+                                $badge = 'label label-info';
+                            } else if ($item['JenisId'] == 'G002')
+                            {
+                                $badge = 'label label-success';
+                            } else if ($item['JenisId'] == 'G003')
+                            {
+                                $badge = 'label label-warning';
+                            } else if ($item['JenisId'] == 'G004')
+                            {
+                                $badge = 'label label-danger';
+                            }
+                            ?>
+                            <td style="text-align:center;"><?= $item['Qty']; ?></td>
+                            <td style="text-align:center;"><label class="<?= $badge; ?>" style="font-size: 14px;"><?= $item['JenisName']; ?></label></td>
+                            <td><?= 'Rp. '.number_format($item['Price'], 0, '.', ','); ?></td>
+                            <td style="text-align:center;"><?php $total = $item['Qty'] * $item['Price']; echo 'Rp. '.number_format($total, 0, '.', ',');?></td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
 
       <div class="row">
         <!-- accepted payments column -->
@@ -176,6 +231,10 @@ $SubTotal = $TotalPendapatan - $TotalPengeluaran;
               <tr>
                 <th>Total Pengeluaran:</th>
                 <td><?= 'Rp. '.number_format($TotalPengeluaran,0,'.',',') ?></td>
+              </tr>
+              <tr>
+                <th>Total Pengeluaran SO:</th>
+                <td><?= 'Rp. '.number_format($TotalPengeluaranSo,0,'.',',') ?></td>
               </tr>
               <tr>
                 <th>Total:</th>

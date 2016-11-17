@@ -20,7 +20,7 @@ class Sod extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public $JenisName;
-    
+    public $Price;
     public static function tableName()
     {
         return 'sod';
