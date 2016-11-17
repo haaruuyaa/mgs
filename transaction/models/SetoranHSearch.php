@@ -43,12 +43,16 @@ class SetoranHSearch extends SetoranH
         $query = SetoranH::find()
                 ->select('*')
                 ->from('SetoranH sh')
-                ->leftJoin('MasterHelper mh','mh.HelperId = sh.HelperId');
+                ->leftJoin('MasterHelper mh','mh.HelperId = sh.HelperId')
+                ->orderBy(['Date' => SORT_DESC]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
         ]);
 
         $this->load($params);

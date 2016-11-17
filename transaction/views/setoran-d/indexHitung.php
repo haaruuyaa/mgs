@@ -77,7 +77,7 @@ for($i = 0;$i < count($dataSOHelper);$i++)
 }
 $TotalPengeluaranSo = array_sum($ArrSO);
 
-$SubTotal = $TotalPendapatan - $TotalPengeluaran;
+$SubTotal = $TotalPendapatan - $TotalPengeluaran - $TotalPengeluaranSo;
 ?>
     <!-- Content Header (Page header) 
     <section class="content-header">

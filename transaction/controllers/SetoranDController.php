@@ -73,10 +73,7 @@ class SetoranDController extends Controller
         $hargacus = new HargaCustomerSearch();
         $Sth = Yii::$app->request->post('sdh');
         $helpid = Yii::$app->request->post('helpid');
-        
-        
         if ($model->load(Yii::$app->request->post())) {
-            
             $qty = $model->Qty;
             $jenid = $model->JenisId;
             $cus = $model->CustomerId;
