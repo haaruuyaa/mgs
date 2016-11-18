@@ -80,10 +80,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                                     return $total;
                                 }
+                            ],
+                            [
+                                'header' => 'Action',
+                                'format' => 'raw',
+                                'value' => function($data)
+                                {
+                                    return Html::a('<i class="glyphicon glyphicon-trash"></i>',['setoran-d/delete','id'=>$data['SetoranIdD'],'idh' => $data['SetoranIdH'],'cus' => 1]);
+                                }
                             ]
-                            // 'DateCrt',
-
-                //            ['class' => 'yii\grid\ActionColumn'],
                         ],
                     ]); ?>
                 </div>
