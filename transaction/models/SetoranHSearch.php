@@ -70,7 +70,7 @@ class SetoranHSearch extends SetoranH
         ]);
 
         $query->andFilterWhere(['like', 'SetoranIdH', $this->SetoranIdH])
-            ->andFilterWhere(['like', 'HelperId', $this->HelperId]);
+            ->andFilterWhere(['like', 'HelperName', $this->HelperId]);
 
         return $dataProvider;
     }
