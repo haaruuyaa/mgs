@@ -27,7 +27,7 @@ class SetoranDController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+//                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -113,7 +113,7 @@ class SetoranDController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->SetoranIdD]);
         } else {
@@ -129,11 +129,16 @@ class SetoranDController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id,$idh)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        $jenisid = $model['JenisId'];
+        $qty = $model['Qty'];
+        
+        $this->CancelStock($jenisid, $qty);
+        $model->delete();
+        
+        return $this->redirect(['setoran-d/create','id' => $idh]);
     }
 
     /**
@@ -173,6 +178,32 @@ class SetoranDController extends Controller
         
         $model->StockIsi = ($stockisi - $qty);
         $model->StockKosong = ($stockkosong + $qty);
+        $model->DateUpdate = date('Y-m-d h:i:s');
+        $modelHis->save();
+        $model->save();
+    }
+    
+    public function CancelStock($id,$qty)
+    {
+        $model = MasterStock::find()->where(['JenisId' => $id])->one();
+        $modelHis = new MasterStockHistory();
+        
+        $stockisi = $model['StockIsi'];
+        $stockkosong = $model['StockKosong'];
+        $datestock = $model['StockDateAdd'];
+        $stocktotal = $model['StockTotal'];
+        $dateupdate = $model['DateUpdate'];
+        
+        $modelHis->StockIsi = $stockisi;
+        $modelHis->StockKosong = $stockkosong;
+        $modelHis->StockTotal = $stocktotal;
+        $modelHis->JenisId = $id;
+        $modelHis->StockDateAdd = $datestock;
+        $modelHis->DateCrt = date('Y-m-d h:i:s');
+        $modelHis->DateUpdate = $dateupdate;
+        
+        $model->StockIsi = ($stockisi + $qty);
+        $model->StockKosong = ($stockkosong - $qty);
         $model->DateUpdate = date('Y-m-d h:i:s');
         $modelHis->save();
         $model->save();
