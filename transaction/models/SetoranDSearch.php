@@ -74,7 +74,7 @@ class SetoranDSearch extends SetoranD
     public function searchSetoranD($params)
     {
         $query = SetoranD::find()
-                ->select('mj.JenisName,sd.Qty,sd.HHID,sd.HCID,mc.CustomerName')
+                ->select('mj.JenisName,sd.Qty,sd.HHID,sd.HCID,mc.CustomerName,sd.SetoranIdD,sd.SetoranIdH')
                 ->from('SetoranD sd')
                 ->leftJoin('MasterJenis mj','mj.JenisId = sd.JenisId')
                 ->leftJoin('MasterCustomer mc','mc.CustomerId = sd.CustomerId')
