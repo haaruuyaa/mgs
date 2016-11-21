@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranD;
-use app\transaction\models\PengeluaranD;
+use app\transaction\models\Pengeluaran;
 use app\transaction\models\Sod;
 use app\master\models\MasterHelper;
 /* @var $this yii\web\View */
@@ -31,11 +31,10 @@ $dataSetoranD = SetoranD::find()->select("sd.Qty,sd.JenisId,sd.HHID,sd.HCID,hc.P
                                 ->where(['SetoranIdH' => $Setoranidh])
                                 ->all();
 
-$dataPengeluaranD = PengeluaranD::find()
+$dataPengeluaran = Pengeluaran::find()
         ->select('pd.Description,pd.Amount')
-        ->from('PengeluaranD pd')
-        ->leftJoin('PengeluaranH ph','ph.PengeluaranIdH = pd.PengeluaranIdH')
-        ->leftJoin('SetoranH sh','sh.SetoranIdH = ph.SetoranIdH')
+        ->from('Pengeluaran pd')
+        ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')
         ->where(['sh.SetoranIdH' => $Setoranidh])
         ->all()
         ;
@@ -63,9 +62,9 @@ for($i = 0;$i < count($dataSetoranD);$i++)
 }
 $TotalPendapatan = array_sum($ArrPendapatan);
 
-for($i = 0;$i < count($dataPengeluaranD);$i++)
+for($i = 0;$i < count($dataPengeluaran);$i++)
 {
-    $price = $dataPengeluaranD[$i]['Amount'];
+    $price = $dataPengeluaran[$i]['Amount'];
     array_push($ArrPengeluaran, $price);
 }
 $TotalPengeluaran = array_sum($ArrPengeluaran);
@@ -163,7 +162,7 @@ $SubTotal = $TotalPendapatan - $TotalPengeluaran - $TotalPengeluaranSo;
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($dataPengeluaranD as $item){ ?>
+                        <?php foreach($dataPengeluaran as $item){ ?>
                         <tr>
                             <td style="text-align:center;"><?= $item['Description']; ?></td>
                             <td></td>

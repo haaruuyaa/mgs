@@ -114,7 +114,7 @@ class SodController extends Controller
             $model->SOIDH = $soidh;
             $model->SOIDD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
-//            $this->AddStock($jenis, $qty);
+            $this->AddStock($jenis, $qty);
             $model->save();
             return $this->redirect(['sod/create-sod', 'id' => $soidh]);
 //            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);

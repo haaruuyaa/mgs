@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 use app\master\models\MasterJenis;
 use app\master\models\MasterHelper;
 use app\master\models\MasterCustomer;
-use app\transaction\models\PengeluaranD;
+use app\transaction\models\Pengeluaran;
 use app\transaction\models\Sod;
 use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranDSearch;
@@ -17,7 +17,7 @@ use kartik\select2\Select2;
 /* @var $form yii\widgets\ActiveForm */
 
 //Model pengeluaran
-$modelP = new PengeluaranD();
+$modelP = new Pengeluaran();
 $modelS = new Sod();
 
 $setoranH = Yii::$app->request->get('id','xxx');
@@ -85,7 +85,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 <div class="box-header">
                     <h1 class="box-title with-border"><?= Html::encode("Pengeluaran") ?></h1>
                 </div>
-                <?php $form1 = ActiveForm::begin(['action' => ['pengeluaran-d/create']]); ?>
+                <?php $form1 = ActiveForm::begin(['action' => ['pengeluaran/create']]); ?>
                 <div class="box-body">
                     <?= html::hiddeninput('sth',$setoranH)?>
                     <label class="col-xs-2">Desc</label>
@@ -157,10 +157,10 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
         </div>
         <div class="col-md-6">
             <?php
-                $searchModelPengeluaran = new \app\transaction\models\PengeluaranDSearch();
-                $dataProviderPengeluaran = $searchModelPengeluaran->searchPengD($setoranH);
+                $searchModelPengeluaran = new \app\transaction\models\PengeluaranSearch();
+                $dataProviderPengeluaran = $searchModelPengeluaran->searchPeng($setoranH);
                 
-                echo $this->render('/pengeluaran-d/index',[
+                echo $this->render('/pengeluaran/index',[
                     'dataProvider' => $dataProviderPengeluaran,
                 ]);  
                 ?>
