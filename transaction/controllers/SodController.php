@@ -71,13 +71,15 @@ class SodController extends Controller
         $searchModel = new SodSearch();
         $modelSoh = new Soh();
         $searchModelSoh = new SohSearch();
+        $soidh = $searchModelSoh->GenerateId();
+        $soidd = $searchModel->GenerateId();
+        
         if ($model->load(Yii::$app->request->post())) {
             $sth = Yii::$app->request->post('sth','xxx');
             $storandate = Yii::$app->request->post('date','xxx');
             $jenis = $model->JenisId;
-            $qty = $model->Qty;
+            $qty = $model->Qty;            
             
-            $soidh = $searchModelSoh->GenerateId();
             $modelSoh->SOIDH = $soidh;
             $modelSoh->SODate = $storandate;
             $modelSoh->SetoranIdH = $sth;
@@ -85,7 +87,7 @@ class SodController extends Controller
             
             $this->AddStock($jenis, $qty);
             $model->SOIDH = $soidh;
-            $model->SOIDD = $searchModel->GenerateId();
+            $model->SOIDD = $soidd;
             $model->DateCrt = date('Y-m-d h:i:s');
             
             $modelSoh->save();
@@ -112,7 +114,7 @@ class SodController extends Controller
             $model->SOIDH = $soidh;
             $model->SOIDD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
-            $this->AddStock($jenis, $qty);
+//            $this->AddStock($jenis, $qty);
             $model->save();
             return $this->redirect(['sod/create-sod', 'id' => $soidh]);
 //            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);

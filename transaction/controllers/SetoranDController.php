@@ -77,7 +77,7 @@ class SetoranDController extends Controller
             $qty = $model->Qty;
             $jenid = $model->JenisId;
             $cus = $model->CustomerId;
-            $this->ReduceStock($jenid, $qty);
+//            $this->ReduceStock($jenid, $qty);
             $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
             $arrayhc = $hargacus->GetHarga($cus, $jenid);
             $idhh = $arrayhh['HHID'];

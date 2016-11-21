@@ -4,22 +4,24 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\transaction\models\PengeluaranHSearch */
+/* @var $model app\transaction\models\PengeluaranSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="pengeluaran-h-search">
+<div class="pengeluaran-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'PengeluaranIdH') ?>
+    <?= $form->field($model, 'PengeluaranId') ?>
 
     <?= $form->field($model, 'SetoranIdH') ?>
 
-    <?= $form->field($model, 'Date') ?>
+    <?= $form->field($model, 'Amount') ?>
+
+    <?= $form->field($model, 'Description') ?>
 
     <?= $form->field($model, 'DateCrt') ?>
 

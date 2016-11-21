@@ -5,12 +5,12 @@ namespace app\transaction\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\transaction\models\PengeluaranH;
+use app\transaction\models\Pengeluaran;
 
 /**
- * PengeluaranHSearch represents the model behind the search form about `app\transaction\models\PengeluaranH`.
+ * PengeluaranSearch represents the model behind the search form about `app\transaction\models\Pengeluaran`.
  */
-class PengeluaranHSearch extends PengeluaranH
+class PengeluaranSearch extends Pengeluaran
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class PengeluaranHSearch extends PengeluaranH
     public function rules()
     {
         return [
-            [['PengeluaranIdH'], 'integer'],
-            [['SetoranIdH', 'Date', 'DateCrt'], 'safe'],
+            [['PengeluaranId', 'SetoranIdH', 'Description', 'DateCrt'], 'safe'],
+            [['Amount'], 'number'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PengeluaranHSearch extends PengeluaranH
      */
     public function search($params)
     {
-        $query = PengeluaranH::find();
+        $query = Pengeluaran::find();
 
         // add conditions that should always apply here
 
@@ -59,12 +59,13 @@ class PengeluaranHSearch extends PengeluaranH
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'PengeluaranIdH' => $this->PengeluaranIdH,
-            'Date' => $this->Date,
+            'Amount' => $this->Amount,
             'DateCrt' => $this->DateCrt,
         ]);
 
-        $query->andFilterWhere(['like', 'SetoranIdH', $this->SetoranIdH]);
+        $query->andFilterWhere(['like', 'PengeluaranId', $this->PengeluaranId])
+            ->andFilterWhere(['like', 'SetoranIdH', $this->SetoranIdH])
+            ->andFilterWhere(['like', 'Description', $this->Description]);
 
         return $dataProvider;
     }
@@ -76,10 +77,10 @@ class PengeluaranHSearch extends PengeluaranH
                 'APH',
                 RIGHT(YEAR(NOW()),2),
                 RIGHT(MONTH(NOW()),2),
-                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(PengeluaranIdH,3)),0)+1,CHAR)),3)
-        ) AS PengeluaranIdH 
-        FROM pengeluaranh
-        WHERE SUBSTRING(PengeluaranIdH,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
+                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(PengeluaranId,3)),0)+1,CHAR)),3)
+        ) AS PengeluaranId 
+        FROM pengeluaran
+        WHERE SUBSTRING(PengeluaranId,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
         
         return $genId;
     }

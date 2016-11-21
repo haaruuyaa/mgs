@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\transaction\models\PengeluaranHSearch */
+/* @var $searchModel app\transaction\models\PengeluaranSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Pengeluaran Hs';
+$this->title = 'Pengeluarans';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="pengeluaran-h-index">
+<div class="pengeluaran-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Pengeluaran H', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Pengeluaran', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,9 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'PengeluaranIdH',
+            'PengeluaranId',
             'SetoranIdH',
-            'Date',
+            'Amount',
+            'Description',
             'DateCrt',
 
             ['class' => 'yii\grid\ActionColumn'],

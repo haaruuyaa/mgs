@@ -5,22 +5,22 @@ namespace app\transaction\models;
 use Yii;
 
 /**
- * This is the model class for table "pengeluarand".
+ * This is the model class for table "pengeluaran".
  *
- * @property string $PengeluaranIdD
- * @property string $PengeluaranIdH
+ * @property string $PengeluaranId
+ * @property string $SetoranIdH
  * @property string $Amount
  * @property string $Description
  * @property string $DateCrt
  */
-class PengeluaranD extends \yii\db\ActiveRecord
+class Pengeluaran extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'pengeluarand';
+        return 'pengeluaran';
     }
 
     /**
@@ -29,10 +29,10 @@ class PengeluaranD extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['PengeluaranIdD'], 'required'],
+            [['PengeluaranId'], 'required'],
             [['Amount'], 'number'],
             [['DateCrt'], 'safe'],
-            [['PengeluaranIdD', 'PengeluaranIdH'], 'string', 'max' => 10],
+            [['PengeluaranId', 'SetoranIdH'], 'string', 'max' => 10],
             [['Description'], 'string', 'max' => 255],
         ];
     }
@@ -43,8 +43,8 @@ class PengeluaranD extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'PengeluaranIdD' => 'Pengeluaran Id D',
-            'PengeluaranIdH' => 'Pengeluaran Id H',
+            'PengeluaranId' => 'Pengeluaran ID',
+            'SetoranIdH' => 'Setoran Id H',
             'Amount' => 'Amount',
             'Description' => 'Description',
             'DateCrt' => 'Date Crt',

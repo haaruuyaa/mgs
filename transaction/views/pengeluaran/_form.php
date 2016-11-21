@@ -4,17 +4,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\transaction\models\PengeluaranD */
+/* @var $model app\transaction\models\Pengeluaran */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="pengeluaran-d-form">
+<div class="pengeluaran-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'PengeluaranIdD')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'PengeluaranId')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'PengeluaranIdH')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'SetoranIdH')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'Amount')->textInput(['maxlength' => true]) ?>
 
