@@ -37,13 +37,11 @@ class SetoranD extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-           [['SetoranIdD'], 'required'],
-           [['HHID', 'Qty'], 'integer'],
-           [['HHID', 'HCID', 'Qty'], 'integer'],
-           [['DateCrt'], 'safe'],
-           [['SetoranIdD', 'SetoranIdH', 'JenisId'], 'string', 'max' => 10],
-           [['SetoranIdD', 'SetoranIdH', 'JenisId', 'CustomerId'], 'string', 'max' => 10],
-       ];
+            [['SetoranIdD'], 'required'],
+            [['HHID', 'HHSeqId', 'HCID', 'HCSeqId', 'Qty'], 'integer'],
+            [['DateCrt'], 'safe'],
+            [['SetoranIdD', 'SetoranIdH', 'JenisId', 'CustomerId'], 'string', 'max' => 10],
+        ];
     }
 
     /**
@@ -52,14 +50,16 @@ class SetoranD extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-           'SetoranIdD' => 'Setoran Id D',
-           'SetoranIdH' => 'Setoran Id H',
-           'JenisId' => 'Jenis ID',
-           'CustomerId' => 'Customer ID', 
-           'HHID' => 'Hhid',
-           'HCID' => 'Hcid', 
-           'Qty' => 'Qty',
-           'DateCrt' => 'Date Crt',
+            'SetoranIdD' => 'Setoran Id D',
+            'SetoranIdH' => 'Setoran Id H',
+            'JenisId' => 'Jenis ID',
+            'CustomerId' => 'Customer ID',
+            'HHID' => 'Hhid',
+            'HHSeqId' => 'Hhseq ID',
+            'HCID' => 'Hcid',
+            'HCSeqId' => 'Hcseq ID',
+            'Qty' => 'Qty',
+            'DateCrt' => 'Date Crt',
         ];
     }
 }

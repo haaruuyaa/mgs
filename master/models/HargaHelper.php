@@ -31,6 +31,7 @@ class HargaHelper extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['SeqId'], 'integer'],
             [['Price'], 'number'],
             [['HelperId', 'JenisId'], 'string', 'max' => 10],
         ];
@@ -43,6 +44,7 @@ class HargaHelper extends \yii\db\ActiveRecord
     {
         return [
             'HHID' => 'Hhid',
+            'SeqId' => 'Seq ID',
             'HelperId' => 'Helper ID',
             'JenisId' => 'Jenis ID',
             'Price' => 'Price',

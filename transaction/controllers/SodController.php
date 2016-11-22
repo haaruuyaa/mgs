@@ -85,7 +85,7 @@ class SodController extends Controller
             $modelSoh->SetoranIdH = $sth;
             $modelSoh->DateCrt = date('Y-m-d h:i:s');
             
-            $this->AddStock($jenis, $qty);
+//            $this->AddStock($jenis, $qty);
             $model->SOIDH = $soidh;
             $model->SOIDD = $soidd;
             $model->DateCrt = date('Y-m-d h:i:s');

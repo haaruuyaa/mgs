@@ -17,12 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
 $id = Yii::$app->request->get('id','xxx');
 
 $modelSumPend = Pendapatan::find()
-                                                        ->select("sum(p.Amount) as Amount")
-                                                        ->from('Pendapatan p')
-                                                        ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
-                                                        ->one()
-                                                        ;
+->select("sum(p.Amount) as Amount")
+->from('Pendapatan p')
+->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
+->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
+->one()
+;
 
 $modelHelper = MasterHelper::find()->where(['HelperId' => $id])->one();
 $helperName = $modelHelper['HelperName'];
@@ -49,6 +49,7 @@ $SO = SetoranD::find()
         ->from("SOD sd")
         ->leftJoin('SOH sh','sh.SOIDH = sd.SOIDH')
         ->where(['sd.JenisId' => $jenisbyhelper,'MONTH(sh.SODate)' => date('m')])
+        ->orderBy(['sh.SODate' => SORT_ASC])
         ->all();
 
 $SOSum = SetoranD::find()
@@ -184,6 +185,14 @@ $modelPendapatan = Pendapatan::find()
                               <th style="width: 100px">Total</th>
                             </tr>
                             <?php foreach($modelPendapatan as $index => $penditem){ ?>
+                            <?php 
+                                        $modelSumPend = Pendapatan::find()
+                                                        ->select("IFNULL(sum(p.Amount),0) as Amount")
+                                                        ->from('Pendapatan p')
+                                                        ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
+                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
+                                                        ->one()
+                                                        ; ?>
                             <tr>
                                 <td><?= ($index+1)."."; ?></td>
                                 <td><?= date('d-m-Y',strtotime($penditem['Date'])); ?></td>
@@ -204,13 +213,6 @@ $modelPendapatan = Pendapatan::find()
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
                                                         ->where(['sh.Date' => $penditem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
                                                         ->all()
-                                                        ;
-                                        $modelSumPend = Pendapatan::find()
-                                                        ->select("IFNULL(sum(p.Amount),0) as Amount")
-                                                        ->from('Pendapatan p')
-                                                        ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
-                                                        ->one()
                                                         ;
                                        
                                         foreach($modelPenddesc as $index => $itempend) {
@@ -327,7 +329,7 @@ $modelPendapatan = Pendapatan::find()
                                         <?php } ?>
                                     </ul>
                                 </td>
-                                <td><span class="badge bg-red"><?= 'Rp. '.number_format($modelPengsum[0]['Amount'],0,'.',','); ?></span></td>
+                                <td><span class="badge bg-green"><?= 'Rp. '.number_format($modelPengsum[0]['Amount'],0,'.',','); ?></span></td>
                             </tr>
                             <?php } ?>
                             <tr>
