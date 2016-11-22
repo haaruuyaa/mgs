@@ -31,6 +31,7 @@ class HargaCustomer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['SeqId'], 'integer'],
             [['Price'], 'number'],
             [['CustomerId', 'JenisId'], 'string', 'max' => 10],
         ];
@@ -43,6 +44,7 @@ class HargaCustomer extends \yii\db\ActiveRecord
     {
         return [
             'HCID' => 'Hcid',
+            'SeqId' => 'Seq ID',
             'CustomerId' => 'Customer ID',
             'JenisId' => 'Jenis ID',
             'Price' => 'Price',
