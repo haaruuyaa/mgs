@@ -20,6 +20,7 @@ class SetoranH extends \yii\db\ActiveRecord
     public $HelperName;
     public $PengeluaranIdH;
     public $SOIDH;
+    public $Qty;
     public static function tableName()
     {
         return 'setoranh';

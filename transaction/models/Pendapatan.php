@@ -5,35 +5,35 @@ namespace app\transaction\models;
 use Yii;
 
 /**
- * This is the model class for table "pengeluaran".
+ * This is the model class for table "pendapatan".
  *
- * @property string $PengeluaranId
+ * @property string $PendapatanId
  * @property string $SetoranIdH
  * @property string $Amount
  * @property string $Description
  * @property string $DateCrt
  */
-class Pengeluaran extends \yii\db\ActiveRecord
+class Pendapatan extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
+    public $Date;
     public static function tableName()
     {
-        return 'pengeluaran';
+        return 'pendapatan';
     }
 
     /**
      * @inheritdoc
      */
-    public $Date;
     public function rules()
     {
         return [
-            [['PengeluaranId'], 'required'],
+            [['PendapatanId'], 'required'],
             [['Amount'], 'number'],
             [['DateCrt'], 'safe'],
-            [['PengeluaranId', 'SetoranIdH'], 'string', 'max' => 10],
+            [['PendapatanId', 'SetoranIdH'], 'string', 'max' => 10],
             [['Description'], 'string', 'max' => 255],
         ];
     }
@@ -44,7 +44,7 @@ class Pengeluaran extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'PengeluaranId' => 'Pengeluaran ID',
+            'PendapatanId' => 'Pendapatan ID',
             'SetoranIdH' => 'Setoran Id H',
             'Amount' => 'Amount',
             'Description' => 'Description',

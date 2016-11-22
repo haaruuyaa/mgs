@@ -21,6 +21,12 @@
 //                    ['label' => 'Orderan', 'icon' => 'fa fa-pencil-square-o', 'url' => ['/transaction/order-h']],
                     ['label' => 'Data Pelanggan', 'icon' => 'fa fa-users', 'url' => ['/master/master-member']],
                     ['label' => 'Setoran', 'icon' => 'fa fa-money', 'url' => ['/transaction/setoran-h']],
+                    ['label' => 'Laporan', 'icon' => 'fa fa-file-code-o', 'url' => ['#'],
+                         'items' => [
+//                        ['label' => 'Keuangan', 'icon' => 'fa fa-bar-chart', 'url' => ['/transaction/default/report-keuangan']],
+                        ['label' => 'Penjualan Helper', 'icon' => 'fa fa-user', 'url' => ['/transaction/default/report-helper']],
+                        ['label' => 'Penjualan Customer', 'icon' => 'fa fa-truck', 'url' => ['/transaction/default/report-customer']],
+                     ]],
                     
                 ],
             ]

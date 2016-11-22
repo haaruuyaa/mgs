@@ -7,6 +7,7 @@ use app\master\models\MasterJenis;
 use app\master\models\MasterHelper;
 use app\master\models\MasterCustomer;
 use app\transaction\models\Pengeluaran;
+use app\transaction\models\Pendapatan;
 use app\transaction\models\Sod;
 use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranDSearch;
@@ -18,6 +19,7 @@ use kartik\select2\Select2;
 
 //Model pengeluaran
 $modelP = new Pengeluaran();
+$modelP1 = new Pendapatan();
 $modelS = new Sod();
 
 $setoranH = Yii::$app->request->get('id','xxx');
@@ -43,7 +45,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
 ?>
 <div class="setoran-d-form">
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header">
                     <h1 class="box-title with-border"><?= Html::encode($this->title) ?></h1>
@@ -80,7 +82,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 <?php ActiveForm::end(); ?>
             </div>
         </div>        
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header">
                     <h1 class="box-title with-border"><?= Html::encode("Pengeluaran") ?></h1>
@@ -103,7 +105,30 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h1 class="box-title with-border"><?= Html::encode("Pendapatan") ?></h1>
+                </div>
+                <?php $form3 = ActiveForm::begin(['action' => ['pendapatan/create']]); ?>
+                <div class="box-body">
+                    <?= html::hiddeninput('sth',$setoranH)?>
+                    <label class="col-xs-2">Desc</label>
+                    <div class="col-xs-10">
+                        <?= $form->field($modelP1, 'Description')->textInput(['maxlength' => true])->label(false) ?>
+                    </div>
+                    <label class="col-xs-2">Jumlah</label>
+                    <div class="col-xs-10">
+                        <?= $form->field($modelP1, 'Amount')->textInput(['maxlength' => true])->label(false) ?>
+                    </div>
+                    <div class="col-xs-12">
+                        <?= Html::submitButton('Save',['class' => 'btn btn-success']) ?>
+                    </div>
+                </div>
+                <?php ActiveForm::end(); ?>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header">
                     <h1 class="box-title with-border"><?= Html::encode("SO") ?></h1>
@@ -155,7 +180,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
             
             ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?php
                 $searchModelPengeluaran = new \app\transaction\models\PengeluaranSearch();
                 $dataProviderPengeluaran = $searchModelPengeluaran->searchPeng($setoranH);
@@ -165,13 +190,23 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 ]);  
                 ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <?php
                 $searchModelSO = new \app\transaction\models\SodSearch();
                 $dataProviderSO = $searchModelSO->searchSod($setoranH);
                 
                 echo $this->render('/sod/index',[
                     'dataProvider' => $dataProviderSO,
+                ]);  
+                ?>
+        </div>
+        <div class="col-md-4">
+            <?php
+                $searchModelPendapatan = new \app\transaction\models\PendapatanSearch();
+                $dataProviderPendapatan = $searchModelPendapatan->search($setoranH);
+                
+                echo $this->render('/pendapatan/index',[
+                    'dataProvider' => $dataProviderPendapatan,
                 ]);  
                 ?>
         </div>

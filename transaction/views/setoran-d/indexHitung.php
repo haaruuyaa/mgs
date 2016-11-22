@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranD;
 use app\transaction\models\Pengeluaran;
+use app\transaction\models\Pendapatan;
 use app\transaction\models\Sod;
 use app\master\models\MasterHelper;
 /* @var $this yii\web\View */
@@ -38,6 +39,13 @@ $dataPengeluaran = Pengeluaran::find()
         ->where(['sh.SetoranIdH' => $Setoranidh])
         ->all()
         ;
+$dataPendapatan = Pengeluaran::find()
+        ->select('pd.Description,pd.Amount')
+        ->from('Pendapatan pd')
+        ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')
+        ->where(['sh.SetoranIdH' => $Setoranidh])
+        ->all()
+        ;
 $dataSOHelper = Sod::find()
         ->select('sd.Qty,sd.JenisId,mj.JenisName,mn.Price')
         ->from('Sod sd')
@@ -49,6 +57,7 @@ $dataSOHelper = Sod::find()
         ;
 $ArrPendapatan = [];
 $ArrPengeluaran = [];
+$ArrBayar = [];
 $ArrSO = [];
 for($i = 0;$i < count($dataSetoranD);$i++)
 {
@@ -69,6 +78,13 @@ for($i = 0;$i < count($dataPengeluaran);$i++)
 }
 $TotalPengeluaran = array_sum($ArrPengeluaran);
 
+for($i = 0;$i < count($dataPendapatan);$i++)
+{
+    $price = $dataPendapatan[$i]['Amount'];
+    array_push($ArrBayar, $price);
+}
+$TotalPembayaran = array_sum($ArrBayar);
+
 for($i = 0;$i < count($dataSOHelper);$i++)
 {
     $price = $dataSOHelper[$i]['Qty'] * $dataSOHelper[$i]['Price'];
@@ -76,7 +92,7 @@ for($i = 0;$i < count($dataSOHelper);$i++)
 }
 $TotalPengeluaranSo = array_sum($ArrSO);
 
-$SubTotal = $TotalPendapatan - $TotalPengeluaran - $TotalPengeluaranSo;
+$SubTotal = ($TotalPendapatan + $TotalPembayaran) - $TotalPengeluaran - $TotalPengeluaranSo;
 ?>
     <!-- Content Header (Page header) 
     <section class="content-header">
@@ -147,6 +163,27 @@ $SubTotal = $TotalPendapatan - $TotalPengeluaran - $TotalPengeluaranSo;
                             <td style="text-align:center;"><label class="<?= $badge; ?>" style="font-size: 14px;"><?= $item['JenisName']; ?></label></td>
                             <td><?php $price = ($item['HHID'] == NULL) ? $price = $item['PriceHC'] : $price = $item['PriceHH']; echo 'Rp. '.number_format($price, 0, '.', ','); ?></td>
                             <td style="text-align:center;"><?php $price = ($item['HHID'] == NULL) ? $price = $item['PriceHC'] : $price = $item['PriceHH']; $totalprice = $item['Qty'] * $price; echo 'Rp. '.number_format($totalprice, 0, '.', ','); ?></td>
+                        </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+                <table class="table table-striped">
+                    <h3>Pembayaran</h3>
+                    <thead>
+                        <tr>
+                            <th style="width:10%; text-align: center;">Keterangan</th>
+                            <th style="width:10%; text-align: center;"></th>
+                            <th style="width:65%;"></th>
+                            <th style="width:15%; text-align: center;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($dataPendapatan as $item){ ?>
+                        <tr>
+                            <td style="text-align:center;"><?= $item['Description']; ?></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center;"><?= 'Rp. '.number_format($item['Amount'], 0, '.', ',');?></td>
                         </tr>
                         <?php }?>
                     </tbody>
@@ -226,6 +263,10 @@ $SubTotal = $TotalPendapatan - $TotalPengeluaran - $TotalPengeluaranSo;
               <tr>
                 <th style="width:75%">Total Pendapatan:</th>
                 <td><?= 'Rp. '.number_format($TotalPendapatan,0,'.',',') ?></td>
+              </tr>
+              <tr>
+                <th style="width:75%">Total Pembayaran:</th>
+                <td><?= 'Rp. '.number_format($TotalPembayaran,0,'.',',') ?></td>
               </tr>
               <tr>
                 <th>Total Pengeluaran:</th>

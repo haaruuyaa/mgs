@@ -24,6 +24,8 @@ class SetoranD extends \yii\db\ActiveRecord
     public $CustomerName;
     public $PriceHC;
     public $PriceHH;
+    public $SODate;
+    
     public static function tableName()
     {
         return 'setorand';

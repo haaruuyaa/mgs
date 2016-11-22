@@ -20,9 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                <p>
+                
                     <?php // Html::a('Create Sod', ['create'], ['class' => 'btn btn-success']) ?>
-                </p>
+                
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
 //                    'filterModel' => $searchModel,
