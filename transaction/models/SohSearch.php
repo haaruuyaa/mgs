@@ -40,12 +40,15 @@ class SohSearch extends Soh
      */
     public function search($params)
     {
-        $query = Soh::find();
+        $query = Soh::find()->where(['SetoranIdH' => NULL])->orderBy(['SODate' => SORT_ASC]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
         ]);
 
         $this->load($params);
