@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1755957c03f72d406067375961c67dfc",
-    "content-hash": "a1095d95846e079737b13b82013c9d1e",
+    "hash": "f5faf62edbeb67bd909593aae0ad726f",
+    "content-hash": "02745d0b03cf9e548018ce6bda4aef98",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -2624,6 +2624,49 @@
             "time": "2016-07-08 11:51:25"
         },
         {
+            "name": "yiier/yii2-chartjs-widget",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiier/yii2-chartjs-widget.git",
+                "reference": "e49244ff04104193f87677f3aeb1cb8177c76c1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiier/yii2-chartjs-widget/zipball/e49244ff04104193f87677f3aeb1cb8177c76c1e",
+                "reference": "e49244ff04104193f87677f3aeb1cb8177c76c1e",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/chartjs": "^2.1.3",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "yiier\\chartjs\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "forecho",
+                    "email": "caizhenghai@gmail.com"
+                }
+            ],
+            "description": "ChartJs 2 for Yii2 widget",
+            "keywords": [
+                "chartjs",
+                "extension",
+                "widget",
+                "yii2"
+            ],
+            "time": "2016-05-17 08:16:19"
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "2.0.9",
             "source": {
@@ -3022,6 +3065,7 @@
                 "codeception",
                 "yii2"
             ],
+            "abandoned": "codeception/codeception",
             "time": "2016-03-17 03:41:26"
         },
         {
