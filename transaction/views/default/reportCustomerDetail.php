@@ -27,6 +27,7 @@ $SO = SetoranD::find()
         ->from("SOD sd")
         ->leftJoin('SOH sh','sh.SOIDH = sd.SOIDH')
         ->where(['sd.JenisId' => 'G002','MONTH(sh.SODate)' => date('m')])
+        ->orderBy(['sh.SODate' => SORT_ASC])
         ->all();
 
 $SOSum = SetoranD::find()
@@ -135,60 +136,7 @@ $modelPendapatan = Pendapatan::find()
                             </tr>
                             <?php } ?>
                         </table>
-                    </div>
-                    <div class="box-body">
-                        <table class="table table-bordered">
-                            <tr>
-                              <th style="width: 10px">#</th>
-                              <th>Keterangan</th>
-                              <th style="width: 150px">Harga Satuan</th>
-                              <th style="width: 100px">Qty</th>
-                              <th style="width: 100px">Total</th>
-                            </tr>
-                            <?php foreach($SO as $index => $soitems){ ?>
-                            <?php 
-                            $soqty = $soitems['Qty'];
-                            $totalsoqty = $SOSum['Qty'];
-                            
-                            $TotalPriceSO = $hargaSatuan * $soqty;
-                            $TotalPengSO = $totalsoqty * $hargaSatuan;
-                            
-                            if($soitems['JenisId'] == 'G001')
-                            {
-                                $badge = 'badge bg-blue';
-                            } else if ($soitems['JenisId'] == 'AQ001')
-                            {
-                                $badge = 'badge bg-aqua';
-                            } else if ($soitems['JenisId'] == 'G002')
-                            {
-                                $badge = 'badge bg-green';
-                            } else if ($soitems['JenisId'] == 'G003')
-                            {
-                                $badge = 'badge bg-yellow';
-                            } else if ($soitems['JenisId'] == 'G004')
-                            {
-                                $badge = 'badge bg-red';
-                            } 
-                            
-                            
-                            ?>
-                            <tr>
-                              <td><?= $index+1; ?>.</td>
-                              <td>SO Tanggal <?= date('d F Y',strtotime($soitems['SODate'])); ?></td>
-                              <td><?= 'Rp. '.number_format($hargaSatuan,0,'.',',')?></td>
-                              <td><?= $soitems['Qty']; ?></td>
-                              <td><span class="<?= $badge;?>"><?= 'Rp. '.number_format($TotalPriceSO,0,'.',','); ?></span></td>
-                            </tr>
-                            <?php } ?>
-                            <tr>
-                              <td style="width: 10px"><?= (count($SO)+1)."."; ?></td>
-                              <td style="width: 150px">Total Pengeluaran SO</td>
-                              <td></td>
-                              <td></td>
-                              <td style="width: 100px"><span class="badge bg-red"><?= 'Rp. '.number_format($TotalPengSO,0,'.',',') ?></span></td>
-                            </tr>
-                        </table>
-                    </div>
+                    </div>                    
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -241,6 +189,59 @@ $modelPendapatan = Pendapatan::find()
                               <td style="width: 150px">Total Pembayaran</td>
                               <td></td>
                               <td style="width: 100px"><span class="badge bg-red"><?= 'Rp. '.number_format($modelSumPend['Amount'],0,'.',',')?></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <tr>
+                              <th style="width: 10px">#</th>
+                              <th>Keterangan</th>
+                              <th style="width: 150px">Harga Satuan</th>
+                              <th style="width: 100px">Qty</th>
+                              <th style="width: 100px">Total</th>
+                            </tr>
+                            <?php foreach($SO as $index => $soitems){ ?>
+                            <?php 
+                            $soqty = $soitems['Qty'];
+                            $totalsoqty = $SOSum['Qty'];
+                            
+                            $TotalPriceSO = $hargaSatuan * $soqty;
+                            $TotalPengSO = $totalsoqty * $hargaSatuan;
+                            
+                            if($soitems['JenisId'] == 'G001')
+                            {
+                                $badge = 'badge bg-blue';
+                            } else if ($soitems['JenisId'] == 'AQ001')
+                            {
+                                $badge = 'badge bg-aqua';
+                            } else if ($soitems['JenisId'] == 'G002')
+                            {
+                                $badge = 'badge bg-green';
+                            } else if ($soitems['JenisId'] == 'G003')
+                            {
+                                $badge = 'badge bg-yellow';
+                            } else if ($soitems['JenisId'] == 'G004')
+                            {
+                                $badge = 'badge bg-red';
+                            } 
+                            
+                            
+                            ?>
+                            <tr>
+                              <td><?= $index+1; ?>.</td>
+                              <td>SO Tanggal <?= date('d F Y',strtotime($soitems['SODate'])); ?></td>
+                              <td><?= 'Rp. '.number_format($hargaSatuan,0,'.',',')?></td>
+                              <td><?= $soitems['Qty']; ?></td>
+                              <td><span class="<?= $badge;?>"><?= 'Rp. '.number_format($TotalPriceSO,0,'.',','); ?></span></td>
+                            </tr>
+                            <?php } ?>
+                            <tr>
+                              <td style="width: 10px"><?= (count($SO)+1)."."; ?></td>
+                              <td style="width: 150px">Total Pengeluaran SO</td>
+                              <td></td>
+                              <td></td>
+                              <td style="width: 100px"><span class="badge bg-red"><?= 'Rp. '.number_format($TotalPengSO,0,'.',',') ?></span></td>
                             </tr>
                         </table>
                     </div>
