@@ -16,7 +16,7 @@
                         ['label' => 'Harga Helper', 'icon' => 'fa fa-usd', 'url' => ['/master/harga-helper']],
                      ]],
                     // ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
-//                    ['label' => 'SO', 'icon' => 'fa fa-mail-reply', 'url' => ['/transaction/soh']],
+                    ['label' => 'SO', 'icon' => 'fa fa-mail-reply', 'url' => ['/transaction/soh']],
 //                    ['label' => 'Pengeluaran', 'icon' => 'fa fa-money', 'url' => ['/transaction/pengeluaran-h']],
 //                    ['label' => 'Orderan', 'icon' => 'fa fa-pencil-square-o', 'url' => ['/transaction/order-h']],
                     ['label' => 'Data Pelanggan', 'icon' => 'fa fa-users', 'url' => ['/master/master-member']],
