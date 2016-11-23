@@ -16,7 +16,7 @@ $this->title = 'Laporan Pendapatan';
 $this->params['breadcrumbs'][] = $this->title;
 
 $id = Yii::$app->request->get('id','xxx');
-
+$arrPendptn = array();
 $modelCustomer = MasterCustomer::find()->all();
 
 $modelHelper = MasterHelper::find()->where(['HelperId' => $id])->one();
@@ -108,7 +108,8 @@ $modelPendapatan = Pendapatan::find()
                               <th style="width: 100px">Total</th>
                             </tr>
                             <?php foreach($modelCustomer as $index => $cus){ ?>
-                            <?php  $modalsetoran = SetoranH::find()
+                            <?php  
+                            $modalsetoran = SetoranH::find()
                                     ->select("SUM(sd.Qty) as Qty")
                                     ->from('SetoranH sh')
                                     ->leftJoin('SetoranD sd','sd.SetoranIdH = sh.SetoranIdH')
@@ -126,6 +127,8 @@ $modelPendapatan = Pendapatan::find()
                             
                             $TotalPrice = $price * $qty;
                             
+                            array_push($arrPendptn, $TotalPrice);
+                            $TotalAllPrice = array_sum($arrPendptn);
                             ?>
                             <tr>
                               <td><?= $index+1; ?>.</td>
@@ -134,7 +137,14 @@ $modelPendapatan = Pendapatan::find()
                               <td><?= $qty; ?></td>
                               <td><span class="badge bg-green"><?= 'Rp. '.number_format($TotalPrice,0,'.',','); ?></span></td>
                             </tr>
-                            <?php } ?>
+                            <?php }  ?>
+                            <tr>
+                              <td style="width: 10px"><?= (count($modelCustomer)+1)."."; ?></td>
+                              <td style="width: 150px">Total Pendapatan</td>
+                              <td></td>
+                              <td></td>
+                              <td style="width: 100px"><span class="badge bg-red"><?= 'Rp. '.number_format($TotalAllPrice,0,'.',',')?></span></td>
+                            </tr>
                         </table>
                     </div>                    
                     <div class="box-body">
