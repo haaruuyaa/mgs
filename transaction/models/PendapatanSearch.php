@@ -94,7 +94,7 @@ class PendapatanSearch extends Pendapatan
             'DateCrt' => $this->DateCrt,
         ]);
 
-        $query->andFilterWhere(['like', 'PendapatanId', $this->PengeluaranId])
+        $query->andFilterWhere(['like', 'PendapatanId', $this->PendapatanId])
             ->andFilterWhere(['like', 'SetoranIdH', $this->SetoranIdH])
             ->andFilterWhere(['like', 'Description', $this->Description]);
 
