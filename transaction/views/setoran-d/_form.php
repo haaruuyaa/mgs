@@ -203,7 +203,7 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
         <div class="col-md-4">
             <?php
                 $searchModelPendapatan = new \app\transaction\models\PendapatanSearch();
-                $dataProviderPendapatan = $searchModelPendapatan->search($setoranH);
+                $dataProviderPendapatan = $searchModelPendapatan->searchPend($setoranH);
                 
                 echo $this->render('/pendapatan/index',[
                     'dataProvider' => $dataProviderPendapatan,
