@@ -42,4 +42,9 @@ class DefaultController extends Controller
     {
         return $this->render('reportCustomerDetail',['id' => $id]);
     }
+    
+    public function actionReportSo()
+    {
+        return $this->render('reportSO');
+    }
 }

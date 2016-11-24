@@ -26,6 +26,7 @@
 //                        ['label' => 'Keuangan', 'icon' => 'fa fa-bar-chart', 'url' => ['/transaction/default/report-keuangan']],
                         ['label' => 'Penjualan Helper', 'icon' => 'fa fa-user', 'url' => ['/transaction/default/report-helper']],
                         ['label' => 'Penjualan Customer', 'icon' => 'fa fa-truck', 'url' => ['/transaction/default/report-customer']],
+                        ['label' => 'SO', 'icon' => 'fa fa-folder-open', 'url' => ['/transaction/default/report-so']],
                      ]],
                     
                 ],
