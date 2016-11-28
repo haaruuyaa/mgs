@@ -15,6 +15,7 @@ class MasterJenis extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $StockTotal;
     public static function tableName()
     {
         return 'masterjenis';
