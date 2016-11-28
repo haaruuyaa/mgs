@@ -21,6 +21,7 @@ class SetoranH extends \yii\db\ActiveRecord
     public $PengeluaranIdH;
     public $SOIDH;
     public $Qty;
+    public $Year;
     public static function tableName()
     {
         return 'setoranh';
