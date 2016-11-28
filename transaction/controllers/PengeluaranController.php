@@ -23,7 +23,7 @@ class PengeluaranController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+//                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -105,11 +105,11 @@ class PengeluaranController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id,$idh)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['setoran-d/create','id' => $idh]);
     }
 
     /**

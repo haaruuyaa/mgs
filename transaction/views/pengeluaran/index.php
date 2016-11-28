@@ -39,6 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'Amount',
                                 'value' => 'Amount'
                             ],
+                            [
+                                'header' => 'Hapus',
+                                'format' => 'raw',
+                                'value' => function($data)
+                                {
+                                    return Html::a('<i class="fa fa-trash"></i>', ['pengeluaran/delete','id' => $data['PengeluaranId'],'idh' => $data['SetoranIdH']]);
+                                }
+                            ],
 //                            'DateCrt',
                         ],
                     ]); ?>

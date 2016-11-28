@@ -10,7 +10,7 @@ use app\master\models\MasterCustomer;
 /* @var $searchModel app\transaction\models\SetoranHSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Laporan Pendapatan';
+$this->title = 'Laporan SO';
 $this->params['breadcrumbs'][] = $this->title;
 
 $modelJenis = MasterJenis::find()->all();
@@ -40,16 +40,14 @@ $modelJenis = MasterJenis::find()->all();
         <div class="col-lg-6 col-xs-3">
             <!-- small box -->
             <div class="small-box <?=$badge?>">
-              <div class="inner">
-                <h3>150</h3>
-                <p>New Orders</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-shopping-cart"></i>
-              </div>
-              <a href="#" class="small-box-footer">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
+                <div class="inner">
+                    <h3><?= $jenis['JenisName'] ?></h3>
+                    <p><?= $jenis['JenisId'] ?></p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-database"></i>
+                </div>
+                <?= Html::a("More info <i class='fa fa-arrow-circle-right'></i>", ['default/report-so-detail','id' => $jenis['JenisId']], ['class' => 'small-box-footer']) ?>
             </div>
         </div>
         <?php } ?>
