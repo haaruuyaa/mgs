@@ -15,12 +15,30 @@ $this->title = 'Laporan Pendapatan';
 $this->params['breadcrumbs'][] = $this->title;
 
 $id = Yii::$app->request->get('id','xxx');
+$year = Yii::$app->request->get('year',date('o'));
+$month = Yii::$app->request->get('month',date('m'));
 
 $modelSumPend = Pendapatan::find()
 ->select("sum(p.Amount) as Amount")
 ->from('Pendapatan p')
 ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
+->where([
+        'MONTH(sh.Date)' => $month,
+        'YEAR(sh.Date)' => $year,
+        'sh.HelperId'=>$id,
+        ])
+->one()
+;
+
+$modelSumPeng = Pengeluaran::find()
+->select("sum(p.Amount) as Amount")
+->from('Pengeluaran p')
+->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
+->where([
+        'YEAR(sh.Date)' => $year,
+        'MONTH(sh.Date)' => $month,
+        'sh.HelperId'=>$id
+        ])
 ->one()
 ;
 
@@ -29,18 +47,27 @@ $helperName = $modelHelper['HelperName'];
 
 
 $jenisinsetoran = SetoranD::find()
-        ->select('SetoranD.JenisId,mj.JenisName')
+        ->select('sd.JenisId,mj.JenisName')
         ->distinct(true)
-        ->leftJoin('SetoranH sh','sh.SetoranIdH = SetoranD.SetoranIdH')
-        ->leftJoin("MasterJenis mj","mj.JenisId = SetoranD.JenisId")
-        ->where(['sh.HelperId' => $id])
+        ->from('SetoranD sd')
+        ->leftJoin('SetoranH sh','sh.SetoranIdH = sd.SetoranIdH')
+        ->leftJoin("MasterJenis mj","mj.JenisId = sd.JenisId")
+        ->where([
+            'sh.HelperId' => $id,
+            'YEAR(sh.Date)' => $year,
+            'MONTH(sh.Date)' => $month
+                ])
         ->all();
 
 $modelPengeluaran = Pengeluaran::find()
         ->select("*")
         ->from("Pengeluaran p")
         ->leftJoin("SetoranH sh","sh.SetoranIdh = p.SetoranIdH")
-        ->where(['sh.HelperId' => $id,'MONTH(sh.Date)' => date('m')])
+        ->where([
+            'sh.HelperId' => $id,
+            'YEAR(sh.Date)' => $year,
+            'MONTH(sh.Date)' => $month
+            ])
         ->orderBy(['sh.Date' => SORT_ASC])
         ->groupBy(['sh.Date'])
         ->all();
@@ -49,7 +76,11 @@ $modelPendapatan = Pendapatan::find()
         ->select("*")
         ->from("Pendapatan p")
         ->leftJoin("SetoranH sh","sh.SetoranIdh = p.SetoranIdH")
-        ->where(['sh.HelperId' => $id,'MONTH(sh.Date)' => date('m')])
+        ->where([
+            'sh.HelperId' => $id,
+            'YEAR(sh.Date)' => $year,
+            'MONTH(sh.Date)' => $month
+            ])
         ->orderBy(['sh.Date' => SORT_ASC])
         ->groupBy(['sh.Date'])
         ->all();
@@ -71,7 +102,12 @@ $modelPendapatan = Pendapatan::find()
                                     ->select("SUM(sd.Qty) as Qty")
                                     ->from('SetoranH sh')
                                     ->leftJoin('SetoranD sd','sd.SetoranIdH = sh.SetoranIdH')
-                                    ->where(['sh.HelperId' => $id,'sd.JenisId' => $items['JenisId']])
+                                    ->where([
+                                        'sh.HelperId' => $id,
+                                        'sd.JenisId' => $items['JenisId'],
+                                        'YEAR(sh.Date)' => $year,
+                                        'MONTH(sh.Date)' => $month    
+                                            ])
                                     ->one();
 
                             $qty = $modalsetoran['Qty']; ?>
@@ -79,6 +115,7 @@ $modelPendapatan = Pendapatan::find()
                       <b><?= $items['JenisName'] ?></b> <a class="pull-right"><?= $qty; ?></a>
                     </li>
                       <?php } ?>
+                    <!-- <li class="list-group-item"><?php //Html::a('<i class="fa fa-download"></i> Download',['exportlaporanhelper','id' => $id,'month' =>$month,'year' => $year],['class' => 'btn btn-success']) ?></li> -->
                   </ul>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -103,7 +140,12 @@ $modelPendapatan = Pendapatan::find()
                                     ->select("SUM(sd.Qty) as Qty")
                                     ->from('SetoranH sh')
                                     ->leftJoin('SetoranD sd','sd.SetoranIdH = sh.SetoranIdH')
-                                    ->where(['sh.HelperId' => $id,'sd.JenisId' => $items['JenisId']])
+                                    ->where([
+                                            'sh.HelperId' => $id,
+                                            'sd.JenisId' => $items['JenisId'],
+                                            'YEAR(sh.Date)' => $year,
+                                            'MONTH(sh.Date)' => $month
+                                            ])
                                     ->one();
 
                             $qty = $modalsetoran['Qty']; 
@@ -111,7 +153,10 @@ $modelPendapatan = Pendapatan::find()
                             $modelHarga = HargaHelper::find()
                                     ->select("*")
                                     ->from("HargaHelper hh")
-                                    ->where(['hh.HelperId' => $id,'hh.JenisId' => $items['JenisId']])
+                                    ->where([
+                                            'hh.HelperId' => $id,
+                                            'hh.JenisId' => $items['JenisId'],
+                                            ])
                                     ->one();
                             $price = $modelHarga['Price'];
                             
@@ -159,7 +204,11 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("sum(p.Amount) as Amount")
                                                         ->from('Pendapatan p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
+                                                        ->where([
+                                                            'YEAR(sh.Date)' => $year,
+                                                            'MONTH(sh.Date)' => $month,
+                                                            'sh.HelperId'=>$id
+                                                                ])
                                                         ->one()
                                                         ; ?>
                             <tr>
@@ -172,7 +221,12 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("*")
                                                         ->from('Pendapatan p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $penditem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                            'sh.Date' => $penditem['Date'],
+                                                            'sh.HelperId'=>$id,
+                                                            'YEAR(sh.Date)' => $year,
+                                                            'MONTH(sh.Date)' => $month
+                                                            ])
                                                         ->all()
                                                         ;
                                         
@@ -180,7 +234,12 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("sum(p.Amount) as Amount")
                                                         ->from('Pendapatan p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $penditem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                            'sh.Date' => $penditem['Date'],
+                                                            'sh.HelperId'=>$id,
+                                                            'YEAR(sh.Date)' => $year,
+                                                            'MONTH(sh.Date)' => $month
+                                                            ])
                                                         ->all()
                                                         ;
                                        
@@ -220,7 +279,12 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("*")
                                                         ->from('Pengeluaran p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $pengitem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                            'sh.Date' => $pengitem['Date'],
+                                                            'sh.HelperId'=>$id,
+                                                            'YEAR(sh.Date)' => $year,
+                                                            'MONTH(sh.Date)' => $month
+                                                            ])
                                                         ->all()
                                                         ;
                                         
@@ -228,16 +292,14 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("sum(p.Amount) as Amount")
                                                         ->from('Pengeluaran p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $pengitem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                                'sh.Date' => $pengitem['Date'],
+                                                                'sh.HelperId'=>$id,
+                                                                'YEAR(sh.Date)' => $year,
+                                                                'MONTH(sh.Date)' => $month
+                                                                ])
                                                         ->all()
-                                                        ;
-                                        $modelSumPeng = Pengeluaran::find()
-                                                        ->select("sum(p.Amount) as Amount")
-                                                        ->from('Pengeluaran p')
-                                                        ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
-                                                        ->one()
-                                                        ;
+                                                        ;                                       
                                         
                                         foreach($modelPengdesc as $index => $itempeng) {
                                         ?>

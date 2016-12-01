@@ -15,10 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $modelHelper = MasterHelper::find()->where(['<>','HelperId','A005'])->all();
 
+$month = Yii::$app->request->get('month',date('m'));
+$year = Yii::$app->request->get('year',date('o'));
 
 ?>
 <div class="transaction-default-index">
     <div class="row">
+        <div class="col-xs-12">
+            <?= $this->render('_search'); ?>
+        </div>
         <?php foreach($modelHelper as $helper){ ?>
         <div class="col-md-6">
               <!-- Widget: user widget style 1 -->
@@ -30,7 +35,7 @@ $modelHelper = MasterHelper::find()->where(['<>','HelperId','A005'])->all();
                     </div><!-- /.widget-user-image -->
                     <h3 class="widget-user-username"><?= $helper['HelperName']; ?></h3>
                     <h5 class="widget-user-desc">Murni Gas</h5>
-                    <?= Html::a('Detail', ['default/report-helper-detail','id'=>$helper['HelperId']], ['class' => 'btn btn-primary']) ?>
+                    <?= Html::a('Detail', ['default/report-helper-detail','id'=>$helper['HelperId'],'year' =>$year,'month' => $month], ['class' => 'btn btn-primary']) ?>
                 </div>
                 <div class="box-footer no-padding">
                     <ul class="nav nav-stacked">
@@ -42,10 +47,15 @@ $modelHelper = MasterHelper::find()->where(['<>','HelperId','A005'])->all();
                         <?php foreach($modelJenis as $index => $jenis){ ?>
                             <?php  
                                 $modelTotalPenjualan = SetoranD::find()
-                                ->select("SUM(sd.Qty) as Qty")
+                                ->select("SUM(sd.Qty) as Qty,sh.Date")
                                 ->from("SetoranD sd")
                                 ->leftJoin('SetoranH sh','sh.SetoranIdH = sd.SetoranIdH')
-                                ->where(['sh.HelperId' => $helper['HelperId'],'sd.JenisId'=> $jenis['JenisId']])->one();
+                                ->where([
+                                        'sh.HelperId' => $helper['HelperId'],
+                                        'sd.JenisId'=> $jenis['JenisId'],
+                                        'MONTH(sh.Date)' => $month,
+                                        'YEAR(sh.Date)' => $year
+                                        ])->one();
                                 
                                 if($jenis['JenisId'] == 'G001')
                                 {
@@ -65,7 +75,7 @@ $modelHelper = MasterHelper::find()->where(['<>','HelperId','A005'])->all();
                                 } 
                             ?>
                             <li><a href="#"><?= $jenis['JenisName'] ?><span class="<?= $badge; ?>"><?= $modelTotalPenjualan['Qty']; ?></span></a></li>
-                        <?php } ?>
+                        <?php } ?>                            
                     </ul>
                 </div>
             </div><!-- /.widget-user -->
