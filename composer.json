@@ -34,7 +34,8 @@
         "kartik-v/yii2-dropdown-x": "*",
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-depdrop": "@dev",
-        "yiier/yii2-chartjs-widget": "*"
+        "yiier/yii2-chartjs-widget": "*",
+        "phpoffice/phpexcel": "dev-develop"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
