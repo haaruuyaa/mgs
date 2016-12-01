@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'raw',
                                 'value' => function($data)
                                 {
-                                    return Html::a('<i class="fa fa-trash"></i>', ['pengeluaran/delete','id' => $data['PengeluaranId'],'idh' => $data['SetoranIdH']]);
+                                    return Html::a('<i class="fa fa-trash"></i>', ['pengeluaran/delete','id' => $data['PengeluaranId'],'idh' => $data['SetoranIdH']],['data-confirm' => 'Apakah yakin ingin menghapus pengeluaran ini ?']);
                                 }
                             ],
 //                            'DateCrt',
