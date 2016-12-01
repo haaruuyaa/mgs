@@ -63,6 +63,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::a('<i class="glyphicon glyphicon-pencil"></i>',['setoran-d/create','id'=>$data['SetoranIdH']]);
                                 }
                             ],
+                            [
+                                'header' => 'Hapus',
+                                'format' => 'raw',
+                                'value' => function($data)
+                                {
+                                    return Html::a('<i class="fa fa-trash"></i>', ['setoran-h/delete','id' => $data['SetoranIdH']],['data-confirm' => 'Apakah yakin ingin menghapus setoran ini ?']);
+                                }
+                            ],
 //                            ['class' => 'yii\grid\ActionColumn'],
                         ],
                     ]); ?>
