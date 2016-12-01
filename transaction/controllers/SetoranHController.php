@@ -12,6 +12,7 @@ use app\transaction\models\PengeluaranHSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\transaction\models\SetoranD;
 
 /**
  * SetoranHController implements the CRUD actions for SetoranH model.
@@ -27,7 +28,7 @@ class SetoranHController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+//                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -115,8 +116,14 @@ class SetoranHController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $modeld = SetoranD::find()->where(['SetoranIdH' => $id])->all();
+        
+        if(count($modeld) >= 0)
+        {
+            Yii::$app->db->createCommand("delete from setorand where SetoranIdH = '".$id."'")->execute();
+            Yii::$app->db->createCommand("delete from setoranh where SetoranIdH = '".$id."'")->execute();
+        }
+        
         return $this->redirect(['index']);
     }
 
@@ -133,6 +140,15 @@ class SetoranHController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
+    protected function findModelD($id)
+    {
+        if (($model = SetoranD::find()->where(['SetoranIdH' => $id])->all()) !== null) {
+            return $model;
+        } else {
+            return $model;
         }
     }
     
