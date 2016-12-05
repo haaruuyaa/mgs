@@ -38,7 +38,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'Amount',
                                 'value' => 'Amount'
                             ],
-
+                            [
+                                'header' => 'Hapus',
+                                'format' => 'raw',
+                                'value' => function($data)
+                                {
+                                    return Html::a('<i class="fa fa-trash"></i>', ['pendapatan/delete','id' => $data['PendapatanId'],'idh' => $data['SetoranIdH']],['data-confirm' => 'Apakah yakin ingin menghapus pendapatan ini ?']);
+                                }
+                            ],
 //                            ['class' => 'yii\grid\ActionColumn'],
                         ],
                     ]); ?>

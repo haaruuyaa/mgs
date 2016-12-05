@@ -189,6 +189,16 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                     'dataProvider' => $dataProviderPengeluaran,
                 ]);  
                 ?>
+        </div>        
+        <div class="col-md-4">
+            <?php
+                $searchModelPendapatan = new \app\transaction\models\PendapatanSearch();
+                $dataProviderPendapatan = $searchModelPendapatan->searchPend($setoranH);
+                
+                echo $this->render('/pendapatan/index',[
+                    'dataProvider' => $dataProviderPendapatan,
+                ]);  
+                ?>
         </div>
         <div class="col-md-4">
             <?php
@@ -197,16 +207,6 @@ $arrayhelpercustomer = ArrayHelper::map($modelCustomer,'CustomerId','CustomerNam
                 
                 echo $this->render('/sod/index',[
                     'dataProvider' => $dataProviderSO,
-                ]);  
-                ?>
-        </div>
-        <div class="col-md-4">
-            <?php
-                $searchModelPendapatan = new \app\transaction\models\PendapatanSearch();
-                $dataProviderPendapatan = $searchModelPendapatan->searchPend($setoranH);
-                
-                echo $this->render('/pendapatan/index',[
-                    'dataProvider' => $dataProviderPendapatan,
                 ]);  
                 ?>
         </div>

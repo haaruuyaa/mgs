@@ -52,4 +52,9 @@ class DefaultController extends Controller
     {
         return $this->render('reportSODetail',['id' => $id]);
     }
+    
+    public function actionExportlaporanhelper() {
+        ob_end_clean();
+        return $this->render('exportlaporanhelper');
+    }
 }

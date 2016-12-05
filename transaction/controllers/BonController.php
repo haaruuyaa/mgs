@@ -3,16 +3,16 @@
 namespace app\transaction\controllers;
 
 use Yii;
-use app\transaction\models\Pendapatan;
-use app\transaction\models\PendapatanSearch;
+use app\transaction\models\Bon;
+use app\transaction\models\BonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PendapatanController implements the CRUD actions for Pendapatan model.
+ * BonController implements the CRUD actions for Bon model.
  */
-class PendapatanController extends Controller
+class BonController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Lists all Pendapatan models.
+     * Lists all Bon models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PendapatanSearch();
+        $searchModel = new BonSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Displays a single Pendapatan model.
+     * Displays a single Bon model.
      * @param string $id
      * @return mixed
      */
@@ -57,22 +57,21 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Creates a new Pendapatan model.
+     * Creates a new Bon model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Pendapatan();
-        $searchModel = new PendapatanSearch();
-
+        $model = new Bon();
+        $search = new BonSearch();
         if ($model->load(Yii::$app->request->post())) {
-            $sth = Yii::$app->request->post('sth','xxx');
-            $model->PendapatanId = $searchModel->GenerateId();
-            $model->SetoranIdH = $sth;
+            
+            $model->BonId = $search->GenerateId();
+            $model->Date = $this->formatDate($model->Date);
             $model->DateCrt = date('Y-m-d h:i:s');
             $model->save();
-            return $this->redirect(['setoran-d/create', 'id' => $sth]);
+            return $this->redirect(['create']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -81,7 +80,7 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Updates an existing Pendapatan model.
+     * Updates an existing Bon model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -91,7 +90,7 @@ class PendapatanController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->PendapatanId]);
+            return $this->redirect(['view', 'id' => $model->BonId]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -100,31 +99,51 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Deletes an existing Pendapatan model.
+     * Deletes an existing Bon model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id,$idh)
+    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['setoran-d/create','id' => $idh]);
+        return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Pendapatan model based on its primary key value.
+     * Finds the Bon model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Pendapatan the loaded model
+     * @return Bon the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pendapatan::findOne($id)) !== null) {
+        if (($model = Bon::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function formatDate($date)
+    {
+        $totime = strtotime($date);
+        $formatdate = date('Y-m-d',$totime);
+        
+        return $formatdate;
+    }
+    
+    public function actionPaid($id)
+    {
+        
+        $model = $this->findModel($id);
+        
+        $model->Tipe = 'PAID';
+        $model->DatePaid = date('Y-m-d');
+        $model->save();
+        
+        return $this->redirect(['index']);
     }
 }

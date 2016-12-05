@@ -3,16 +3,16 @@
 namespace app\transaction\controllers;
 
 use Yii;
-use app\transaction\models\Pendapatan;
-use app\transaction\models\PendapatanSearch;
+use app\transaction\models\PengeluaranPribadi;
+use app\transaction\models\PengeluaranPribadiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PendapatanController implements the CRUD actions for Pendapatan model.
+ * PengeluaranPribadiController implements the CRUD actions for PengeluaranPribadi model.
  */
-class PendapatanController extends Controller
+class PengeluaranPribadiController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Lists all Pendapatan models.
+     * Lists all PengeluaranPribadi models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PendapatanSearch();
+        $searchModel = new PengeluaranPribadiSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Displays a single Pendapatan model.
+     * Displays a single PengeluaranPribadi model.
      * @param string $id
      * @return mixed
      */
@@ -57,22 +57,21 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Creates a new Pendapatan model.
+     * Creates a new PengeluaranPribadi model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Pendapatan();
-        $searchModel = new PendapatanSearch();
-
+        $model = new PengeluaranPribadi();
+        $search = new PengeluaranPribadiSearch();
         if ($model->load(Yii::$app->request->post())) {
-            $sth = Yii::$app->request->post('sth','xxx');
-            $model->PendapatanId = $searchModel->GenerateId();
-            $model->SetoranIdH = $sth;
+            
+            $model->PengeluaranId = $search->GenerateId();
+            $model->Date = $this->formatDate($model->Date);
             $model->DateCrt = date('Y-m-d h:i:s');
             $model->save();
-            return $this->redirect(['setoran-d/create', 'id' => $sth]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -81,7 +80,7 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Updates an existing Pendapatan model.
+     * Updates an existing PengeluaranPribadi model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -91,7 +90,7 @@ class PendapatanController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->PendapatanId]);
+            return $this->redirect(['view', 'id' => $model->PengeluaranId]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -100,31 +99,39 @@ class PendapatanController extends Controller
     }
 
     /**
-     * Deletes an existing Pendapatan model.
+     * Deletes an existing PengeluaranPribadi model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id,$idh)
+    public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['setoran-d/create','id' => $idh]);
+        return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Pendapatan model based on its primary key value.
+     * Finds the PengeluaranPribadi model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Pendapatan the loaded model
+     * @return PengeluaranPribadi the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pendapatan::findOne($id)) !== null) {
+        if (($model = PengeluaranPribadi::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function formatDate($date)
+    {
+        $totime = strtotime($date);
+        $formatdate = date('Y-m-d',$totime);
+        
+        return $formatdate;
     }
 }
