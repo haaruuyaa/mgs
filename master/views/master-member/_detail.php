@@ -1,9 +1,13 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\master\models\MasterMember;
 use app\master\models\MasterMemberSearch;
+use app\master\models\MasterJenis;
+use kartik\date\Datepicker;
+use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\master\models\MasterMember */
 /* @var $form yii\widgets\ActiveForm */
@@ -13,6 +17,8 @@ $id = Yii::$app->request->get('id','xxx');
 $dataMember = MasterMember::find()->where(['MemberId' => $id])->one();
 $alamat = $dataMember['MemberAddress'];
 
+$modeljenis = MasterJenis::find()->all();
+$arrayjenis = ArrayHelper::map($modeljenis,'JenisId','JenisName');
 ?>
 
 <div class="master-member-form">
@@ -28,9 +34,29 @@ $alamat = $dataMember['MemberAddress'];
                     <div class="col-xs-10">
                       <?= Html::textInput('alamat',$alamat,['class' => 'form-group form-control','readonly' => true]); ?>
                     </div>
+                    <label class="col-xs-2">Jenis</label>
+                    <div class="col-xs-10" style="margin-bottom:3%;">
+                      <?= Select2::widget([
+                          'name' => 'jenis',
+                          'data' => $arrayjenis,
+                          'options' => ['placeholder' => 'Pilih Jenis ...']
+                      ]); ?>
+                    </div>
+                    <label class="col-xs-2">Jumlah</label>
+                    <div class="col-xs-10">
+                      <?= Html::textInput('jumlah','',['class' => 'form-group form-control']); ?>
+                    </div>
                     <label class="col-xs-2">Tanggal Pembelian</label>
                     <div class="col-xs-10">
-                      <?php   ?>
+                      <?= DatePicker::widget([
+                            'name' => 'datebuy',
+                            'options' => ['placeholder' => 'Tanggal Pembelian'],
+                            'pluginOptions' => [
+                                'format' => 'yyyy-mm-dd',
+                                'todayHighlight' => true,
+                                'autoclose' => true
+                            ]
+                        ]); ?>
                     </div>
                 </div>
             </div>

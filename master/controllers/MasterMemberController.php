@@ -82,7 +82,23 @@ class MasterMemberController extends Controller
 
     public function actionDetail($id)
     {
-        return $this->render('_detail',['id' => $id]);
+        $model =  new MemberDetail();
+        $request = Yii::$app->request;
+
+        if(Yii::$app->request->post())
+        {
+            $jenis = $request->post('jenis');
+            $jumlah = $request->post('jumlah');
+            $datebuy = $request->post('datebuy');
+
+            $model->MemberId = $id;
+
+            echo var_dump($id);
+            die();
+        } else {
+            return $this->render('_detail',['id' => $id]);
+        }
+
     }
 
     /**

@@ -80,7 +80,10 @@ class SetoranDController extends Controller
             $qty = $model->Qty;
             $jenid = $model->JenisId;
             $cus = $model->CustomerId;
-            $this->ReduceStockHelper($jenid,$qty,$helpid);
+            if($helpid != 'A001' OR $helpid != 'A005')
+            {
+                $this->ReduceStockHelper($jenid,$qty,$helpid);
+            }
             $this->ReduceStock($jenid, $qty);
             $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
             $arrayhc = $hargacus->GetHarga($cus, $jenid);
@@ -169,6 +172,7 @@ class SetoranDController extends Controller
         $modelHis = new StockHelperHistory();
 
         $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
+        
         $shid = $model['StockHelpId'];
         $stockisi = $model['Isi'];
         $stockkosong = $model['Kosong'];
