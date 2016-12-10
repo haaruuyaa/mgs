@@ -143,8 +143,10 @@ class SetoranDController extends Controller
         $jenisid = $model['JenisId'];
         $qty = $model['Qty'];
         $help = $modelH['HelperId'];
-
-        $this->CancelStockHelper($jenisid,$qty,$help);
+        if($help != 'A005')
+        {
+            $this->CancelStockHelper($jenisid,$qty,$help);
+        }
         $this->CancelStock($jenisid, $qty);
         $model->delete();
 
