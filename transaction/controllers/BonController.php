@@ -23,7 +23,7 @@ class BonController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    // 'delete' => ['POST'],
                 ],
             ],
         ];
@@ -67,8 +67,9 @@ class BonController extends Controller
         $search = new BonSearch();
         if ($model->load(Yii::$app->request->post())) {
             
+            $sth = Yii::$app->request->post('sdh');
             $model->BonId = $search->GenerateId();
-            $model->Date = $this->formatDate($model->Date);
+            $model->Date = $this->formatdate($model->Date);
             $model->DateCrt = date('Y-m-d h:i:s');
             $model->save();
             return $this->redirect(['create']);
@@ -107,7 +108,7 @@ class BonController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        
         return $this->redirect(['index']);
     }
 
@@ -140,10 +141,16 @@ class BonController extends Controller
         
         $model = $this->findModel($id);
         
-        $model->Tipe = 'PAID';
-        $model->DatePaid = date('Y-m-d');
-        $model->save();
-        
-        return $this->redirect(['index']);
+        if($model->load(Yii::$app->request->post()))
+        {
+            $model->Tipe = 'PAID';
+            $model->DatePaid = $this->formatdate($model->DatePaid);
+            $model->save();
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('_pay', [
+                'model' => $model,
+            ]);
+        }
     }
 }

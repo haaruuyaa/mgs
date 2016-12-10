@@ -22,6 +22,7 @@ class Sod extends \yii\db\ActiveRecord
     public $JenisName;
     public $Price;
     public $SODate;
+    public $SetoranIdH;
     public static function tableName()
     {
         return 'sod';

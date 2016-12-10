@@ -8,7 +8,8 @@
 //                    ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                      ['label' => 'Master', 'icon' => 'fa fa-file-code-o', 'url' => ['#'],
                          'items' => [
-                        ['label' => 'Stock', 'icon' => 'fa fa-bar-chart', 'url' => ['/master/master-stock']],                    
+                        ['label' => 'Stock', 'icon' => 'fa fa-bar-chart', 'url' => ['/master/master-stock']],
+                        ['label' => 'Stock Helper', 'icon' => 'fa fa-line-chart', 'url' => ['/master/stock-helper/index-help']],                    
                         ['label' => 'Jenis', 'icon' => 'fa fa-file-o', 'url' => ['/master/master-jenis']],
                         ['label' => 'Customer', 'icon' => 'fa fa-user', 'url' => ['/master/master-customer']],
                         ['label' => 'Helper', 'icon' => 'fa fa-user', 'url' => ['/master/master-helper']],
@@ -32,7 +33,7 @@
                         ['label' => 'Penjualan Customer', 'icon' => 'fa fa-truck', 'url' => ['/transaction/default/report-customer']],
                         ['label' => 'SO', 'icon' => 'fa fa-folder-open', 'url' => ['/transaction/default/report-so']],
                      ]],
-                    
+
                 ],
             ]
         ) ?>

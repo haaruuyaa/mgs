@@ -28,8 +28,7 @@ class MasterMember extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['MemberAddress', 'CountBuy', 'DateCrt'], 'required'],
-            [['CountBuy'], 'integer'],
+            [['MemberAddress', 'DateCrt'], 'required'],
             [['DateCrt'], 'safe'],
             [['MemberAddress'], 'string', 'max' => 50],
         ];
@@ -43,7 +42,6 @@ class MasterMember extends \yii\db\ActiveRecord
         return [
             'MemberId' => 'Member ID',
             'MemberAddress' => 'Member Address',
-            'CountBuy' => 'Count Buy',
             'DateCrt' => 'Date Crt',
         ];
     }

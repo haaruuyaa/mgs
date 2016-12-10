@@ -30,6 +30,7 @@ $yearsetoran = SetoranH::find()
         ->from('SetoranH sh')->all();
 
 $arraymap = ArrayHelper::map($yearsetoran,'Year','Year');
+
 $month = Yii::$app->request->get('month',date('m'));
 $year = Yii::$app->request->get('year',date('o'));
 ?>
@@ -37,7 +38,7 @@ $year = Yii::$app->request->get('year',date('o'));
 <div class="setoran-h-search">
     <div class="row">
         <?php $form = ActiveForm::begin([
-            'action' => ['report-helper'],
+            'action' => ['report-customer'],
             'method' => 'get',
         ]); ?>
         <div class="col-md-6">

@@ -79,7 +79,7 @@ class SodSearch extends Sod
     public function searchSod($params)
     {
         $query = Sod::find()
-                ->select("mj.JenisName,sd.Qty")
+                ->select("mj.JenisName,sd.Qty,sd.SOIDD,sh.SetoranIdH")
                 ->from('Sod sd')
                 ->leftJoin('Soh sh','sh.SOIDH = sd.SOIDH')
                 ->leftJoin('MasterJenis mj','mj.JenisId = sd.JenisId')

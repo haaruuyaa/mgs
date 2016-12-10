@@ -16,6 +16,7 @@ class Soh extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $Year;
     public static function tableName()
     {
         return 'soh';
@@ -40,7 +41,7 @@ class Soh extends \yii\db\ActiveRecord
     {
         return [
             'SOIDH' => 'Soidh',
-            'SetoranIdH' => 'Setoran Id H', 
+            'SetoranIdH' => 'Setoran Id H',
             'SODate' => 'Sodate',
             'DateCrt' => 'Date Crt',
         ];

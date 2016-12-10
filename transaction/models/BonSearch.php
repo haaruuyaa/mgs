@@ -18,7 +18,7 @@ class BonSearch extends Bon
     public function rules()
     {
         return [
-            [['BonId', 'Description', 'Date', 'Tipe', 'DateCrt'], 'safe'],
+            [['BonId', 'HelperId', 'Description', 'Date', 'Tipe', 'DatePaid', 'DateCrt'], 'safe'],
             [['Amount'], 'number'],
         ];
     }
@@ -41,7 +41,12 @@ class BonSearch extends Bon
      */
     public function search($params)
     {
-        $query = Bon::find();
+        $query = Bon::find()
+            ->select('*')
+            ->from('Bon b')
+            ->leftJoin('MasterHelper mh','mh.HelperId = b.HelperId')
+            ->orderBy(['b.Tipe' => SORT_DESC,'b.HelperId' => SORT_ASC,'b.Date' => SORT_ASC])
+        ;
 
         // add conditions that should always apply here
 
@@ -61,16 +66,18 @@ class BonSearch extends Bon
         $query->andFilterWhere([
             'Amount' => $this->Amount,
             'Date' => $this->Date,
+            'DatePaid' => $this->DatePaid,
             'DateCrt' => $this->DateCrt,
         ]);
 
         $query->andFilterWhere(['like', 'BonId', $this->BonId])
+            ->andFilterWhere(['like', 'HelperId', $this->HelperId])
             ->andFilterWhere(['like', 'Description', $this->Description])
             ->andFilterWhere(['like', 'Tipe', $this->Tipe]);
 
         return $dataProvider;
     }
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT

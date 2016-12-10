@@ -8,7 +8,7 @@ use app\master\models\MasterMemberSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use app\master\models\MemberDetail;
 /**
  * MasterMemberController implements the CRUD actions for MasterMember model.
  */
@@ -64,7 +64,7 @@ class MasterMemberController extends Controller
     public function actionCreate()
     {
         $model = new MasterMember();
-        
+
         if ($model->load(Yii::$app->request->post())) {
             if($model->CountBuy == NULL)
             {
@@ -78,6 +78,11 @@ class MasterMemberController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionDetail($id)
+    {
+        return $this->render('_detail',['id' => $id]);
     }
 
     /**
@@ -127,15 +132,15 @@ class MasterMemberController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
     public function actionCountup($id)
     {
         $model = $this->findModel($id);
         $countnow = $model->CountBuy;
-        
+
         $model->CountBuy = $countnow + 1;
         $model->save();
-        
+
         return $this->redirect(['index']);
     }
 }

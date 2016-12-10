@@ -14,9 +14,15 @@ $this->title = 'Laporan SO';
 $this->params['breadcrumbs'][] = $this->title;
 
 $modelJenis = MasterJenis::find()->all();
+
+$month = Yii::$app->request->get('month',date('m'));
+$year = Yii::$app->request->get('year',date('o'));
 ?>
 <div class="transaction-default-index">
     <div class="row">
+      <div class="col-xs-12">
+          <?= $this->render('_searchSO'); ?>
+      </div>
         <?php foreach($modelJenis as $jenis){ ?>
         <?php
         if($jenis['JenisId'] == 'G001')
@@ -35,9 +41,9 @@ $modelJenis = MasterJenis::find()->all();
         {
             $badge = 'bg-red';
         }
-        
+
         ?>
-        <div class="col-lg-6 col-xs-3">
+        <div class="col-lg-2 col-xs-1">
             <!-- small box -->
             <div class="small-box <?=$badge?>">
                 <div class="inner">
@@ -47,7 +53,7 @@ $modelJenis = MasterJenis::find()->all();
                 <div class="icon">
                     <i class="fa fa-database"></i>
                 </div>
-                <?= Html::a("More info <i class='fa fa-arrow-circle-right'></i>", ['default/report-so-detail','id' => $jenis['JenisId']], ['class' => 'small-box-footer']) ?>
+                <?= Html::a("More info <i class='fa fa-arrow-circle-right'></i>", ['default/report-so-detail','id' => $jenis['JenisId'],'year' =>$year,'month' => $month], ['class' => 'small-box-footer']) ?>
             </div>
         </div>
         <?php } ?>

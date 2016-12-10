@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
-use app\transaction\models\SetoranH;
+use app\transaction\models\Soh;
 /* @var $this yii\web\View */
 /* @var $model app\transaction\models\SetoranHSearch */
 /* @var $form yii\widgets\ActiveForm */
@@ -24,12 +24,13 @@ $arrayMonth = [
     '12' => 'December'];
 
 $yearnow = date('o');
-$yearsetoran = SetoranH::find()
-        ->select('YEAR(Date) as Year')
+$yearsetoran = Soh::find()
+        ->select('YEAR(SODate) as Year')
         ->distinct(true)
-        ->from('SetoranH sh')->all();
+        ->from('Soh sh')->all();
 
 $arraymap = ArrayHelper::map($yearsetoran,'Year','Year');
+
 $month = Yii::$app->request->get('month',date('m'));
 $year = Yii::$app->request->get('year',date('o'));
 ?>
@@ -37,7 +38,7 @@ $year = Yii::$app->request->get('year',date('o'));
 <div class="setoran-h-search">
     <div class="row">
         <?php $form = ActiveForm::begin([
-            'action' => ['report-helper'],
+            'action' => ['report-so'],
             'method' => 'get',
         ]); ?>
         <div class="col-md-6">

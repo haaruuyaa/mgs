@@ -1,16 +1,16 @@
 <?php
 
-namespace app\transaction\models;
+namespace app\master\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\transaction\models\PengeluaranPribadi;
+use app\master\models\StockHelper;
 
 /**
- * PengeluaranPribadiSearch represents the model behind the search form about `app\transaction\models\PengeluaranPribadi`.
+ * StockHelperSearch represents the model behind the search form about `app\master\models\StockHelper`.
  */
-class PengeluaranPribadiSearch extends PengeluaranPribadi
+class StockHelperSearch extends StockHelper
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class PengeluaranPribadiSearch extends PengeluaranPribadi
     public function rules()
     {
         return [
-            [['PengeluaranId', 'Description', 'Date', 'DateCrt'], 'safe'],
-            [['Amount'], 'number'],
+            [['StockHelpId', 'HelperId', 'JenisId', 'DateAdd', 'DateUpdate', 'DateCrt'], 'safe'],
+            [['Isi', 'Kosong'], 'integer'],
         ];
     }
 
@@ -41,7 +41,12 @@ class PengeluaranPribadiSearch extends PengeluaranPribadi
      */
     public function search($params)
     {
-        $query = PengeluaranPribadi::find();
+        $query = StockHelper::find()
+              ->select('*')
+              ->from('StockHelper sth')
+              ->leftJoin('MasterJenis mj','mj.JenisId = sth.JenisId')
+              ->where(['sth.HelperId' => $params])
+              ;
 
         // add conditions that should always apply here
 
@@ -59,28 +64,32 @@ class PengeluaranPribadiSearch extends PengeluaranPribadi
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'Amount' => $this->Amount,
-            'Date' => $this->Date,
+            'Isi' => $this->Isi,
+            'Kosong' => $this->Kosong,
+            'DateAdd' => $this->DateAdd,
+            'DateUpdate' => $this->DateUpdate,
             'DateCrt' => $this->DateCrt,
         ]);
 
-        $query->andFilterWhere(['like', 'Description', $this->Description]);
+        $query->andFilterWhere(['like', 'StockHelpId', $this->StockHelpId])
+            ->andFilterWhere(['like', 'HelperId', $this->HelperId])
+            ->andFilterWhere(['like', 'JenisId', $this->JenisId]);
 
         return $dataProvider;
     }
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT
         CONCAT(
-                'PID',
+                'STK',
                 RIGHT(YEAR(NOW()),2),
                 RIGHT(MONTH(NOW()),2),
-                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(PengeluaranId,3)),0)+1,CHAR)),3)
-        ) AS PengeluaranId 
-        FROM pengeluaranpribadi
-        WHERE SUBSTRING(PengeluaranId,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
-        
+                RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(StockHelpId,3)),0)+1,CHAR)),3)
+        ) AS StockHelpId
+        FROM StockHelper
+        WHERE SUBSTRING(StockHelpId,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
+
         return $genId;
     }
 }

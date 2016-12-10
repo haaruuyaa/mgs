@@ -10,8 +10,13 @@ use app\master\models\MasterHelper;
 /* @var $model app\transaction\models\Bon */
 /* @var $form yii\widgets\ActiveForm */
 
-$modalHelper = MasterHelper::find()->all();
-$arrayHelper = ArrayHelper::map($modalHelper,'HelperId','HelperName');
+$this->title = 'Bayar Bon';
+
+$helper = $model->HelperId;
+
+$masterhelper = MasterHelper::find()->where(['HelperId' => $helper])->one();
+
+$helpername = $masterhelper['HelperName'];
 ?>
 
 <div class="bon-form">
@@ -25,23 +30,20 @@ $arrayHelper = ArrayHelper::map($modalHelper,'HelperId','HelperName');
                 <div class="box-body">
                     <label class="col-xs-3">Helper</label>
                     <div class="col-xs-9">
-                        <?= $form->field($model, 'HelperId')->widget(Select2::classname(),[
-                            'options' => ['prompt' => 'Pilih Helper ...'],
-                            'data' => $arrayHelper
-                        ])->label(false) ?>
+                        <?= Html::textInput('helpername', $helpername, ['class' => 'form-group form-control','readonly' => true]) ?>
                     </div>
                     <label class="col-xs-3">Keterangan</label>
                     <div class="col-xs-9">
-                        <?= $form->field($model, 'Description')->textInput(['maxlength' => true])->label(false) ?>
+                        <?= Html::textInput('description', $model->Description, ['class' => 'form-group form-control','readonly' => true]) ?>
                     </div>
                     <label class="col-xs-3">Jumlah</label>
                     <div class="col-xs-9">
-                        <?= $form->field($model, 'Amount')->textInput(['maxlength' => true])->label(false) ?>
+                        <?= Html::textInput('amount', $model->Amount, ['class' => 'form-group form-control','readonly' => true]) ?>
                     </div>
                     <label class="col-xs-3">Tanggal</label>
                     <div class="col-xs-9">
-                        <?= $form->field($model, 'Date')->widget(Datepicker::classname(),[
-                            'options' => ['placeholder' => 'Masukan Tanggal Bon ...'],
+                        <?= $form->field($model, 'DatePaid')->widget(Datepicker::classname(),[
+                            'options' => ['placeholder' => 'Masukan Tanggal Bayar ...'],
                             'pluginOptions' => [
                                 'autoclose'=>true,
                                 'todayHighlight' => true
@@ -53,7 +55,7 @@ $arrayHelper = ArrayHelper::map($modalHelper,'HelperId','HelperName');
         </div>
         <div class="col-xs-12">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Back',['index'], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Back', ['index'],['class' => 'btn btn-primary']) ?>
         </div>
         <?php ActiveForm::end(); ?>
 </div>

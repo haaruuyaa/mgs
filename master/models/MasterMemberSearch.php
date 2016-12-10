@@ -19,7 +19,6 @@ class MasterMemberSearch extends MasterMember
     {
         return [
             [['MemberId', 'MemberAddress', 'DateCrt'], 'safe'],
-            [['CountBuy'], 'integer'],
         ];
     }
 
@@ -59,7 +58,6 @@ class MasterMemberSearch extends MasterMember
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'CountBuy' => $this->CountBuy,
             'DateCrt' => $this->DateCrt,
         ]);
 

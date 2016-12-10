@@ -3,12 +3,15 @@
 namespace app\transaction\controllers;
 
 use Yii;
+use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranD;
 use app\transaction\models\SetoranDSearch;
 use app\master\models\HargaHelperSearch;
 use app\master\models\HargaCustomerSearch;
 use app\master\models\MasterStock;
 use app\master\models\MasterStockHistory;
+use app\master\models\StockHelper;
+use app\master\models\StockHelperHistory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -77,6 +80,7 @@ class SetoranDController extends Controller
             $qty = $model->Qty;
             $jenid = $model->JenisId;
             $cus = $model->CustomerId;
+            $this->ReduceStockHelper($jenid,$qty,$helpid);
             $this->ReduceStock($jenid, $qty);
             $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
             $arrayhc = $hargacus->GetHarga($cus, $jenid);
@@ -95,7 +99,7 @@ class SetoranDController extends Controller
             ]);
         }
     }
-    
+
     /**
      * Render page hitung setoran.
      */
@@ -113,7 +117,7 @@ class SetoranDController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->SetoranIdD]);
         } else {
@@ -132,12 +136,15 @@ class SetoranDController extends Controller
     public function actionDelete($id,$idh)
     {
         $model = $this->findModel($id);
+        $modelH = SetoranH::findOne($idh);
         $jenisid = $model['JenisId'];
         $qty = $model['Qty'];
-        
+        $help = $modelH['HelperId'];
+
+        $this->CancelStockHelper($jenisid,$qty,$help);
         $this->CancelStock($jenisid, $qty);
         $model->delete();
-        
+
         return $this->redirect(['setoran-d/create','id' => $idh]);
     }
 
@@ -156,18 +163,46 @@ class SetoranDController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
+    public function ReduceStockHelper($id,$qty,$help)
+    {
+        $modelHis = new StockHelperHistory();
+
+        $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
+        $shid = $model['StockHelpId'];
+        $stockisi = $model['Isi'];
+        $stockkosong = $model['Kosong'];
+        $datestock = $model['DateAdd'];
+        $dateupdate = $model['DateUpdate'];
+
+        $modelHis->StockHelpId = $shid;
+        $modelHis->JenisId = $id;
+        $modelHis->HelperId = $help;
+        $modelHis->Isi = $stockisi;
+        $modelHis->Kosong = $stockkosong;
+        $modelHis->DateAdd = $datestock;
+        $modelHis->DateCrt = date('Y-m-d h:i:s');
+        $modelHis->DateUpdate = $dateupdate;
+
+        $model->Isi = ($stockisi - $qty);
+        $model->Kosong = ($stockkosong + $qty);
+        $model->DateUpdate = date('Y-m-d h:i:s');
+        $modelHis->save();
+        $model->save();
+    }
+
+
     public function ReduceStock($id,$qty)
     {
         $modelHis = new MasterStockHistory();
-        
+
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
         $stockisi = $model['StockIsi'];
         $stockkosong = $model['StockKosong'];
         $datestock = $model['StockDateAdd'];
         $stocktotal = $model['StockTotal'];
         $dateupdate = $model['DateUpdate'];
-        
+
         $modelHis->StockIsi = $stockisi;
         $modelHis->StockKosong = $stockkosong;
         $modelHis->StockTotal = $stocktotal;
@@ -175,25 +210,52 @@ class SetoranDController extends Controller
         $modelHis->StockDateAdd = $datestock;
         $modelHis->DateCrt = date('Y-m-d h:i:s');
         $modelHis->DateUpdate = $dateupdate;
-        
+
         $model->StockIsi = ($stockisi - $qty);
         $model->StockKosong = ($stockkosong + $qty);
         $model->DateUpdate = date('Y-m-d h:i:s');
         $modelHis->save();
         $model->save();
     }
-    
+
+    public function CancelStockHelper($id,$qty,$help)
+    {
+        $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
+        $modelHis = new StockHelperHistory();
+
+        $shid = $model['StockHelpId'];
+        $stockisi = $model['Isi'];
+        $stockkosong = $model['Kosong'];
+        $datestock = $model['DateAdd'];
+        $dateupdate = $model['DateUpdate'];
+
+        $modelHis->StockHelpId = $shid;
+        $modelHis->Isi = $stockisi;
+        $modelHis->Kosong = $stockkosong;
+        $modelHis->JenisId = $id;
+        $modelHis->HelperId = $help;
+        $modelHis->DateAdd = $datestock;
+        $modelHis->DateCrt = date('Y-m-d h:i:s');
+        $modelHis->DateUpdate = $dateupdate;
+
+        $model->Isi = ($stockisi + $qty);
+        $model->Kosong = ($stockkosong - $qty);
+        $model->DateUpdate = date('Y-m-d h:i:s');
+        $modelHis->save();
+        $model->save();
+    }
+
     public function CancelStock($id,$qty)
     {
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
         $modelHis = new MasterStockHistory();
-        
+
         $stockisi = $model['StockIsi'];
         $stockkosong = $model['StockKosong'];
         $datestock = $model['StockDateAdd'];
         $stocktotal = $model['StockTotal'];
         $dateupdate = $model['DateUpdate'];
-        
+
         $modelHis->StockIsi = $stockisi;
         $modelHis->StockKosong = $stockkosong;
         $modelHis->StockTotal = $stocktotal;
@@ -201,7 +263,7 @@ class SetoranDController extends Controller
         $modelHis->StockDateAdd = $datestock;
         $modelHis->DateCrt = date('Y-m-d h:i:s');
         $modelHis->DateUpdate = $dateupdate;
-        
+
         $model->StockIsi = ($stockisi + $qty);
         $model->StockKosong = ($stockkosong - $qty);
         $model->DateUpdate = date('Y-m-d h:i:s');

@@ -48,11 +48,7 @@ $arrayMap = ArrayHelper::map($dataListJenis,'JenisId','JenisName');
                                 'todayHighlight' => true,
                             ]
                         ])->label(false); ?>   
-                    </div>
-                    
-                    
-                    
-                    
+                    </div>    
                 </div>
             </div>
         </div>

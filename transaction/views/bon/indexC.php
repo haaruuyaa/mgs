@@ -21,11 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
                         'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+
                             [
-                                'header' => 'Helper',
-                                'attribute' => 'HelperId',
-                                'value' => 'HelperName'
+                                'header' => 'ID Bon',
+                                'attribute' => 'BonId',
+                                'value' => 'BonId'
                             ],
                             [
                                 'header' => 'Keterangan',
@@ -33,18 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'Description'
                             ],
                             [
-                                'header' => 'Tanggal Bon',
-                                'attribute' => 'Date',
-                                'value' => function($data)
-                                {
-                                    return date('d F Y',strtotime($data['Date']));
-                                }
-                            ],
-                            [
                                 'header' => 'Jumlah',
-                                'format' => ['decimal',0],
                                 'attribute' => 'Amount',
                                 'value' => 'Amount'
+                            ],
+                            [
+                                'header' => 'Tanggal Bon',
+                                'attribute' => 'Date',
+                                'value' => 'Date'
                             ],
                             [
                                 'header' => 'Status',
@@ -62,19 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                             [
-                                'header' => 'Tanggal Bayar',
-                                'attribute' => 'Date',
-                                'value' => function($data)
-                                {
-                                    if($data['DatePaid'] == NULL)
-                                    {
-                                        return 'Belum Di Bayar';
-                                    } else {
-                                        return date('d F Y',strtotime($data['DatePaid']));
-                                    }
-                                }
-                            ],
-                            [
                                 'header' => 'Action',
                                 'format' => 'raw',
                                 'value' => function($data)
@@ -87,14 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                     
                                     return $link;
-                                }
-                            ],
-                            [
-                                'header' => 'Hapus',
-                                'format' => 'raw',
-                                'value' => function($data)
-                                {
-                                    return Html::a('<i class="fa fa-trash"></i>', ['bon/delete','id' => $data['BonId']],['data-confirm' => 'Apakah yakin ingin menghapus bon ini ?']);
                                 }
                             ],
                         ],

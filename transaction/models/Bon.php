@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "bon".
  *
  * @property string $BonId
+ * @property string $HelperId
  * @property string $Description
  * @property string $Amount
  * @property string $Date
@@ -20,6 +21,7 @@ class Bon extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $HelperName;
     public static function tableName()
     {
         return 'bon';
@@ -34,7 +36,7 @@ class Bon extends \yii\db\ActiveRecord
             [['BonId'], 'required'],
             [['Amount'], 'number'],
             [['Date', 'DatePaid', 'DateCrt'], 'safe'],
-            [['BonId', 'Tipe'], 'string', 'max' => 10],
+            [['BonId', 'HelperId', 'Tipe'], 'string', 'max' => 10],
             [['Description'], 'string', 'max' => 255],
         ];
     }
@@ -46,6 +48,7 @@ class Bon extends \yii\db\ActiveRecord
     {
         return [
             'BonId' => 'Bon ID',
+            'HelperId' => 'Helper Id',
             'Description' => 'Description',
             'Amount' => 'Amount',
             'Date' => 'Date',

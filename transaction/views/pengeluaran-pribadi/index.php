@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use kartik\date\Datepicker;
 /* @var $this yii\web\View */
 /* @var $searchModel app\transaction\models\PengeluaranPribadiSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,10 +31,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'header' => 'Tanggal',
                                 'attribute' => 'Date',
+                                'format' => 'raw',
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel, 
+                                    'attribute' => 'Date',
+                                    'options' => ['placeholder' => 'Pilih Tanggal ...'],
+                                    'pluginOptions' => [
+                                        'todayHighlight' => true,
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy/mm/dd'
+                                    ]
+                                ]),
                                 'value' => function($data)
                                 {
-                                    return date('d F Y',strtotime($data['Date']));
+                                    $toTime = strtotime($data['Date']);
+                                    $dateFormat = date('d F Y',$toTime);
+                                    
+                                    return $dateFormat;
                                 }
+                            ],
+                            [
+                                'header' => 'Keterangan',
+                                'attribute' => 'Description',
+                                'value' => 'Description'
                             ],
                             [
                                 'header' => 'Jumlah',

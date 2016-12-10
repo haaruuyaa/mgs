@@ -12,19 +12,28 @@ $this->title = 'Laporan SO';
 $this->params['breadcrumbs'][] = $this->title;
 
 $id = Yii::$app->request->get('id','xxx');
+$month = Yii::$app->request->get('month',date('m'));
+$year = Yii::$app->request->get('year',date('o'));
+
 $arrTotal = [];
 $masterjenis = MasterJenis::find()
         ->select("*")
         ->from("MasterJenis mj")
         ->leftJoin("MasterStock ms",'ms.JenisId = mj.JenisId')
-        ->where(['mj.JenisId' => $id])
+        ->where([
+          'mj.JenisId' => $id
+        ])
         ->one()
         ;
 $sod = Sod::find()
         ->select("*")
         ->from("Sod")
         ->leftJoin("Soh","Soh.SOIDH = Sod.SOIDH")
-        ->where(['Sod.JenisId' => $id])
+        ->where([
+          'Sod.JenisId' => $id,
+          'MONTH(Soh.SODate)' => $month,
+          'YEAR(Soh.SODate)' => $year,
+        ])
         ->orderBy(['Soh.SODate' => SORT_ASC])
         ->all();
 $harganet = MasterNet::find()->where(['JenisId' => $id])->one();
@@ -46,8 +55,8 @@ $harganet = MasterNet::find()->where(['JenisId' => $id])->one();
                   </ul>
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
-              
-        </div><!-- /.col -->   
+
+        </div><!-- /.col -->
         <div class="col-md-9">
             <div class="box box-primary">
                 <div class="box-header">
@@ -63,9 +72,9 @@ $harganet = MasterNet::find()->where(['JenisId' => $id])->one();
                           <th style="width: 40px">Total</th>
                         </tr>
                         <?php foreach($sod as $index => $items){ ?>
-                        <?php 
+                        <?php
                             $TotalPrice = $items['Qty'] * $harganet['Price'];
-                            
+
                             if($items['JenisId'] == 'G001')
                             {
                                 $badge = 'badge bg-blue';
@@ -88,7 +97,7 @@ $harganet = MasterNet::find()->where(['JenisId' => $id])->one();
                           <td><?= date("d F Y",strtotime($items['SODate'])); ?></td>
                           <td><?= $items['Qty']; ?></td>
                           <td><span class="<?= $badge; ?>"><?= 'Rp. '.number_format($harganet['Price'],0,'.',','); ?></span></td>
-                          <td><span class="badge bg-purple-gradient"><?= 'Rp. '.number_format($TotalPrice,0,'.',','); ?></span></td>                          
+                          <td><span class="badge bg-purple-gradient"><?= 'Rp. '.number_format($TotalPrice,0,'.',','); ?></span></td>
                         </tr>
                         <?php array_push($arrTotal,$TotalPrice); } $TotalPriceSo = array_sum($arrTotal); ?>
                         <tr>
@@ -96,7 +105,7 @@ $harganet = MasterNet::find()->where(['JenisId' => $id])->one();
                           <td>Total</td>
                           <td></td>
                           <td></td>
-                          <td><span class="badge bg-red"><?= 'Rp. '.number_format($TotalPriceSo,0,'.',','); ?></span></td>                          
+                          <td><span class="badge bg-red"><?= 'Rp. '.number_format($TotalPriceSo,0,'.',','); ?></span></td>
                         </tr>
                     </table>
                 </div>

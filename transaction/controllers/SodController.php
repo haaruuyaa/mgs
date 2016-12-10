@@ -7,6 +7,9 @@ use app\transaction\models\Sod;
 use app\transaction\models\SodSearch;
 use app\transaction\models\Soh;
 use app\transaction\models\SohSearch;
+use app\transaction\models\SetoranH;
+use app\master\models\StockHelper;
+use app\master\models\SoStockHelperHistory;
 use app\master\models\MasterStock;
 use app\master\models\MasterStockHistory;
 use yii\web\Controller;
@@ -27,7 +30,7 @@ class SodController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    // 'delete' => ['POST'],
                 ],
             ],
         ];
@@ -73,23 +76,29 @@ class SodController extends Controller
         $searchModelSoh = new SohSearch();
         $soidh = $searchModelSoh->GenerateId();
         $soidd = $searchModel->GenerateId();
-        
+
         if ($model->load(Yii::$app->request->post())) {
             $sth = Yii::$app->request->post('sth','xxx');
             $storandate = Yii::$app->request->post('date','xxx');
+            $modelstoran = SetoranH::findOne($sth);
+            $help = $modelstoran['HelperId'];
             $jenis = $model->JenisId;
-            $qty = $model->Qty;            
-            
+            $qty = $model->Qty;
+
             $modelSoh->SOIDH = $soidh;
             $modelSoh->SODate = $storandate;
             $modelSoh->SetoranIdH = $sth;
             $modelSoh->DateCrt = date('Y-m-d h:i:s');
-            
+
             $this->AddStock($jenis, $qty);
+            if($help == 'A002' && $jenis == 'AQ001')
+            {
+              $this->AddStockHelper($jenis,$qty,$help);
+            }
             $model->SOIDH = $soidh;
             $model->SOIDD = $soidd;
             $model->DateCrt = date('Y-m-d h:i:s');
-            
+
             $modelSoh->save();
             $model->save();
             return $this->redirect(['setoran-d/create', 'id' => $sth]);
@@ -100,17 +109,17 @@ class SodController extends Controller
             ]);
         }
     }
-    
+
     public function actionCreateSod()
     {
         $model = new Sod();
         $searchModel = new SodSearch();
-        
+
         if ($model->load(Yii::$app->request->post())) {
             $soidh = Yii::$app->request->post('soidh','xxx');
             $jenis = $model->JenisId;
             $qty = $model->Qty;
-            
+
             $model->SOIDH = $soidh;
             $model->SOIDD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
@@ -150,11 +159,22 @@ class SodController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id,$idh)
     {
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        $modelH = SetoranH::findOne($idh);
+        $help = $modelH['HelperId'];
+        $jenis = $model['JenisId'];
+        $qty = $model['Qty'];
+        $this->ReduceStock($jenis,$qty);
+        if($help == 'A002' && $jenis == 'AQ001')
+        {
+          $this->ReduceStockHelp($jenis,$qty,$help);
+        }
+        $model->delete();
+
+        return $this->redirect(['setoran-d/create','id' => $idh]);
     }
 
     /**
@@ -172,7 +192,7 @@ class SodController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
     public function AddStock($id,$qty)
     {
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
@@ -180,21 +200,67 @@ class SodController extends Controller
         $kosongstock = $model['StockKosong'];
         $datestock = $model['StockDateAdd'];
         $stocktotal = $model['StockTotal'];
-        
+
         $modelHis = new MasterStockHistory();
-        
+
         $modelHis->JenisId = $id;
         $modelHis->StockIsi = $isistock;
         $modelHis->StockKosong = $kosongstock;
         $modelHis->StockDateAdd = $datestock;
         $modelHis->StockTotal = $stocktotal;
         $modelHis->DateCrt = date('Y-m-d h:i:s');
-                
+
         $model->StockIsi = $isistock + $qty;
         $model->StockKosong = $kosongstock - $qty;
         $model->StockDateAdd = date('Y-m-d');
-        
+
         $modelHis->save();
+        $model->save();
+    }
+
+    public function AddStockHelper($id,$qty,$help)
+    {
+        $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
+        $shid = $model['StockHelpId'];
+        $isistock = $model['Isi'];
+        $kosongstock = $model['Kosong'];
+        $datestock = $model['DateAdd'];
+
+        $model->Isi = $isistock + $qty;
+        $model->Kosong = $kosongstock - $qty;
+        $model->DateUpdate = date('Y-m-d h:i:s');
+
+        $model->save();
+    }
+
+    public function ReduceStock($id,$qty)
+    {
+
+        $model = MasterStock::find()->where(['JenisId' => $id])->one();
+        $stockisi = $model['StockIsi'];
+        $stockkosong = $model['StockKosong'];
+        $datestock = $model['StockDateAdd'];
+        $stocktotal = $model['StockTotal'];
+        $dateupdate = $model['DateUpdate'];
+
+        $model->StockIsi = ($stockisi - $qty);
+        $model->StockKosong = ($stockkosong + $qty);
+        $model->DateUpdate = date('Y-m-d h:i:s');
+        $model->save();
+    }
+
+    public function ReduceStockHelp($id,$qty,$help)
+    {
+
+        $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
+        $stockisi = $model['Isi'];
+        $stockkosong = $model['Kosong'];
+        $datestock = $model['DateAdd'];
+        $dateupdate = $model['DateUpdate'];
+
+        $model->Isi = ($stockisi - $qty);
+        $model->Kosong = ($stockkosong + $qty);
+        $model->DateUpdate = date('Y-m-d h:i:s');
         $model->save();
     }
 }

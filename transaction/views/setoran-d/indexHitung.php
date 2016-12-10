@@ -6,6 +6,7 @@ use app\transaction\models\SetoranD;
 use app\transaction\models\Pengeluaran;
 use app\transaction\models\Pendapatan;
 use app\transaction\models\Sod;
+use app\transaction\models\Bon;
 use app\master\models\MasterHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel app\transaction\models\SetoranDSearch */
@@ -32,20 +33,36 @@ $dataSetoranD = SetoranD::find()->select("sd.Qty,sd.JenisId,sd.HHID,sd.HCID,hc.P
                                 ->where(['SetoranIdH' => $Setoranidh])
                                 ->all();
 
+$dataBonUnpaid = Bon::find()
+        ->select('b.Description,b.Amount')
+        ->from('Bon b')
+        ->leftJoin('SetoranH sh','sh.HelperId = b.HelperId and sh.Date = b.Date')
+        ->where(['b.HelperId' => $helperid,'b.Date' => $dataSetoranH['Date']]);
+
+$dataBonPaid = Bon::find()
+        ->select('b.Description,b.Amount')
+        ->from('Bon b')
+        ->leftJoin('SetoranH sh','sh.HelperId = b.HelperId and sh.Date = b.Date')
+        ->where(['b.HelperId' => $helperid,'b.DatePaid' => $dataSetoranH['Date'],'b.Tipe' => 'PAID']);
+
 $dataPengeluaran = Pengeluaran::find()
         ->select('pd.Description,pd.Amount')
         ->from('Pengeluaran pd')
         ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')
         ->where(['sh.SetoranIdH' => $Setoranidh])
+        ->union($dataBonUnpaid,true)
         ->all()
         ;
-$dataPendapatan = Pengeluaran::find()
+
+$dataPendapatan = Pendapatan::find()
         ->select('pd.Description,pd.Amount')
         ->from('Pendapatan pd')
-        ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')
+        ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')        
         ->where(['sh.SetoranIdH' => $Setoranidh])
+        ->union($dataBonPaid,true)
         ->all()
         ;
+
 $dataSOHelper = Sod::find()
         ->select('sd.Qty,sd.JenisId,mj.JenisName,mn.Price')
         ->from('Sod sd')
@@ -59,6 +76,7 @@ $ArrPendapatan = [];
 $ArrPengeluaran = [];
 $ArrBayar = [];
 $ArrSO = [];
+
 for($i = 0;$i < count($dataSetoranD);$i++)
 {
     if($dataSetoranD[$i]['HHID'] == NULL)

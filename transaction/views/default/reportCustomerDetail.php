@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use app\transaction\models\SetoranH;
 use app\transaction\models\SetoranD;
+use app\transaction\models\Sod;
 use app\master\models\MasterHelper;
 use app\master\models\MasterCustomer;
 use app\master\models\HargaCustomer;
@@ -16,25 +17,36 @@ $this->title = 'Laporan Pendapatan';
 $this->params['breadcrumbs'][] = $this->title;
 
 $id = Yii::$app->request->get('id','xxx');
+$year = Yii::$app->request->get('year',date('o'));
+$month = Yii::$app->request->get('month',date('m'));
+
 $arrPendptn = array();
 $modelCustomer = MasterCustomer::find()->all();
 
 $modelHelper = MasterHelper::find()->where(['HelperId' => $id])->one();
 $helperName = $modelHelper['HelperName'];
 
-$SO = SetoranD::find()
+$SO = Sod::find()
         ->select("*")
         ->from("SOD sd")
         ->leftJoin('SOH sh','sh.SOIDH = sd.SOIDH')
-        ->where(['sd.JenisId' => 'G002','MONTH(sh.SODate)' => date('m')])
+        ->where([
+            'sd.JenisId' => 'G002',
+            'MONTH(sh.SODate)' => $month,
+            'YEAR(sh.SODate)' => $year,
+          ])
         ->orderBy(['sh.SODate' => SORT_ASC])
         ->all();
 
-$SOSum = SetoranD::find()
+$SOSum = Sod::find()
         ->select("sum(sd.Qty) as Qty")
         ->from("SOD sd")
         ->leftJoin('SOH sh','sh.SOIDH = sd.SOIDH')
-        ->where(['sd.JenisId' => 'G002','MONTH(sh.SODate)' => date('m')])
+        ->where([
+            'sd.JenisId' => 'G002',
+            'MONTH(sh.SODate)' => $month,
+            'YEAR(sh.SODate)' => $year,
+            ])
         ->one();
 
 $hargaNet = \app\master\models\MasterNet::find()
@@ -49,7 +61,11 @@ $modelPengeluaran = Pengeluaran::find()
         ->select("*")
         ->from("Pengeluaran p")
         ->leftJoin("SetoranH sh","sh.SetoranIdh = p.SetoranIdH")
-        ->where(['sh.HelperId' => $id,'MONTH(sh.Date)' => date('m')])
+        ->where([
+          'sh.HelperId' => $id,
+          'MONTH(sh.Date)' => $month,
+          'YEAR(sh.Date)' => $year,
+        ])
         ->orderBy(['sh.Date' => SORT_ASC])
         ->groupBy(['sh.Date'])
         ->all();
@@ -58,10 +74,26 @@ $modelPendapatan = Pendapatan::find()
         ->select("*")
         ->from("Pendapatan p")
         ->leftJoin("SetoranH sh","sh.SetoranIdh = p.SetoranIdH")
-        ->where(['sh.HelperId' => $id,'MONTH(sh.Date)' => date('m')])
+        ->where([
+          'sh.HelperId' => $id,
+          'MONTH(sh.Date)' => $month,
+          'YEAR(sh.Date)' => $year,
+        ])
         ->orderBy(['sh.Date' => SORT_ASC])
         ->groupBy(['sh.Date'])
         ->all();
+
+$modelSumPend = Pendapatan::find()
+                ->select("sum(p.Amount) as Amount")
+                ->from('Pendapatan p')
+                ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
+                ->where([
+                  'MONTH(sh.Date)' => $month,
+                  'YEAR(sh.Date)' => $year,
+                  'sh.HelperId'=>$id
+                ])
+                ->one()
+                ;
 ?>
 <div class="transaction-default-index">
     <div class="row">
@@ -80,7 +112,12 @@ $modelPendapatan = Pendapatan::find()
                                     ->select("SUM(sd.Qty) as Qty")
                                     ->from('SetoranH sh')
                                     ->leftJoin('SetoranD sd','sd.SetoranIdH = sh.SetoranIdH')
-                                    ->where(['sd.CustomerId' => $cus['CustomerId'],'sd.JenisId' => 'G002','MONTH(sh.Date)' => date('m')])
+                                    ->where([
+                                      'sd.CustomerId' => $cus['CustomerId'],
+                                      'sd.JenisId' => 'G002',
+                                      'MONTH(sh.Date)' => $month,
+                                      'YEAR(sh.Date)' => $year,
+                                    ])
                                     ->one();
 
                             $qty = $modalsetoran['Qty']; ?>
@@ -91,7 +128,7 @@ $modelPendapatan = Pendapatan::find()
                   </ul>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-              
+
             </div><!-- /.col -->
             <div class="col-md-9">
                 <div class="box box-primary">
@@ -108,25 +145,30 @@ $modelPendapatan = Pendapatan::find()
                               <th style="width: 100px">Total</th>
                             </tr>
                             <?php foreach($modelCustomer as $index => $cus){ ?>
-                            <?php  
+                            <?php
                             $modalsetoran = SetoranH::find()
                                     ->select("SUM(sd.Qty) as Qty")
                                     ->from('SetoranH sh')
                                     ->leftJoin('SetoranD sd','sd.SetoranIdH = sh.SetoranIdH')
-                                    ->where(['MONTH(sh.Date)' => date('m'),'sd.JenisId' => 'G002','sd.CustomerId' => $cus['CustomerId']])
+                                    ->where([
+                                      'MONTH(sh.Date)' => $month,
+                                      'YEAR(sh.Date)' => $year,
+                                      'sd.JenisId' => 'G002',
+                                      'sd.CustomerId' => $cus['CustomerId']
+                                    ])
                                     ->one();
 
-                            $qty = $modalsetoran['Qty']; 
-                            
+                            $qty = $modalsetoran['Qty'];
+
                             $modelHarga = HargaCustomer::find()
                                     ->select("*")
                                     ->from("HargaCustomer hc")
                                     ->where(['hc.CustomerId' => $cus['CustomerId'],'hc.JenisId' => 'G002'])
                                     ->one();
                             $price = $modelHarga['Price'];
-                            
+
                             $TotalPrice = $price * $qty;
-                            
+
                             array_push($arrPendptn, $TotalPrice);
                             $TotalAllPrice = array_sum($arrPendptn);
                             ?>
@@ -146,7 +188,7 @@ $modelPendapatan = Pendapatan::find()
                               <td style="width: 100px"><span class="badge bg-red"><?= 'Rp. '.number_format($TotalAllPrice,0,'.',',')?></span></td>
                             </tr>
                         </table>
-                    </div>                    
+                    </div>
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -166,25 +208,28 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("*")
                                                         ->from('Pendapatan p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $penditem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                          'sh.Date' => $penditem['Date'],
+                                                          'sh.HelperId'=>$id,
+                                                          'MONTH(sh.Date)' => $month,
+                                                          'YEAR(sh.Date)' => $year,
+                                                        ])
                                                         ->all()
                                                         ;
-                                        
+
                                         $modelPendsum = Pendapatan::find()
                                                         ->select("sum(p.Amount) as Amount")
                                                         ->from('Pendapatan p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $penditem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                          'sh.Date' => $penditem['Date'],
+                                                          'sh.HelperId'=>$id,
+                                                          'MONTH(sh.Date)' => $month,
+                                                          'YEAR(sh.Date)' => $year,
+                                                        ])
                                                         ->all()
                                                         ;
-                                        $modelSumPend = Pendapatan::find()
-                                                        ->select("sum(p.Amount) as Amount")
-                                                        ->from('Pendapatan p')
-                                                        ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
-                                                        ->one()
-                                                        ;
-                                        
+
                                         foreach($modelPenddesc as $index => $itempend) {
                                         ?>
                                         <li><?= $itempend['Description'].': Rp. '.number_format($itempend['Amount'],0,'.',',') ?></li>
@@ -212,13 +257,13 @@ $modelPendapatan = Pendapatan::find()
                               <th style="width: 100px">Total</th>
                             </tr>
                             <?php foreach($SO as $index => $soitems){ ?>
-                            <?php 
+                            <?php
                             $soqty = $soitems['Qty'];
                             $totalsoqty = $SOSum['Qty'];
-                            
+
                             $TotalPriceSO = $hargaSatuan * $soqty;
                             $TotalPengSO = $totalsoqty * $hargaSatuan;
-                            
+
                             if($soitems['JenisId'] == 'G001')
                             {
                                 $badge = 'badge bg-blue';
@@ -234,9 +279,9 @@ $modelPendapatan = Pendapatan::find()
                             } else if ($soitems['JenisId'] == 'G004')
                             {
                                 $badge = 'badge bg-red';
-                            } 
-                            
-                            
+                            }
+
+
                             ?>
                             <tr>
                               <td><?= $index+1; ?>.</td>
@@ -274,25 +319,39 @@ $modelPendapatan = Pendapatan::find()
                                                         ->select("*")
                                                         ->from('Pengeluaran p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $pengitem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                          'sh.Date' => $pengitem['Date'],
+                                                          'sh.HelperId'=>$id,
+                                                          'MONTH(sh.Date)' => $month,
+                                                          'YEAR(sh.Date)' => $year,
+                                                        ])
                                                         ->all()
                                                         ;
-                                        
+
                                         $modelPengsum = Pengeluaran::find()
                                                         ->select("sum(p.Amount) as Amount")
                                                         ->from('Pengeluaran p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['sh.Date' => $pengitem['Date'],'sh.HelperId'=>$id,'MONTH(sh.Date)' => date('m')])
+                                                        ->where([
+                                                          'sh.Date' => $pengitem['Date'],
+                                                          'sh.HelperId'=>$id,
+                                                          'MONTH(sh.Date)' => $month,
+                                                          'YEAR(sh.Date)' => $year,
+                                                        ])
                                                         ->all()
                                                         ;
                                         $modelSumPeng = Pengeluaran::find()
                                                         ->select("sum(p.Amount) as Amount")
                                                         ->from('Pengeluaran p')
                                                         ->leftJoin("SetoranH sh",'sh.SetoranIdH = p.SetoranIdH')
-                                                        ->where(['MONTH(sh.Date)' => date('m'),'sh.HelperId'=>$id])
+                                                        ->where([
+                                                          'MONTH(sh.Date)' => $month,
+                                                          'YEAR(sh.Date)' => $year,
+                                                          'sh.HelperId'=>$id
+                                                        ])
                                                         ->one()
                                                         ;
-                                        
+
                                         foreach($modelPengdesc as $index => $itempeng) {
                                         ?>
                                         <li><?= $itempeng['Description'].': Rp. '.number_format($itempeng['Amount'],0,'.',',') ?></li>
