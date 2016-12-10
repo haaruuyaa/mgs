@@ -169,7 +169,14 @@ class StockHelperController extends Controller
             $modelStockHelper->DateUpdate = date('Y-m-d h:i:s');
 
           } else {
-              throw new NotFoundHttpException('The requested page does not exist.');
+
+            $modelStockHelper = StockHelper::find()->where(['HelperId' => $helper,'JenisId' => $jenis])->one();
+            $isi = $modelStockHelper->Isi;
+            $kosong = $modelStockHelper->Kosong;
+
+            $modelStockHelper->Isi = ($isi - $newisi);
+            $modelStockHelper->Kosong = ($kosong + $newisi);
+            $modelStockHelper->DateUpdate = date('Y-m-d h:i:s');
           }
 
           $model->Isi = $stockoldisi + $newisi;
