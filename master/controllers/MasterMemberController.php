@@ -23,7 +23,7 @@ class MasterMemberController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    // 'delete' => ['POST'],
                 ],
             ],
         ];
@@ -124,7 +124,12 @@ class MasterMemberController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $del = Yii::$app->db->createCommand("delete from MasterMember where MemberId = $id");
+        $deld = Yii::$app->db->createCommand("delete from MemberDetail where MemberId = $id");
+
+        $deld->execute();
+        $del->execute();
+
 
         return $this->redirect(['index']);
     }

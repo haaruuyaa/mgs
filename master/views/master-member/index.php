@@ -34,11 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'MemberAddress'
                             ],
                             [
-                                'header' => 'Action',
+                                'header' => 'Detail',
                                 'format' => 'raw',
                                 'value' => function($data)
                                 {
                                     return Html::a('<i class="fa fa-user"></i>', ['detail','id' => $data['MemberId']]);
+                                }
+                            ],
+                            [
+                                'header' => 'Delete',
+                                'format' => 'raw',
+                                'value' => function($data)
+                                {
+                                    return Html::a('<i class="fa fa-trash"></i>', ['delete','id' => $data['MemberId']],['data-confirm' => 'Apakah yakin ingin menghapus setoran ini ?']);
                                 }
                             ]
                         ],
