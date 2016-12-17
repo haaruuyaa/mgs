@@ -33,7 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'header' => 'Tanggal SO',
                                 'attribute' => 'SODate',
-                                'value' => 'SODate'
+                                'value' => function($data)
+                                {
+                                    return date('d F Y',strtotime($data['SODate']));
+                                }
                             ],
 //                            'DateCrt',
                             [
@@ -54,5 +57,5 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-xs-12">
             <?= Html::a('Buat So', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
-    </div>    
+    </div>
 </div>

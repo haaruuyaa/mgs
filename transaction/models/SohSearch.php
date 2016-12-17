@@ -40,7 +40,7 @@ class SohSearch extends Soh
      */
     public function search($params)
     {
-        $query = Soh::find()->where(['SetoranIdH' => NULL])->orderBy(['SODate' => SORT_ASC]);
+        $query = Soh::find()->where(['SetoranIdH' => NULL])->orderBy(['SODate' => SORT_DESC]);
 
         // add conditions that should always apply here
 
@@ -69,7 +69,7 @@ class SohSearch extends Soh
 
         return $dataProvider;
     }
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT
@@ -78,10 +78,10 @@ class SohSearch extends Soh
                 RIGHT(YEAR(NOW()),2),
                 RIGHT(MONTH(NOW()),2),
                 RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(soidh,3)),0)+1,CHAR)),3)
-        ) AS soidh 
+        ) AS soidh
         FROM soh
         WHERE SUBSTRING(soidh,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
-        
+
         return $genId;
     }
 }
