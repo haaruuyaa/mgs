@@ -23,19 +23,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-
                             [
-                                'header' => 'Alamat Pelanggan',
-                                'attribute' => 'MemberAddress',
-                                'value' => 'MemberAddress'
-                            ],
-                            [
-                                'header' => 'Action',
-                                'format' => 'raw',
+                                'header' => 'Tanggal',
+                                'attribute' => 'Date',
                                 'value' => function($data)
                                 {
-                                    return Html::a('<i class="fa fa-user"></i>', ['detail','id' => $data['MemberId']]);
+                                    return date('d F Y',strtotime($data['Date']));
                                 }
+                            ],
+                            [
+                                'header' => 'Jumlah',
+                                'attribute' => 'Qty',
+                                'value' => 'Qty'
+                            ],
+                            [
+                                'header' => 'Jenis',
+                                'attribute' => 'JenisId',
+                                'value' => 'JenisName'
                             ]
                         ],
                     ]); ?>

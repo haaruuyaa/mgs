@@ -66,10 +66,6 @@ class MasterMemberController extends Controller
         $model = new MasterMember();
 
         if ($model->load(Yii::$app->request->post())) {
-            if($model->CountBuy == NULL)
-            {
-                $model->CountBuy = 1;
-            }
             $model->DateCrt = date('Y-m-d h:i:s');
             $model->save();
             return $this->redirect(['index']);
@@ -82,19 +78,19 @@ class MasterMemberController extends Controller
 
     public function actionDetail($id)
     {
-        $model =  new MemberDetail();
-        $request = Yii::$app->request;
 
         if(Yii::$app->request->post())
         {
+            $request = Yii::$app->request;
             $jenis = $request->post('jenis');
             $jumlah = $request->post('jumlah');
-            $datebuy = $request->post('datebuy');
+            $datebuy = date('Y-m-d',strtotime($request->post('datebuy')));
+            $datecrt = date('Y-m-d h:i:s');
 
-            $model->MemberId = $id;
+            $db = Yii::$app->db->createCommand("insert into MemberDetail (MemberId,Date,JenisId,Qty,DateCrt) values ('$id','$datebuy','$jenis','$jumlah','$datecrt')");
+            $db->execute();
 
-            echo var_dump($id);
-            die();
+            return $this->redirect(['index']);
         } else {
             return $this->render('_detail',['id' => $id]);
         }

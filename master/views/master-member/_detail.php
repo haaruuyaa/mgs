@@ -71,7 +71,7 @@ $arrayjenis = ArrayHelper::map($modeljenis,'JenisId','JenisName');
       <div class="col-xs-12">
         <?php
           $searchModel = new MasterMemberSearch();
-          $dataProvider = $searchModel->search($id);
+          $dataProvider = $searchModel->searchDetail($id);
 
           echo $this->render('indexdetail', [
               'searchModel' => $searchModel,

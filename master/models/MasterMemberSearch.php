@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\master\models\MasterMember;
-
+use app\master\models\MemberDetail;
 /**
  * MasterMemberSearch represents the model behind the search form about `app\master\models\MasterMember`.
  */
@@ -63,6 +63,39 @@ class MasterMemberSearch extends MasterMember
 
         $query->andFilterWhere(['like', 'MemberId', $this->MemberId])
             ->andFilterWhere(['like', 'MemberAddress', $this->MemberAddress]);
+
+        return $dataProvider;
+    }
+
+    public function searchDetail($params)
+    {
+        $query = MemberDetail::find()
+        ->select('*')
+        ->from("MemberDetail md")
+        ->leftJoin('MasterJenis mj','mj.JenisId = md.JenisId')
+        ->where(['MemberId' => $params])
+        ;
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'DateCrt' => $this->DateCrt,
+        ]);
+
+        $query->andFilterWhere(['like', 'MemberId', $this->MemberId]);
 
         return $dataProvider;
     }
