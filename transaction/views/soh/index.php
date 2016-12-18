@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use kartik\date\Datepicker;
 /* @var $this yii\web\View */
 /* @var $searchModel app\transaction\models\SohSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -33,9 +33,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'header' => 'Tanggal SO',
                                 'attribute' => 'SODate',
+                                'format' => 'raw',
+                                'filter' => DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute' => 'SODate',
+                                    'options' => ['placeholder' => 'Pilih Tanggal ...'],
+                                    'pluginOptions' => [
+                                        'todayHighlight' => true,
+                                        'autoclose'=>true,
+                                        'format' => 'yyyy/mm/dd'
+                                    ]
+                                ]),
                                 'value' => function($data)
                                 {
-                                    return date('d F Y',strtotime($data['SODate']));
+                                    $toTime = strtotime($data['SODate']);
+                                    $dateFormat = date('d F Y',$toTime);
+
+                                    return $dateFormat;
                                 }
                             ],
 //                            'DateCrt',
