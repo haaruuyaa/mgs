@@ -90,7 +90,7 @@ class SodController extends Controller
             $modelSoh->SetoranIdH = $sth;
             $modelSoh->DateCrt = date('Y-m-d h:i:s');
 
-            $this->AddStock($jenis, $qty);
+            $this->AddStock($jenis, $qty,$soidh);
             if($help == 'A002' && $jenis == 'AQ001')
             {
               $this->AddStockHelper($jenis,$qty,$help);
@@ -116,6 +116,7 @@ class SodController extends Controller
         $searchModel = new SodSearch();
 
         if ($model->load(Yii::$app->request->post())) {
+
             $soidh = Yii::$app->request->post('soidh','xxx');
             $jenis = $model->JenisId;
             $qty = $model->Qty;
@@ -123,7 +124,7 @@ class SodController extends Controller
             $model->SOIDH = $soidh;
             $model->SOIDD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
-            $this->AddStock($jenis, $qty);
+            $this->AddStock($jenis, $qty,$soidh);
             $model->save();
             return $this->redirect(['sod/create-sod', 'id' => $soidh]);
 //            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);
@@ -193,26 +194,32 @@ class SodController extends Controller
         }
     }
 
-    public function AddStock($id,$qty)
+    public function AddStock($id,$qty,$soidh)
     {
+        $modelSoidh = Soh::find()->where(['SOIDH' => $soidh])->one();
+        $sodate = $modelSoidh['SODate'];
+
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
         $isistock = $model['StockIsi'];
         $kosongstock = $model['StockKosong'];
         $datestock = $model['StockDateAdd'];
         $stocktotal = $model['StockTotal'];
+        $datecrt = $model['DateCrt'];
 
         $modelHis = new MasterStockHistory();
-
         $modelHis->JenisId = $id;
         $modelHis->StockIsi = $isistock;
         $modelHis->StockKosong = $kosongstock;
         $modelHis->StockDateAdd = $datestock;
         $modelHis->StockTotal = $stocktotal;
-        $modelHis->DateCrt = date('Y-m-d h:i:s');
+        $modelHis->IsSO = 1;
+        $modelHis->DateUpdate = date('Y-m-d h:i:s');
+        $modelHis->DateCrt = $datecrt;
 
         $model->StockIsi = $isistock + $qty;
         $model->StockKosong = $kosongstock - $qty;
-        $model->StockDateAdd = date('Y-m-d');
+        $model->IsSO = 1;
+        $model->StockDateAdd = date('Y-m-d',strtotime($sodate));
 
         $modelHis->save();
         $model->save();

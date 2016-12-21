@@ -34,10 +34,14 @@ $arrayMap = ArrayHelper::map($dataListJenis,'JenisId','JenisName');
                         ],
                     ])->label(false); ?>
                     </div>
-                    <label class="col-md-4">Jumlah</label>        
+                    <label class="col-md-4">Isi</label>
                     <div class="col-md-8">
-                        <?= $form->field($model, 'StockQty')->textInput()->label(false) ?>
-                    </div>  
+                        <?= $form->field($model, 'StockIsi')->textInput()->label(false) ?>
+                    </div>
+                    <label class="col-md-4">Kosong</label>
+                    <div class="col-md-8">
+                        <?= $form->field($model, 'StockKosong')->textInput()->label(false) ?>
+                    </div>
                     <label class="col-md-4">Tanggal</label>
                     <div class="col-md-8">
                         <?= $form->field($model, 'StockDateAdd')->widget(DatePicker::classname(), [
@@ -47,8 +51,8 @@ $arrayMap = ArrayHelper::map($dataListJenis,'JenisId','JenisName');
                                 'format' => 'dd/mm/yyyy',
                                 'todayHighlight' => true,
                             ]
-                        ])->label(false); ?>   
-                    </div>    
+                        ])->label(false); ?>
+                    </div>
                 </div>
             </div>
         </div>

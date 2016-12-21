@@ -4,6 +4,7 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
+    'timeZone' => 'Asia/Jakarta',
     'name' => 'MGS Application',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
