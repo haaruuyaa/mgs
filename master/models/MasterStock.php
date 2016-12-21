@@ -36,7 +36,6 @@ class MasterStock extends \yii\db\ActiveRecord
         return [
             [['StockIsi', 'StockKosong', 'StockTotal'], 'integer'],
             [['StockDateAdd', 'DateCrt', 'DateUpdate'], 'safe'],
-            [['IsSO'], 'boolean'],
             [['JenisId'], 'string', 'max' => 50],
         ];
     }
@@ -53,7 +52,6 @@ class MasterStock extends \yii\db\ActiveRecord
             'StockKosong' => 'Stock Kosong',
             'StockTotal' => 'Stock Total',
             'StockDateAdd' => 'Stock Date Add',
-            'IsSO' => 'Is So', 
             'DateCrt' => 'Date Crt',
             'DateUpdate' => 'Date Update',
         ];

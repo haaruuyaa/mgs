@@ -91,7 +91,7 @@ class SodController extends Controller
             $modelSoh->DateCrt = date('Y-m-d h:i:s');
 
             $this->AddStock($jenis, $qty,$soidh);
-            if($help == 'A002' && $jenis == 'AQ001')
+            if(($help == 'A002' && $jenis == 'AQ001') OR ($help == 'A002' && $jenis == 'G004'))
             {
               $this->AddStockHelper($jenis,$qty,$help);
             }
@@ -169,7 +169,7 @@ class SodController extends Controller
         $jenis = $model['JenisId'];
         $qty = $model['Qty'];
         $this->ReduceStock($jenis,$qty);
-        if($help == 'A002' && $jenis == 'AQ001')
+        if(($help == 'A002' && $jenis == 'AQ001') OR ($help == 'A002' && $jenis == 'G004'))
         {
           $this->ReduceStockHelp($jenis,$qty,$help);
         }
@@ -212,13 +212,11 @@ class SodController extends Controller
         $modelHis->StockKosong = $kosongstock;
         $modelHis->StockDateAdd = $datestock;
         $modelHis->StockTotal = $stocktotal;
-        $modelHis->IsSO = 1;
         $modelHis->DateUpdate = date('Y-m-d h:i:s');
         $modelHis->DateCrt = $datecrt;
 
         $model->StockIsi = $isistock + $qty;
         $model->StockKosong = $kosongstock - $qty;
-        $model->IsSO = 1;
         $model->StockDateAdd = date('Y-m-d',strtotime($sodate));
 
         $modelHis->save();
