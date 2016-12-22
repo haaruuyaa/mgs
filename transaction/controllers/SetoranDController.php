@@ -80,11 +80,13 @@ class SetoranDController extends Controller
             $qty = $model->Qty;
             $jenid = $model->JenisId;
             $cus = $model->CustomerId;
-            if($helpid != 'A005')
-            {
-                $this->ReduceStockHelper($jenid,$qty,$helpid);
-            }
-            $this->ReduceStock($jenid, $qty);
+            //stock helper
+            $stockhelp = StockHelper::find()->where(['HelperId' => $helpid,'JenisId' => $jenid])->one();
+            $isi = $stockhelp['Isi'];
+            //master stock
+            $masterstock = MasterStock::find()->where(['JenisId' => $jenid])->one();
+            $stockisi = $masterstock['StockIsi'];
+            // harga helper dan harga customer
             $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
             $arrayhc = $hargacus->GetHarga($cus, $jenid);
             $idhh = $arrayhh['HHID'];
@@ -94,7 +96,20 @@ class SetoranDController extends Controller
             $model->SetoranIdH = $Sth;
             $model->SetoranIdD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
-            $model->save();
+
+            if($isi < $qty OR $stockisi < $qty)
+            {
+              Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
+            } else {
+              if($helpid != 'A005')
+              {
+                $this->ReduceStockHelper($jenid, $qty,$helpid);
+                $this->ReduceStock($jenid, $qty);
+              } else {
+                $this->ReduceStock($jenid, $qty);
+              }
+              $model->save();
+            }
             return $this->redirect(['setoran-d/create', 'id' => $Sth]);
         } else {
             return $this->render('create', [
