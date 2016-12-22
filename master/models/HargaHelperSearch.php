@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\master\models\HargaHelper;
+use app\transaction\models\SetoranH;
 
 /**
  * HargaHelperSearch represents the model behind the search form about `app\master\models\HargaHelper`.
@@ -56,7 +57,7 @@ class HargaHelperSearch extends HargaHelper
                 'pageSize' => 10,
             ]
         ]);
-        
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -76,11 +77,36 @@ class HargaHelperSearch extends HargaHelper
 
         return $dataProvider;
     }
-    
-    public function GetHarga($Help,$Jen)
+
+    public function GetHarga($Help,$Jen,$sth)
     {
-        $query = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen])->one();
-        return $query;
-        
+        $query = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen])->all();
+        $dateSetoran = SetoranH::findOne($sth);
+        $tglsth = $dateSetoran['Date'];
+
+        if(count($query) > 1)
+        {
+          $query1 = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen])->orderBy('SeqId DESC')->one();
+          $dateperiod = $query1['Periode'];
+          $seqid = $query1['SeqId'];
+
+          $datep = strtotime($dateperiod);
+          $dates = strtotime($tglsth);
+          $datediff = $dates - $datep;
+
+          if($datediff >= 0)
+          {
+            $queryhh = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen])->orderBy('SeqId DESC')->one();
+
+          } else {
+            $queryhh = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen,'SeqId' => ($seqid-1)])->orderBy('SeqId DESC')->one();
+
+          }
+
+        } else {
+          $queryhh = HargaHelper::find()->where(['HelperId' => $Help,'JenisId' => $Jen])->one();
+        }
+        return $queryhh;
+
     }
 }

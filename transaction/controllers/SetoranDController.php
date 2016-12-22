@@ -87,7 +87,7 @@ class SetoranDController extends Controller
             $masterstock = MasterStock::find()->where(['JenisId' => $jenid])->one();
             $stockisi = $masterstock['StockIsi'];
             // harga helper dan harga customer
-            $arrayhh = $hargasearch->GetHarga($helpid, $jenid);
+            $arrayhh = $hargasearch->GetHarga($helpid, $jenid,$Sth);
             $arrayhc = $hargacus->GetHarga($cus, $jenid);
             $idhh = $arrayhh['HHID'];
             $idhc = $arrayhc['HCID'];
