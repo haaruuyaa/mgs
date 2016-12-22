@@ -19,7 +19,7 @@ class HargaCustomer extends \yii\db\ActiveRecord
      */
     public $CustomerName;
     public $JenisName;
-    
+
     public static function tableName()
     {
         return 'hargacustomer';
@@ -33,7 +33,7 @@ class HargaCustomer extends \yii\db\ActiveRecord
         return [
             [['SeqId'], 'integer'],
             [['Price'], 'number'],
-            [['CustomerId', 'JenisId'], 'string', 'max' => 10],
+            [['CustomerId', 'Periode', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 
@@ -46,6 +46,7 @@ class HargaCustomer extends \yii\db\ActiveRecord
             'HCID' => 'Hcid',
             'SeqId' => 'Seq ID',
             'CustomerId' => 'Customer ID',
+            'Periode' => 'Periode',
             'JenisId' => 'Jenis ID',
             'Price' => 'Price',
         ];
