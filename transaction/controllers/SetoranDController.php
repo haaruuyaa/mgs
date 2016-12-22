@@ -97,19 +97,33 @@ class SetoranDController extends Controller
             $model->SetoranIdD = $searchModel->GenerateId();
             $model->DateCrt = date('Y-m-d h:i:s');
 
-            if($isi < $qty OR $stockisi < $qty)
+            if($helpid != 'A005')
             {
-              Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
-            } else {
-              if($helpid != 'A005')
+              if($isi < $qty OR $stockisi < $qty)
               {
+                Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
+              } else {
                 $this->ReduceStockHelper($jenid, $qty,$helpid);
                 $this->ReduceStock($jenid, $qty);
-              } else {
-                $this->ReduceStock($jenid, $qty);
               }
-              $model->save();
+            } else {
+                $this->ReduceStock($jenid, $qty);
             }
+            $model->save();
+
+            // if($isi < $qty OR $stockisi < $qty)
+            // {
+            //   Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
+            // } else {
+            //   if($helpid != 'A005')
+            //   {
+            //     $this->ReduceStockHelper($jenid, $qty,$helpid);
+            //     $this->ReduceStock($jenid, $qty);
+            //   } else {
+            //     $this->ReduceStock($jenid, $qty);
+            //   }
+            //   $model->save();
+            // }
             return $this->redirect(['setoran-d/create', 'id' => $Sth]);
         } else {
             return $this->render('create', [
