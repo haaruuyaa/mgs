@@ -19,7 +19,7 @@ class HargaHelper extends \yii\db\ActiveRecord
      */
     public $HelperName;
     public $JenisName;
-    
+
     public static function tableName()
     {
         return 'hargahelper';
@@ -33,7 +33,7 @@ class HargaHelper extends \yii\db\ActiveRecord
         return [
             [['SeqId'], 'integer'],
             [['Price'], 'number'],
-            [['HelperId', 'JenisId'], 'string', 'max' => 10],
+            [['HelperId', 'Periode', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 
@@ -46,6 +46,7 @@ class HargaHelper extends \yii\db\ActiveRecord
             'HHID' => 'Hhid',
             'SeqId' => 'Seq ID',
             'HelperId' => 'Helper ID',
+            'Periode' => 'Periode',
             'JenisId' => 'Jenis ID',
             'Price' => 'Price',
         ];
