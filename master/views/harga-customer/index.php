@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\master\models\HargaCustomerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Harga Customers';
+$this->title = 'Harga Customer';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="harga-customer-index">
@@ -42,14 +42,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'Price'
                             ],
 
-                            ['class' => 'yii\grid\ActionColumn'],
+                            ['class' => 'yii\grid\ActionColumn','template' => '{update}'],
                         ],
                     ]); ?>
-                </div>               
+                </div>
             </div>
         </div>
         <div class="col-md-12">
-            <?= Html::a('Create Harga Customer', ['create'], ['class' => 'btn btn-success']) ?>    
+            <?= Html::a('Create Harga Customer', ['create'], ['class' => 'btn btn-success']) ?>
         </div>
     </div>
 </div>

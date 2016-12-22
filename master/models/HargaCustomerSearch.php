@@ -42,7 +42,7 @@ class HargaCustomerSearch extends HargaCustomer
     public function search($params)
     {
         $query = HargaCustomer::find()
-                ->select("mc.CustomerName as CustomerName,hc.Price as Price,hc.CustomerId as CustomerId,mj.JenisName,mj.JenisId")
+                ->select("mc.CustomerName as CustomerName,hc.Price as Price,hc.CustomerId as CustomerId,mj.JenisName,mj.JenisId,hc.HCID")
                 ->from("HargaCustomer hc")
                 ->leftJoin('MasterCustomer mc','mc.CustomerId = hc.CustomerId')
                 ->leftJoin('MasterJenis mj','mj.JenisId = hc.JenisId')
@@ -73,12 +73,12 @@ class HargaCustomerSearch extends HargaCustomer
 
         return $dataProvider;
     }
-    
+
     public function GetHarga($Cus,$Jen)
     {
         $query = HargaCustomer::find()->where(['CustomerId' => $Cus,'JenisId' => $Jen])->one();
-        
+
         return $query;
-        
+
     }
 }

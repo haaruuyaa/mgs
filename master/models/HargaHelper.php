@@ -32,8 +32,9 @@ class HargaHelper extends \yii\db\ActiveRecord
     {
         return [
             [['SeqId'], 'integer'],
+            [['Periode'], 'safe'],
             [['Price'], 'number'],
-            [['HelperId', 'Periode', 'JenisId'], 'string', 'max' => 10],
+            [['HelperId', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 

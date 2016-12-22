@@ -6,6 +6,7 @@ use app\master\models\MasterCustomer;
 use app\master\models\MasterJenis;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
+use kartik\date\Datepicker;
 /* @var $this yii\web\View */
 /* @var $model app\master\models\HargaCustomer */
 /* @var $form yii\widgets\ActiveForm */
@@ -53,6 +54,19 @@ $arrayMapJenis = ArrayHelper::map($dataListJenis,'JenisId','JenisName');
                     <div class="col-md-8">
                         <?= $form->field($model, 'Price')->textInput(['maxlength' => true])->label(false) ?>
                     </div>
+                    <?php if(!$model->IsNewRecord){ ?>
+                    <label class="col-md-4">Tanggal Berubah</label>
+                    <div class="col-md-8">
+                      <?= $form->field($model, 'Periode')->widget(DatePicker::classname(),[
+                          'options' => ['placeholder' => 'Masukan Tanggal Berubah ...'],
+                          'pluginOptions' => [
+                              'autoclose'=>true,
+                              'todayHighlight' => true,
+                              'format' => 'yyyy-mm-dd'
+                          ]
+                      ])->label(false) ?>
+                    </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

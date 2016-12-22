@@ -66,7 +66,7 @@ class HargaCustomerController extends Controller
         $model = new HargaCustomer();
 
         if ($model->load(Yii::$app->request->post())) {
-            
+
             $model->save();
             return $this->redirect(['index']);
         } else {
@@ -82,18 +82,28 @@ class HargaCustomerController extends Controller
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+     public function actionUpdate($id)
+     {
+         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->HCID]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
+         if ($model->load(Yii::$app->request->post()) ) {
+
+             $modelNew = new HargaCustomer();
+
+             $modelNew->CustomerId = $model->HelperId;
+             $modelNew->JenisId = $model->JenisId;
+             $modelNew->Price = $model->Price;
+             $modelNew->SeqId = ($model->SeqId)+1;
+             $modelNew->Periode = $model->Periode;
+             $modelNew->save();
+ //            $model->save();
+             return $this->redirect(['index']);
+         } else {
+             return $this->render('update', [
+                 'model' => $model,
+             ]);
+         }
+     }
 
     /**
      * Deletes an existing HargaCustomer model.

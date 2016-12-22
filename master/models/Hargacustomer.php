@@ -8,7 +8,9 @@ use Yii;
  * This is the model class for table "hargacustomer".
  *
  * @property integer $HCID
+ * @property integer $SeqId
  * @property string $CustomerId
+ * @property string $Periode
  * @property string $JenisId
  * @property string $Price
  */
@@ -19,7 +21,7 @@ class HargaCustomer extends \yii\db\ActiveRecord
      */
     public $CustomerName;
     public $JenisName;
-
+    
     public static function tableName()
     {
         return 'hargacustomer';
@@ -32,8 +34,9 @@ class HargaCustomer extends \yii\db\ActiveRecord
     {
         return [
             [['SeqId'], 'integer'],
+            [['Periode'], 'safe'],
             [['Price'], 'number'],
-            [['CustomerId', 'Periode', 'JenisId'], 'string', 'max' => 10],
+            [['CustomerId', 'JenisId'], 'string', 'max' => 10],
         ];
     }
 

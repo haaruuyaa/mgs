@@ -66,8 +66,8 @@ class HargaHelperController extends Controller
         $model = new HargaHelper();
 
         if ($model->load(Yii::$app->request->post())) {
-            
-            
+
+
             $model->save();
             return $this->redirect(['index']);
         } else {
@@ -86,15 +86,16 @@ class HargaHelperController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if ($model->load(Yii::$app->request->post()) ) {
-            
+
             $modelNew = new HargaHelper();
-            
+
             $modelNew->HelperId = $model->HelperId;
             $modelNew->JenisId = $model->JenisId;
             $modelNew->Price = $model->Price;
             $modelNew->SeqId = ($model->SeqId)+1;
+            $modelNew->Periode = $model->Periode;
             $modelNew->save();
 //            $model->save();
             return $this->redirect(['index']);
