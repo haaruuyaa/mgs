@@ -47,7 +47,7 @@ class StockHelperHistory extends \yii\db\ActiveRecord
     {
         return [
             'StockHelpId' => 'Stock Help ID',
-            'StockHelpSeqId' => 'Stock Help Seq ID', 
+            'StockHelpSeqId' => 'Stock Help Seq ID',
             'HelperId' => 'Helper ID',
             'JenisId' => 'Jenis ID',
             'Isi' => 'Isi',
@@ -55,6 +55,6 @@ class StockHelperHistory extends \yii\db\ActiveRecord
             'DateAdd' => 'Date Add',
             'DateUpdate' => 'Date Update',
             'DateCrt' => 'Date Crt',
-        ];
+        ];  
     }
 }
