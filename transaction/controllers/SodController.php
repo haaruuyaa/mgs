@@ -93,7 +93,7 @@ class SodController extends Controller
             $this->AddStock($jenis, $qty,$soidh);
             if(($help == 'A002' && $jenis == 'AQ001') OR ($help == 'A002' && $jenis == 'G004'))
             {
-              $this->AddStockHelper($jenis,$qty,$help);
+              $this->AddStockHelper($jenis,$qty,$help,$stdate);
             }
             $model->SOIDH = $soidh;
             $model->SOIDD = $soidd;
@@ -210,7 +210,7 @@ class SodController extends Controller
         $modelHis->JenisId = $id;
         $modelHis->StockIsi = $isistock;
         $modelHis->StockKosong = $kosongstock;
-        $modelHis->StockDateAdd = $datestock;
+        $modelHis->StockDateAdd = date('Y-m-d',strtotime($sodate));
         $modelHis->StockTotal = $stocktotal;
         $modelHis->DateUpdate = date('Y-m-d h:i:s');
         $modelHis->DateCrt = $datecrt;
@@ -223,18 +223,28 @@ class SodController extends Controller
         $model->save();
     }
 
-    public function AddStockHelper($id,$qty,$help)
+    public function AddStockHelper($id,$qty,$help,$stdate)
     {
+        $modelHis = new SoStockHelperHistory();
+
         $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
         $shid = $model['StockHelpId'];
         $isistock = $model['Isi'];
         $kosongstock = $model['Kosong'];
-        $datestock = $model['DateAdd'];
+        $datestock = date('Y-m-d',strtotime($stdate));
+
+        $modelHis->StockHelpId = $shid;
+        $modelHis->JenisId = $id;
+        $modelHis->HelperId = $help;
+        $modelHis->Isi = $qty;
+        $modelHis->DateAdd = date('Y-m-d',strtotime($stdate));
+        $modelHis->DateCrt = date('Y-m-d h:i:s');
 
         $model->Isi = $isistock + $qty;
         $model->Kosong = $kosongstock - $qty;
         $model->DateUpdate = date('Y-m-d h:i:s');
 
+        $modelHis->save();
         $model->save();
     }
 
