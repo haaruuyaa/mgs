@@ -79,6 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $link;
                               }
                             ],
+                            [
+                              'header' => 'Cancel SO',
+                              'format' => 'raw',
+                              'value' => function($data)
+                              {
+                                $link = Html::a('<i class="fa fa-close"></i>',['/master/stock-helper/cancel-so','id' => $data['StockHelpId']]);
+                                return $link;
+                              }
+                            ],
                             // 'DateCrt',
                         ],
                     ]); ?>

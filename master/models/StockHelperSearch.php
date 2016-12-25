@@ -79,38 +79,7 @@ class StockHelperSearch extends StockHelper
         return $dataProvider;
     }
 
-    public function searchStockHistory($helper,$date)
-    {
-        $query = "select * from (
-                  select
-                  sh.JenisId,
-                  IFNULL(shh.Isi,sh.Isi) as Isi,
-                  IFNULL(shh.Kosong,sh.Kosong) as Kosong
-                  from stockhelper sh
-                  left join stockhelperhistory shh on shh.StockHelpId = sh.StockHelpId and shh.DateCrt like '%".date('Y-m-d',strtotime($date))."%'
-                  where sh.HelperId = '".$helper."'
-                  group by sh.JenisId ) a
-                  left join masterjenis mj on mj.JenisId = a.JenisId
-                  "
-              ;
-
-        // add conditions that should always apply here
-
-        $dataProvider = new SqlDataProvider([
-            'sql' => $query,
-        ]);
-
-        $this->load($helper,$date);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        return $dataProvider;
-    }
-
+    
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT

@@ -44,6 +44,7 @@ class SoStockHelperHistory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'SoStockId' => 'So Stock ID',
             'StockHelpId' => 'Stock Help ID',
             'HelperId' => 'Helper ID',
             'JenisId' => 'Jenis ID',

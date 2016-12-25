@@ -99,17 +99,23 @@ class SetoranDController extends Controller
 
             if($helpid != 'A005')
             {
-              if($isi < $qty OR $stockisi < $qty)
+              if($isi < $qty)
               {
                 Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
               } else {
                 $this->ReduceStockHelper($jenid, $qty,$helpid);
                 $this->ReduceStock($jenid, $qty);
+                $model->save();
               }
             } else {
+              if($stockisi < $qty){
+                Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
+              } else {
                 $this->ReduceStock($jenid, $qty);
+                $model->save();
+              }
             }
-            $model->save();
+
 
             // if($isi < $qty OR $stockisi < $qty)
             // {
@@ -256,7 +262,7 @@ class SetoranDController extends Controller
     public function CancelStockHelper($id,$qty,$help)
     {
         $model = StockHelper::find()->where(['JenisId' => $id,'HelperId' => $help])->one();
-        $modelHis = new StockHelperHistory();
+        $modelHis = StockHelperHistory::find()->where(['JenisId' => $id,'HelperId' => $help])->orderBy('DateCrt DESC')->one();
 
         $shid = $model['StockHelpId'];
         $stockisi = $model['Isi'];
@@ -264,19 +270,10 @@ class SetoranDController extends Controller
         $datestock = $model['DateAdd'];
         $dateupdate = $model['DateUpdate'];
 
-        $modelHis->StockHelpId = $shid;
-        $modelHis->Isi = $stockisi;
-        $modelHis->Kosong = $stockkosong;
-        $modelHis->JenisId = $id;
-        $modelHis->HelperId = $help;
-        $modelHis->DateAdd = $datestock;
-        $modelHis->DateCrt = date('Y-m-d h:i:s');
-        $modelHis->DateUpdate = $dateupdate;
-
         $model->Isi = ($stockisi + $qty);
         $model->Kosong = ($stockkosong - $qty);
         $model->DateUpdate = date('Y-m-d h:i:s');
-        $modelHis->save();
+        $modelHis->delete();
         $model->save();
     }
 

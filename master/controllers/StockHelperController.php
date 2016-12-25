@@ -204,6 +204,68 @@ class StockHelperController extends Controller
 
     }
 
+    public function actionCancelSo($id)
+    {
+        $model = $this->findModel($id);
+        $stockoldisi = $model->Isi;
+        $stockoldkosong = $model->Kosong;
+        $helper = $model->HelperId;
+        $jenis = $model->JenisId;
+        if($model->load(Yii::$app->request->post()))
+        {
+          $modelHis = SoStockHelperHistory::find()->where(['StockHelpId' => $id])->orderBy('DateCrt DESC')->one();
+          $newisi = Yii::$app->request->post('jmlso','xxx');
+
+          if($helper != 'A001' && $jenis == 'G001')
+          {
+            $modelStockHelper = StockHelper::find()->where(['HelperId' => 'A001','JenisId' => 'G001'])->one();
+            $isi = $modelStockHelper->Isi;
+            $kosong = $modelStockHelper->Kosong;
+
+            $modelStockHelper->Isi = ($isi + $newisi);
+            $modelStockHelper->Kosong = ($kosong - $newisi);
+            $modelStockHelper->DateUpdate = date('Y-m-d h:i:s');
+
+          }
+          else if ($helper != 'A002' && $jenis == 'AQ001')
+          {
+            $modelStockHelper = StockHelper::find()->where(['HelperId' => 'A002','JenisId' => 'AQ001'])->one();
+            $isi = $modelStockHelper->Isi;
+            $kosong = $modelStockHelper->Kosong;
+
+            $modelStockHelper->Isi = ($isi + $newisi);
+            $modelStockHelper->Kosong = ($kosong - $newisi);
+            $modelStockHelper->DateUpdate = date('Y-m-d h:i:s');
+
+          } else {
+
+            $modelStockHelper = StockHelper::find()->where(['HelperId' => $helper,'JenisId' => $jenis])->one();
+            $isi = $modelStockHelper->Isi;
+            $kosong = $modelStockHelper->Kosong;
+
+            $modelStockHelper->Isi = ($isi + $newisi);
+            $modelStockHelper->Kosong = ($kosong - $newisi);
+            $modelStockHelper->DateUpdate = date('Y-m-d h:i:s');
+          }
+
+          $model->Isi = $stockoldisi - $newisi;
+          $model->Kosong = $stockoldkosong + $newisi;
+          $model->DateUpdate = date('Y-m-d h:i:s');
+
+          $modelHis->delete();
+
+          $modelStockHelper->save();
+          $model->save();
+
+          return $this->redirect(['/master/stock-helper/detail','id' => $helper]);
+        } else {
+
+          return $this->render('_cancelso', [
+              'model' => $model
+          ]);
+        }
+
+    }
     /**
      * Finds the StockHelper model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -27,8 +27,6 @@ if(!isset($date))
   $date = $date;
 }
 
-$searchModel = new StockHelperSearch();
-$dataProvider = $searchModel->searchStockHistory($helper,$date);
 
 ?>
 <div class="transaction-default-index">
@@ -36,35 +34,32 @@ $dataProvider = $searchModel->searchStockHistory($helper,$date);
         <div class="col-xs-12">
             <?= $this->render('_searchStock'); ?>
         </div>
+        <?php if($helper != '' OR $helper != NULL) { ?>
         <div class="col-xs-12">
           <div class="box box-primary">
             <div class="box-header">
               <h1 class="box-title with-border"><?= Html::encode('Laporan Stock '. ucfirst(strtolower($nama)) .' Tanggal '.date('d F Y',strtotime($date)))?></h1>
             </div>
             <div class="box-body">
-              <?= GridView::widget([
-                  'dataProvider' => $dataProvider,
-                  'columns' => [
-                      ['class' => 'yii\grid\SerialColumn'],
-                        [
-                          'header' => 'Jenis',
-                          'attribute' => 'JenisId',
-                          'value' => 'JenisName'
-                        ],
-                        [
-                          'header' => 'Stock Isi',
-                          'attribute' => 'Isi',
-                          'value' => 'Isi'
-                        ],
-                        [
-                          'header' => 'Stock Kosong',
-                          'attribute' => 'Kosong',
-                          'value' => 'Kosong'
-                        ]
-                  ],
-              ]); ?>
+              <table class="table table-bordered">
+                  <tr>
+                    <th>No.</th>
+                    <th>Helper</th>
+                    <th>Keterangan</th>
+                    <th>Jenis</th>
+                    <th>Jumlah</th>
+                  </tr>
+                  <tr>
+                    <td>1.</td>
+                    <td><?= $nama;?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+              </table>
             </div>
           </div>
         </div>
+        <?php } ?>
     </div>
 </div>
