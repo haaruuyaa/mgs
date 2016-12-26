@@ -146,6 +146,7 @@ class StockHelperController extends Controller
         {
           $modelHis = new SoStockHelperHistory();
           $newisi = Yii::$app->request->post('jmlso','xxx');
+          $dateadd = Yii::$app->request->post('dateadd','xxx');
 
           if($helper != 'A001' && $jenis == 'G001')
           {
@@ -181,13 +182,14 @@ class StockHelperController extends Controller
 
           $model->Isi = $stockoldisi + $newisi;
           $model->Kosong = $stockoldkosong - $newisi;
-          $model->DateUpdate = date('Y-m-d h:i:s');
+          $model->DateAdd = date('Y-m-d',strtotime($dateadd));
+          $model->DateUpdate = date('Y-m-d',strtotime($dateadd));
 
           $modelHis->StockHelpId = $id;
           $modelHis->JenisId = $jenis;
           $modelHis->HelperId = $helper;
           $modelHis->Isi = $newisi;
-          $modelHis->DateAdd = date('Y-m-d');
+          $modelHis->DateAdd = date('Y-m-d',strtotime($dateadd));
           $modelHis->DateCrt = date('Y-m-d h:i:s');
 
           $modelStockHelper->save();

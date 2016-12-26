@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+use kartik\date\Datepicker;
 use app\master\models\MasterJenis;
 use app\master\models\StockHelper;
 /* @var $this yii\web\View */
@@ -43,6 +44,18 @@ $jenisname = $stockhelper['JenisName'];
                   <label class="col-xs-3">Tambahan SO</label>
                   <div class="col-xs-9">
                       <?= Html::textInput('jmlso',NULL,['class' => 'form-group form-control']) ?>
+                  </div>
+                  <label class="col-xs-3">Tanggal SO</label>
+                  <div class="col-xs-9">
+                      <?= DatePicker::widget([
+                          'name' => 'dateadd',
+                          'options' => ['placeholder' => 'Masukan Tanggal SO ...'],
+                          'pluginOptions' => [
+                              'autoclose'=>true,
+                              'format' => 'yyyy-mm-dd',
+                              'todayHighlight' => true
+                          ]
+                      ]);?>
                   </div>
                 </div>
             </div>
