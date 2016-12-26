@@ -44,7 +44,7 @@ $dataBonPaid = Bon::find()
         ->from('Bon b')
         ->leftJoin('SetoranH sh','sh.HelperId = b.HelperId and sh.Date = b.Date')
         ->where(['b.HelperId' => $helperid,'b.DatePaid' => $dataSetoranH['Date'],'b.Tipe' => 'PAID']);
-
+        
 $dataPengeluaran = Pengeluaran::find()
         ->select('pd.Description,pd.Amount')
         ->from('Pengeluaran pd')
@@ -57,7 +57,7 @@ $dataPengeluaran = Pengeluaran::find()
 $dataPendapatan = Pendapatan::find()
         ->select('pd.Description,pd.Amount')
         ->from('Pendapatan pd')
-        ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')        
+        ->leftJoin('SetoranH sh','sh.SetoranIdH = pd.SetoranIdH')
         ->where(['sh.SetoranIdH' => $Setoranidh])
         ->union($dataBonPaid,true)
         ->all()
@@ -112,7 +112,7 @@ $TotalPengeluaranSo = array_sum($ArrSO);
 
 $SubTotal = ($TotalPendapatan + $TotalPembayaran) - $TotalPengeluaran - $TotalPengeluaranSo;
 ?>
-    <!-- Content Header (Page header) 
+    <!-- Content Header (Page header)
     <section class="content-header">
       <h1>
         Laporan Setoran
@@ -272,7 +272,7 @@ $SubTotal = ($TotalPendapatan + $TotalPembayaran) - $TotalPengeluaran - $TotalPe
       <div class="row">
         <!-- accepted payments column -->
         <div class="col-xs-6">
-          
+
         </div><!-- /.col -->
         <div class="col-xs-6">
           <!-- <p class="lead">Amount Due 2/22/2014</p> -->
@@ -300,12 +300,12 @@ $SubTotal = ($TotalPendapatan + $TotalPembayaran) - $TotalPengeluaran - $TotalPe
               </tr>
             </table>
           </div>
-        </div><!-- /.col -->        
+        </div><!-- /.col -->
       </div><!-- /.row -->
         <div class="col-xs-12">
             <?= Html::a('Back', ['setoran-h/index'], ['class' => 'btn btn-success']) ?>
         </div>
-      <!-- this row will not appear when printing 
+      <!-- this row will not appear when printing
       <div class="row no-print">
         <div class="col-xs-12">
           <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>

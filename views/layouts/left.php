@@ -32,6 +32,7 @@
                         ['label' => 'Penjualan Helper', 'icon' => 'fa fa-user', 'url' => ['/transaction/default/report-helper']],
                         ['label' => 'Penjualan Customer', 'icon' => 'fa fa-truck', 'url' => ['/transaction/default/report-customer']],
                         ['label' => 'SO', 'icon' => 'fa fa-folder-open', 'url' => ['/transaction/default/report-so']],
+                        // ['label' => 'Pengeluaran Pribadi', 'icon' => 'fa fa-yen', 'url' => ['/transaction/default/report-pengeluaran-pribadi']],
                      ]],
 
                 ],

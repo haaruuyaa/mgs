@@ -93,7 +93,7 @@ class SodController extends Controller
             $this->AddStock($jenis, $qty,$soidh);
             if(($help == 'A002' && $jenis == 'AQ001') OR ($help == 'A002' && $jenis == 'G004'))
             {
-              $this->AddStockHelper($jenis,$qty,$help,$stdate);
+              $this->AddStockHelper($jenis,$qty,$help,$storandate);
             }
             $model->SOIDH = $soidh;
             $model->SOIDD = $soidd;

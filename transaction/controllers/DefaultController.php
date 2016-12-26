@@ -71,4 +71,16 @@ class DefaultController extends Controller
             return $this->render('reportStockHistory');
         }
     }
+
+    public function actionReportPengeluaranPribadi()
+    {
+      if(Yii::$app->request->post())
+      {
+          $date = Yii::$app->request->post('tanggal');
+
+          return $this->render('reportPengeluaranPribadi',['date' => $date]);
+      } else {
+          return $this->render('reportPengeluaranPribadi');
+      }
+    }
 }
