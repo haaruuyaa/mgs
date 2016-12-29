@@ -105,6 +105,14 @@ class SetoranDController extends Controller
               } else {
                 $this->ReduceStockHelper($jenid, $qty,$helpid);
                 $this->ReduceStock($jenid, $qty);
+                // $model->save();
+              }
+            } else if($helpid == 'A005' AND $jenid == 'G001') {
+              if($stockisi < $qty){
+                Yii::$app->session->setFlash('error','aaa');
+              } else {
+                $this->ReduceStockHelper($jenid, $qty,'A001');
+                $this->ReduceStock($jenid, $qty);
                 $model->save();
               }
             } else {
@@ -115,21 +123,6 @@ class SetoranDController extends Controller
                 $model->save();
               }
             }
-
-
-            // if($isi < $qty OR $stockisi < $qty)
-            // {
-            //   Yii::$app->session->setFlash('error','Stock tidak mencukupi, harap SO terlebih dahulu');
-            // } else {
-            //   if($helpid != 'A005')
-            //   {
-            //     $this->ReduceStockHelper($jenid, $qty,$helpid);
-            //     $this->ReduceStock($jenid, $qty);
-            //   } else {
-            //     $this->ReduceStock($jenid, $qty);
-            //   }
-            //   $model->save();
-            // }
             return $this->redirect(['setoran-d/create', 'id' => $Sth]);
         } else {
             return $this->render('create', [
@@ -181,6 +174,9 @@ class SetoranDController extends Controller
         if($help != 'A005')
         {
             $this->CancelStockHelper($jenisid,$qty,$help);
+        } else if ($help == 'A005' AND $jenisid == 'G001')
+        {
+            $this->CancelStockHelper($jenisid,$qty,'A001');
         }
         $this->CancelStock($jenisid, $qty);
         $model->delete();
