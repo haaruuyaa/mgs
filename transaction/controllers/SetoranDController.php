@@ -105,7 +105,7 @@ class SetoranDController extends Controller
               } else {
                 $this->ReduceStockHelper($jenid, $qty,$helpid);
                 $this->ReduceStock($jenid, $qty);
-                // $model->save();
+                $model->save();
               }
             } else if($helpid == 'A005' AND $jenid == 'G001') {
               if($stockisi < $qty){
