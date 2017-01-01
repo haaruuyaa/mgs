@@ -74,19 +74,19 @@ class SetoranHSearch extends SetoranH
 
         return $dataProvider;
     }
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT
           CONCAT(
                   'STH',
                   RIGHT(YEAR(NOW()),2),
-                  RIGHT(MONTH(NOW()),2),
+                  RIGHT(LPAD(MONTH(NOW()), 2, '0'),2),
                   RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(SetoranIdH,3)),0)+1,CHAR)),3)
-          ) AS SetoranIdH 
+          ) AS SetoranIdH
           FROM setoranh
           WHERE SUBSTRING(SetoranIdH,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
-        
+
         return $genId;
     }
 }

@@ -89,6 +89,7 @@ class SodController extends Controller
             $modelSoh->SODate = $storandate;
             $modelSoh->SetoranIdH = $sth;
             $modelSoh->DateCrt = date('Y-m-d h:i:s');
+            $modelSoh->save();
 
             $this->AddStock($jenis, $qty,$soidh);
             if(($help == 'A002' && $jenis == 'AQ001') OR ($help == 'A002' && $jenis == 'G004'))
@@ -98,8 +99,6 @@ class SodController extends Controller
             $model->SOIDH = $soidh;
             $model->SOIDD = $soidd;
             $model->DateCrt = date('Y-m-d h:i:s');
-
-            $modelSoh->save();
             $model->save();
             return $this->redirect(['setoran-d/create', 'id' => $sth]);
 //            return $this->redirect(['sod/create', 'id' => Yii::$app->request->post('soidh')]);
@@ -196,7 +195,7 @@ class SodController extends Controller
 
     public function AddStock($id,$qty,$soidh)
     {
-        $modelSoidh = Soh::find()->where(['SOIDH' => $soidh])->one();
+        $modelSoidh = Soh::findOne($soidh);
         $sodate = $modelSoidh['SODate'];
 
         $model = MasterStock::find()->where(['JenisId' => $id])->one();
@@ -210,14 +209,14 @@ class SodController extends Controller
         $modelHis->JenisId = $id;
         $modelHis->StockIsi = $isistock;
         $modelHis->StockKosong = $kosongstock;
-        $modelHis->StockDateAdd = date('Y-m-d',strtotime($sodate));
+        $modelHis->StockDateAdd = $datestock;
         $modelHis->StockTotal = $stocktotal;
         $modelHis->DateUpdate = date('Y-m-d h:i:s');
-        $modelHis->DateCrt = $datecrt;
+        $modelHis->DateCrt = date('Y-m-d h:i:s');
 
         $model->StockIsi = $isistock + $qty;
         $model->StockKosong = $kosongstock - $qty;
-        $model->StockDateAdd = date('Y-m-d',strtotime($sodate));
+        $model->StockDateAdd = $sodate;
 
         $modelHis->save();
         $model->save();

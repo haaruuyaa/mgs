@@ -69,7 +69,7 @@ class PendapatanSearch extends Pendapatan
 
         return $dataProvider;
     }
-    
+
      public function searchPend($params)
     {
         $query = Pendapatan::find()->where(['SetoranIdH' => $params]);
@@ -100,19 +100,19 @@ class PendapatanSearch extends Pendapatan
 
         return $dataProvider;
     }
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT
         CONCAT(
                 'ARH',
                 RIGHT(YEAR(NOW()),2),
-                RIGHT(MONTH(NOW()),2),
+                RIGHT(LPAD(MONTH(NOW()), 2, '0'),2),
                 RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(PendapatanId,3)),0)+1,CHAR)),3)
-        ) AS PendapatanId 
+        ) AS PendapatanId
         FROM pendapatan
         WHERE SUBSTRING(PendapatanId,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
-        
+
         return $genId;
     }
 }

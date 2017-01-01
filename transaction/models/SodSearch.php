@@ -75,7 +75,7 @@ class SodSearch extends Sod
 
         return $dataProvider;
     }
-    
+
     public function searchSod($params)
     {
         $query = Sod::find()
@@ -112,19 +112,19 @@ class SodSearch extends Sod
 
         return $dataProvider;
     }
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT
         CONCAT(
                 'SOD',
                 RIGHT(YEAR(NOW()),2),
-                RIGHT(MONTH(NOW()),2),
+                RIGHT(LPAD(MONTH(NOW()), 2, '0'),2),
                 RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(soidd,3)),0)+1,CHAR)),3)
-        ) AS soidd 
+        ) AS soidd
         FROM sod
         WHERE SUBSTRING(soidd,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
-        
+
         return $genId;
     }
 }

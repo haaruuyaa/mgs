@@ -76,7 +76,7 @@ class SohSearch extends Soh
         CONCAT(
                 'SOH',
                 RIGHT(YEAR(NOW()),2),
-                RIGHT(MONTH(NOW()),2),
+                RIGHT(LPAD(MONTH(NOW()), 2, '0'),2),
                 RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(soidh,3)),0)+1,CHAR)),3)
         ) AS soidh
         FROM soh

@@ -42,15 +42,30 @@ $masterjenis = MasterJenis::find()->all();
         <?php if($helper != '' OR $helper != NULL) { ?>
         <?php foreach($masterjenis as $index => $data){ ?>
           <?php
+          $helpers = ['A003','A004'];
+          $jenis = $data['JenisId'];
 
           $querySoStock = SoStockHelperHistory::find()
-                      ->where(['HelperId' => $helper,'JenisId' => $data['JenisId'],'DateAdd' => $date])
+                      ->where(['HelperId' => $helper,'JenisId' => $data['JenisId']])
+                      ->andWhere(['DATE(DateCrt)' => $date])
+                      // ->andWhere(['between','DATE(DateCrt)',date('Y-m-01'),$date])
+                      ->orderBy('DateCrt DESC')
+                      ->limit(1)
+                      ->one();
+
+          $queryhelpsoother = SoStockHelperHistory::find()
+                      ->select('SUM(Isi) as Isi')
+                      ->where(['IN','HelperId',$helpers])
+                      ->andWhere(['JenisId' => $data['JenisId'],'DateAdd' => $date])
                       ->orderBy('DateCrt DESC')
                       ->one();
+          $qtysoother = $queryhelpsoother['Isi'];
+
           $queryStock = StockHelperHistory::find()
-                      ->where(['like','datecrt',date('Y-m-d',strtotime($date))])
+                      ->where(['between','DATE(DateCrt)',date('%Y-%m-01'),$date])
                       ->andWhere(['jenisid' => $data['JenisId'],'HelperId'=> $helper])
-                      ->orderBy('datecrt,jenisid DESC')
+                      ->orderBy('datecrt DESC')
+                      ->limit(1)
                       ->one();
 
           $querypenjualan = SetoranD::find()
@@ -97,12 +112,27 @@ $masterjenis = MasterJenis::find()->all();
                     <td>Penjualan</td>
                     <td><?= $penjualan ?></td>
                   </tr>
+                  <?php if($helper == 'A002' AND $jenis == 'AQ001'){ ?>
+                  <tr>
+                    <td>4.</td>
+                    <td><?= $nama;?></td>
+                    <td>Pengurangan SO Helper</td>
+                    <td><?= $qtysoother ?></td>
+                  </tr>
+                  <tr>
+                    <td>5.</td>
+                    <td><?= $nama;?></td>
+                    <td>Sisa</td>
+                    <td><?= ($sisahariini - $qtysoother) ?></td>
+                  </tr>
+                  <?php } else { ?>
                   <tr>
                     <td>4.</td>
                     <td><?= $nama;?></td>
                     <td>Sisa</td>
                     <td><?= $sisahariini ?></td>
                   </tr>
+                  <?php } ?>
               </table>
             </div>
           </div>

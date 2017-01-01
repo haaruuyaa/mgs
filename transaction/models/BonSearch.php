@@ -84,12 +84,12 @@ class BonSearch extends Bon
         CONCAT(
                 'BON',
                 RIGHT(YEAR(NOW()),2),
-                RIGHT(MONTH(NOW()),2),
+                RIGHT(LPAD(MONTH(NOW()), 2, '0'),2),
                 RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(BonId,3)),0)+1,CHAR)),3)
-        ) AS BonId 
+        ) AS BonId
         FROM Bon
         WHERE SUBSTRING(BonId,4,4) = CONCAT(RIGHT(YEAR(NOW()),2),RIGHT(MONTH(NOW()),2))")->queryScalar();
-        
+
         return $genId;
     }
 }

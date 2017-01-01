@@ -79,14 +79,14 @@ class StockHelperSearch extends StockHelper
         return $dataProvider;
     }
 
-    
+
     public function GenerateId()
     {
         $genId = Yii::$app->db->createCommand("SELECT
         CONCAT(
                 'STK',
                 RIGHT(YEAR(NOW()),2),
-                RIGHT(MONTH(NOW()),2),
+                RIGHT(LPAD(MONTH(NOW()), 2, '0'),2),
                 RIGHT(CONCAT('00',CONVERT(IFNULL(MAX(RIGHT(StockHelpId,3)),0)+1,CHAR)),3)
         ) AS StockHelpId
         FROM StockHelper
