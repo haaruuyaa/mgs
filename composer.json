@@ -35,10 +35,10 @@
         "kartik-v/yii2-widget-select2": "@dev",
         "kartik-v/yii2-widget-depdrop": "@dev",
         "yiier/yii2-chartjs-widget": "*",
-        "phpoffice/phpexcel": "dev-develop"
+        "phpoffice/phpexcel": "dev-develop",
+        "codeception/codeception": "^2.2"
     },
     "require-dev": {
-        "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",
         "yiisoft/yii2-faker": "*"
